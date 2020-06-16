@@ -7,6 +7,9 @@ The requirements are:
 * A Scheme compiler; either Chez Scheme (default), or Racket.
 * `bash`, with `realpath`. On Linux, you probably already have this.
   On a Mac, you can install this with `brew install coreutils`.
+  On FreeBSD, OpenBSD and NetBSD, you can install `realpath` and `GNU make`
+  using a package manager.  For instance, on OpenBSD you can install all of them
+  with `pkg_add coreutuls gmake` command.
 
 On Windows, it has been reported that installing via `MSYS2` works
 (https://www.msys2.org/). On Windows older than Windows 8, you may need to
