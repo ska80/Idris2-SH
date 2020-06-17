@@ -22,6 +22,9 @@ by setting the environment variable `IDRIS2_CG=racket` before running `make`.
 If you install Chez Scheme from source files, building it locally,
 make sure you run `./configure --threads` to build multithreading support in.
 
+**NOTE**: On FreeBSD, OpenBSD and NetBSD you need to use `gmake` command instead
+of `make` in the following steps.
+
 1: Set the PREFIX
 -----------------
 
