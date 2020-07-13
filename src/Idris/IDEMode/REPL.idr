@@ -31,6 +31,7 @@ import Idris.Version
 import Idris.IDEMode.Commands
 import Idris.IDEMode.Holes
 import Idris.IDEMode.Parser
+import Idris.IDEMode.REPL.FFI
 import Idris.IDEMode.SyntaxHighlight
 
 import TTImp.Interactive.CaseSplit
@@ -48,9 +49,6 @@ import Network.Socket
 import Network.Socket.Data
 
 %default covering
-
-%foreign "C:fdopen,libc 6"
-prim__fdopen : Int -> String -> PrimIO AnyPtr
 
 export
 socketToFile : Socket -> IO (Either String File)

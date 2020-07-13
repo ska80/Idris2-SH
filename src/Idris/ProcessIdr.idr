@@ -19,6 +19,7 @@ import TTImp.TTImp
 
 import Idris.Desugar
 import Idris.Parser
+import Idris.ProcessIdr.FFI
 import Idris.REPLCommon
 import Idris.REPLOpts
 import Idris.Syntax
@@ -208,9 +209,6 @@ readHeader path
         = case tok t of
                Symbol ":" => True
                _ => False
-
-%foreign "scheme:collect"
-prim__gc : Int -> PrimIO ()
 
 gc : IO ()
 gc = primIO $ prim__gc 4

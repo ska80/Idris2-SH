@@ -78,6 +78,7 @@ modules =
     Idris.Package,
     Idris.Parser,
     Idris.ProcessIdr,
+    Idris.ProcessIdr.FFI,
     Idris.REPL,
     Idris.REPLCommon,
     Idris.REPLOpts,
@@ -95,6 +96,7 @@ modules =
     Idris.IDEMode.MakeClause,
     Idris.IDEMode.Parser,
     Idris.IDEMode.REPL,
+    Idris.IDEMode.REPL.FFI,
     Idris.IDEMode.SyntaxHighlight,
     Idris.IDEMode.TokenLine,
 
