@@ -149,8 +149,8 @@ optSeparator = MkOpt [] [] [] Nothing
 showDefault : Show a => a -> String
 showDefault x = "(default " ++ show x ++ ")"
 
-options : Session -> List OptDesc
-options session =
+options : List OptDesc
+options =
           [MkOpt ["--check", "-c"] [] [CheckOnly]
               (Just "Exit after checking source file"),
            MkOpt ["--output", "-o"] [Required "file"] (\f => [OutputFile f, Quiet])
@@ -160,15 +160,15 @@ options session =
            MkOpt ["--no-prelude"] [] [NoPrelude]
               (Just "Don't implicitly import Prelude"),
            MkOpt ["--codegen", "--cg"] [Required "backend"] (\f => [SetCG f])
-              (Just $ "Set code generator " ++ showDefault (maybe "n/a" show (codegen session))),
+              (Just "Set code generator"),
            MkOpt ["--package", "-p"] [Required "package"] (\f => [PkgPath f])
               (Just "Add a package as a dependency"),
            MkOpt ["--source-dir"] [Required "dir"] (\d => [SourceDir d])
-              (Just $ "Set source directory"),
+              (Just "Set source directory"),
            MkOpt ["--build-dir"] [Required "dir"] (\d => [BuildDir d])
-              (Just $ "Set build directory"),
+              (Just "Set build directory"),
            MkOpt ["--output-dir"] [Required "dir"] (\d => [OutputDir d])
-              (Just $ "Set output directory"),
+              (Just "Set output directory"),
 
            optSeparator,
            MkOpt ["--prefix"] [] [ShowPrefix]
@@ -206,7 +206,7 @@ options session =
 
            optSeparator,
            MkOpt ["--log"] [RequiredNat "log level"] (\l => [Logging l])
-              (Just $ "Global log level " ++ showDefault (logLevel session)),
+              (Just $ "Global log level " ++ showDefault (logLevel defaultSession)),
            MkOpt ["--timing"] [] [Timing]
               (Just "Display timing logs"),
 
@@ -274,7 +274,7 @@ usage : String
 usage = versionMsg ++ "\n" ++
         "Usage: idris2 [options] [input file]\n\n" ++
         "Available options:\n" ++
-        optsUsage (options defaultSession)
+        optsUsage options
 
 checkNat : Integer -> Maybe Nat
 checkNat n = toMaybe (n >= 0) (integerToNat n)
@@ -324,8 +324,7 @@ parseOpts opts args
 
 export
 getOpts : List String -> Either String (List CLOpt)
-getOpts opts = parseOpts (options defaultSession) opts
-
+getOpts opts = parseOpts options opts
 
 export covering
 getCmdOpts : IO (Either String (List CLOpt))
