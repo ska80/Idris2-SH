@@ -1,15 +1,17 @@
-module Idris.Main
+module Main
 
 import Data.List
 
+import Compiler.Common
+
 import Idris.Driver
 
-import Compiler.Common
-import Compiler.Scheme.Chez
-import Compiler.Scheme.Racket
-import Compiler.Scheme.Gambit
-import Compiler.ES.Javascript
-import Compiler.ES.Node
+import Scheme.Chez
+import Scheme.Racket
+import Scheme.Gambit
+
+import ES.Javascript
+import ES.Node
 
 main : IO ()
 main = mainWithCodegens [

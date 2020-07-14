@@ -53,7 +53,7 @@ all: support ${TARGET} testbin libs
 
 idris2-exec: ${TARGET}
 
-${TARGET}: src/IdrisPaths.idr
+${TARGET}: install-api src/IdrisPaths.idr
 	${IDRIS2_BOOT} --build ${IDRIS2_IPKG}
 
 src/IdrisPaths.idr:
