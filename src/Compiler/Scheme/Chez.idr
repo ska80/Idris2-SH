@@ -366,7 +366,7 @@ startChezWinSh chez appdir target = unlines
 compileToSS : Ref Ctxt Defs ->
               String -> ClosedTerm -> (outfile : String) -> Core ()
 compileToSS c appdir tm outfile
-    = do ds <- getDirectives Chez
+    = do ds <- getDirectives (MkCG "chez")
          libs <- findLibs ds
          traverse_ copyLib libs
          cdata <- getCompileData Cases tm

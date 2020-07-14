@@ -149,8 +149,9 @@ optSeparator = MkOpt [] [] [] Nothing
 showDefault : Show a => a -> String
 showDefault x = "(default " ++ show x ++ ")"
 
-options : List OptDesc
-options = [MkOpt ["--check", "-c"] [] [CheckOnly]
+options : Session -> List OptDesc
+options session =
+          [MkOpt ["--check", "-c"] [] [CheckOnly]
               (Just "Exit after checking source file"),
            MkOpt ["--output", "-o"] [Required "file"] (\f => [OutputFile f, Quiet])
               (Just "Specify output file"),
@@ -159,7 +160,7 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            MkOpt ["--no-prelude"] [] [NoPrelude]
               (Just "Don't implicitly import Prelude"),
            MkOpt ["--codegen", "--cg"] [Required "backend"] (\f => [SetCG f])
-              (Just $ "Set code generator " ++ showDefault (codegen defaultSession)),
+              (Just $ "Set code generator " ++ showDefault (maybe "n/a" show (codegen session))),
            MkOpt ["--package", "-p"] [Required "package"] (\f => [PkgPath f])
               (Just "Add a package as a dependency"),
            MkOpt ["--source-dir"] [Required "dir"] (\d => [SourceDir d])
@@ -271,7 +272,7 @@ usage : String
 usage = versionMsg ++ "\n" ++
         "Usage: idris2 [options] [input file]\n\n" ++
         "Available options:\n" ++
-        optsUsage options
+        optsUsage (options defaultSession)
 
 checkNat : Integer -> Maybe Nat
 checkNat n = toMaybe (n >= 0) (integerToNat n)
@@ -321,7 +322,7 @@ parseOpts opts args
 
 export
 getOpts : List String -> Either String (List CLOpt)
-getOpts opts = parseOpts options opts
+getOpts opts = parseOpts (options defaultSession) opts
 
 
 export covering

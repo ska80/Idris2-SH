@@ -1,5 +1,19 @@
 package idris2app
 
+modules =
+    Compiler.ES.ES,
+    Compiler.ES.Imperative,
+    Compiler.ES.ImperativeAst,
+    Compiler.ES.Javascript,
+    Compiler.ES.Node,
+    Compiler.ES.RemoveUnused,
+    Compiler.ES.TailRec,
+
+    Compiler.Scheme.Common,
+    Compiler.Scheme.Chez,
+    Compiler.Scheme.Racket,
+    Compiler.Scheme.Gambit
+
 depends = idris2, contrib, network
 
 sourcedir = "src"
