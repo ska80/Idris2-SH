@@ -2,9 +2,9 @@ module Main
 
 import Data.List
 
-import Compiler.Common
-
 import Idris.Driver
+
+import Compiler.Common
 
 import Scheme.Chez
 import Scheme.Racket
