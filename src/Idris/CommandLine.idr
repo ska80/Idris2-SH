@@ -203,6 +203,10 @@ options session =
            optSeparator,
            MkOpt ["--client"] [Required "REPL command"] (\f => [RunREPL f])
               (Just "Run a REPL command then quit immediately"),
+
+           optSeparator,
+           MkOpt ["--log"] [RequiredNat "log level"] (\l => [Logging l])
+              (Just $ "Global log level " ++ showDefault (logLevel session)),
            MkOpt ["--timing"] [] [Timing]
               (Just "Display timing logs"),
 
@@ -213,8 +217,6 @@ options session =
               (Just "Quiet mode; display fewer messages"),
            MkOpt ["--verbose"] [] [Verbose]
               (Just "Verbose mode (default)"),
-           MkOpt ["--log"] [RequiredNat "log level"] (\l => [Logging l])
-              (Just "Global log level (0 by default)"),
 
            optSeparator,
            MkOpt ["--version", "-v"] [] [Version]
