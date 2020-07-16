@@ -1,6 +1,8 @@
 module Idris.Driver
 
 import Compiler.Common
+import Compiler.Scheme.Chez
+import Compiler.Scheme.Racket
 
 import Core.Core
 import Core.InitPrimitives
@@ -126,17 +128,17 @@ checkVerbose [] = False
 checkVerbose (Verbose :: _) = True
 checkVerbose (_ :: xs) = checkVerbose xs
 
-stMain : List (String, Codegen) -> List CLOpt -> Core ()
+stMain : (cgs : List (String, Codegen)) -> {auto ok : NonEmpty cgs} -> List CLOpt -> Core ()
 stMain cgs opts
     = do False <- tryYaffle opts
             | True => pure ()
          False <- tryTTM opts
             | True => pure ()
          defs <- initDefs
-         let updated = foldl (\o, (s, _) => addCG (s, Other s) o) (options defs) cgs
+         let updated = foldl (\o, (s, _) => addCG (s, MkCG s) o) (options defs) cgs
          c <- newRef Ctxt (record { options = updated } defs)
          s <- newRef Syn initSyntax
-         setCG {c} $ maybe Chez (Other . fst) (head' cgs)
+         setCG {c} $ (MkCG . fst) (head cgs)
          addPrimitives
 
          setWorkingDir "."
@@ -228,16 +230,19 @@ quitOpts (ShowPrefix :: _)
          pure False
 quitOpts (_ :: opts) = quitOpts opts
 
+defaultCgs : List (String, Codegen)
+defaultCgs = [("chez", codegenChez), ("racket", codegenRacket)]
+
 export
 mainWithCodegens : List (String, Codegen) -> IO ()
 mainWithCodegens cgs = do Right opts <- getCmdOpts
-                            | Left err => do putStrLn err
-                                             putStrLn usage
+                                     | Left err => do putStrLn err
+                                                      putStrLn usage
                           continue <- quitOpts opts
                           if continue
-                              then
-                                  coreRun (stMain cgs opts)
-                                    (\err : Error => do putStrLn ("Uncaught error: " ++ show err)
-                                                        exitWith (ExitFailure 1))
-                                    (\res => pure ())
-                              else pure ()
+                             then
+                               coreRun (stMain (defaultCgs ++ cgs) opts)
+                                       (\err : Error => do putStrLn ("Uncaught error: " ++ show err)
+                                                           exitWith (ExitFailure 1))
+                                       (\res => pure ())
+                             else pure ()
