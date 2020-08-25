@@ -21,7 +21,9 @@ namedpoint* mkNamedPoint(char* str, point* p) {
     namedpoint* np = malloc(sizeof(namedpoint));
     np->name = str;
     np->pt = p;
+
     printf("Made it!\n");
+    fflush(stdout);
 
     return np;
 }
@@ -29,4 +31,3 @@ namedpoint* mkNamedPoint(char* str, point* p) {
 void freeNamedPoint(namedpoint* np) {
     free(np);
 }
-

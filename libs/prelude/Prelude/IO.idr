@@ -60,17 +60,22 @@ onCollect ptr c = fromPrim (prim__onCollect ptr (\x => toPrim (c x)))
 export
 prim__getString : Ptr String -> String
 
-%foreign "C:putchar,libc 6"
+%foreign "scheme:blodwen-put-char"
+         "C:putchar,libc 6"
 prim__putChar : Char -> (1 x : %World) -> IORes ()
-%foreign "C:getchar,libc 6"
-%extern prim__getChar : (1 x : %World) -> IORes Char
 
-%foreign "C:idris2_getStr,libidris2_support"
+%foreign "scheme:blodwen-get-char"
+         "C:getchar,libc 6"
+prim__getChar : (1 x : %World) -> IORes Char
+
+%foreign "scheme:blodwen-get-string"
          "node:support:getStr,support_system_file"
+         "C:idris2_getStr,libidris2_support"
 prim__getStr : PrimIO String
 
-%foreign "C:idris2_putStr,libidris2_support"
+%foreign "scheme:blodwen-put-string"
          "node:lambda:x=>process.stdout.write(x)"
+         "C:idris2_putStr,libidris2_support"
 prim__putStr : String -> PrimIO ()
 
 ||| Output a string to stdout without a trailing newline.

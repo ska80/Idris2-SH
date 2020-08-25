@@ -22,6 +22,8 @@ char* getStr(Stuff* x) {
 
 void freeThing(Stuff* x) {
     printf("Freeing %d %s\n", x->val, x->str);
+    fflush(stdout);
+
     free(x->str);
     free(x);
 }

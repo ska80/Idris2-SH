@@ -8,11 +8,13 @@
     [(i3nt ti3nt a6nt ta6nt) "windows"]
     [else "unknown"]))
 
-(define blodwen-read-args (lambda (desc)
-  (case (vector-ref desc 0)
-    ((0) '())
-    ((1) (cons (vector-ref desc 2)
-               (blodwen-read-args (vector-ref desc 3)))))))
+(define blodwen-read-args
+  (lambda (desc)
+    (case (vector-ref desc 0)
+      ((0) '())
+      ((1) (cons (vector-ref desc 2)
+                 (blodwen-read-args (vector-ref desc 3)))))))
+
 (define b+ (lambda (x y bits) (remainder (+ x y) (ash 1 bits))))
 (define b- (lambda (x y bits) (remainder (- x y) (ash 1 bits))))
 (define b* (lambda (x y bits) (remainder (* x y) (ash 1 bits))))
@@ -95,21 +97,23 @@
     (newline)
     (exit 1)))
 
-(define (blodwen-get-line p)
-    (if (port? p)
-        (let ((str (get-line p)))
-            (if (eof-object? str)
-                ""
-                str))
-        void))
+(define (blodwen-get-string)
+  (let ((str (get-line (current-input-port))))
+    (if (eof-object? str)
+        ""
+        str)))
 
-(define (blodwen-get-char p)
-    (if (port? p)
-        (let ((chr (get-char p)))
-            (if (eof-object? chr)
-                #\nul
-                chr))
-        void))
+(define (blodwen-put-string str)
+  (put-string (current-output-port) str))
+
+(define (blodwen-get-char)
+  (let ((chr (get-char (current-input-port))))
+    (if (eof-object? chr)
+        #\nul
+        chr)))
+
+(define (blodwen-put-char char)
+  (put-char (current-output-port) char))
 
 ;; Buffers
 
