@@ -39,6 +39,7 @@ prim__readLine : FilePtr -> PrimIO (Ptr String)
 
 %foreign support "idris2_readChars"
 prim__readChars : Int -> FilePtr -> PrimIO (Ptr String)
+
 %foreign "C:fgetc,libc 6"
 prim__readChar : FilePtr -> PrimIO Int
 
@@ -51,9 +52,12 @@ prim__writeLine : FilePtr -> String -> PrimIO Int
 prim__eof : FilePtr -> PrimIO Int
 
 %foreign "C:fflush,libc 6"
+         "node:lambda:filePtr => 0n"
 prim__flush : FilePtr -> PrimIO Int
+
 %foreign support "idris2_popen"
 prim__popen : String -> String -> PrimIO FilePtr
+
 %foreign support "idris2_pclose"
 prim__pclose : FilePtr -> PrimIO ()
 
