@@ -557,8 +557,9 @@ errorMsg : String
 errorMsg = unlines
   [ "Not all command line options can be used to override package options.\n"
   , "Overridable options are:"
-  , "    --quiet"
   , "    --verbose"
+  , "    --quiet"
+  , "    --test"
   , "    --timing"
   , "    --log <log level>"
   , "    --dumpcases <file>"
@@ -575,8 +576,9 @@ filterPackageOpts : POptsFilterResult -> List CLOpt -> Core (POptsFilterResult)
 filterPackageOpts acc Nil                  = pure acc
 filterPackageOpts acc (Package cmd f ::xs) = filterPackageOpts (record {pkgDetails = Just (cmd, f)}  acc) xs
 
-filterPackageOpts acc (Quiet         ::xs) = filterPackageOpts (record {oopts $= (Quiet::)}          acc) xs
 filterPackageOpts acc (Verbose       ::xs) = filterPackageOpts (record {oopts $= (Verbose::)}        acc) xs
+filterPackageOpts acc (Quiet         ::xs) = filterPackageOpts (record {oopts $= (Quiet::)}          acc) xs
+filterPackageOpts acc (Test          ::xs) = filterPackageOpts (record {oopts $= (Test::)}           acc) xs
 filterPackageOpts acc (Timing        ::xs) = filterPackageOpts (record {oopts $= (Timing::)}         acc) xs
 filterPackageOpts acc (Logging l     ::xs) = filterPackageOpts (record {oopts $= (Logging l::)}      acc) xs
 filterPackageOpts acc (DumpCases f   ::xs) = filterPackageOpts (record {oopts $= (DumpCases f::)}    acc) xs

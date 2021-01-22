@@ -2,8 +2,9 @@
 Not all command line options can be used to override package options.
 
 Overridable options are:
-    --quiet
     --verbose
+    --quiet
+    --test
     --timing
     --log <log level>
     --dumpcases <file>

@@ -92,7 +92,7 @@ record Options where
 
 export
 usage : String -> String
-usage exe = unwords ["Usage:", exe, "runtests <path> [--timing] [--interactive] [--cg CODEGEN] [--only [NAMES]]"]
+usage exe = unwords ["Usage:", exe, "<path> [--timing] [--interactive] [--cg CODEGEN] [--only [NAMES]]"]
 
 ||| Process the command line options.
 export

@@ -46,7 +46,7 @@ export
 defaultOpts : Maybe String -> OutputMode -> List (String, Codegen) -> REPLOpts
 defaultOpts fname outmode cgs
     = MkREPLOpts
-        { showTypes = False
+        { showTypes = True
         , evalMode = NormaliseAll
         , mainfile = fname
         , literateStyle = litStyle fname

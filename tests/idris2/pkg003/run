@@ -1,7 +1,8 @@
 $1 --build testpkg.ipkg
 rm -rf  build/
-$1 --build testpkg.ipkg --quiet
 $1 --build testpkg.ipkg --verbose
+$1 --build testpkg.ipkg --quiet
+$1 --build testpkg.ipkg --test
 $1 --build testpkg.ipkg --codegen gambit
 $1 --build testpkg.ipkg --ide-mode
 $1 --build malformed-package-name

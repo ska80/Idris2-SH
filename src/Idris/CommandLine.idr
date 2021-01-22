@@ -71,10 +71,12 @@ data CLOpt
    ||| Suppress the banner
   NoBanner |
    ||| Run Idris 2 in quiet mode
-  Quiet |
-   ||| Run Idris 2 in verbose mode (cancels quiet if it's the default)
   Verbose |
    ||| Set the console width for REPL output
+  Quiet |
+   ||| Run Idris 2 in verbose mode (cancels quiet if it's the default)
+  Test |
+   ||| Run Idris 2 in test mode (suitable for running tests without fancy output)
   ConsoleWidth (Maybe Nat) |
    ||| Whether to use color in the console output
   Color Bool |
@@ -226,16 +228,18 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            optSeparator,
            MkOpt ["--no-banner"] [] [NoBanner]
               (Just "Suppress the banner"),
+           MkOpt ["--verbose"] [] [Verbose]
+              (Just "Verbose mode (default)"),
            MkOpt ["--quiet", "-q"] [] [Quiet]
               (Just "Quiet mode; display fewer messages"),
+           MkOpt ["--test", "-t"] [] [Test]
+              (Just "Test mode; suitable for running tests without fancy output"),
            MkOpt ["--console-width"] [AutoNat "console width"] (\l => [ConsoleWidth l])
               (Just "Width for console output (0 for unbounded) (auto by default)"),
            MkOpt ["--color", "--colour"] [] ([Color True])
               (Just "Forces colored console output (enabled by default)"),
            MkOpt ["--no-color", "--no-colour"] [] ([Color False])
               (Just "Disables colored console output"),
-           MkOpt ["--verbose"] [] [Verbose]
-              (Just "Verbose mode (default)"),
            MkOpt ["--log"] [RequiredLogLevel "log level"] (\l => [Logging l])
               (Just "Global log level (0 by default)"),
 

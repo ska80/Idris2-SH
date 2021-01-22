@@ -84,13 +84,22 @@ updateEnv
               | Nothing => throw (InternalError "Can't get current directory")
          addLibDir cwd
 
+checkVerbose : List CLOpt -> Bool
+checkVerbose [] = True
+checkVerbose (Quiet :: _) = False
+checkVerbose (_ :: xs) = checkVerbose xs
+
 updateREPLOpts : {auto o : Ref ROpts REPLOpts} ->
+                 List CLOpt ->
                  Core ()
-updateREPLOpts
-    = do opts <- get ROpts
+updateREPLOpts clOpts
+    = do unless (checkVerbose clOpts) $ do
+           opts <- get ROpts
+           put ROpts (record { showTypes = False } opts)
          ed <- coreLift $ idrisGetEnv "EDITOR"
          the (Core ()) $ case ed of
-              Just e => put ROpts (record { editor = e } opts)
+              Just e => do opts <- get ROpts
+                           put ROpts (record { editor = e } opts)
               Nothing => pure ()
 
 showInfo : {auto c : Ref Ctxt Defs}
@@ -126,11 +135,6 @@ banner = "     ____    __     _         ___                                     
          "\n" ++
          "Welcome to Idris 2.  Enjoy yourself!"
 
-checkVerbose : List CLOpt -> Bool
-checkVerbose [] = False
-checkVerbose (Verbose :: _) = True
-checkVerbose (_ :: xs) = checkVerbose xs
-
 stMain : List (String, Codegen) -> List CLOpt -> Core ()
 stMain cgs opts
     = do False <- tryYaffle opts
@@ -165,7 +169,7 @@ stMain cgs opts
                      setOutput (REPL False)
                  u <- newRef UST initUState
                  m <- newRef MD initMetadata
-                 updateREPLOpts
+                 updateREPLOpts opts
                  session <- getSession
                  when (not $ nobanner session) $ do
                    iputStrLn $ pretty banner
