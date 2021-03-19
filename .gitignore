@@ -43,5 +43,5 @@ result
 
 /custom.mk
 
-#Mac OS
+# Mac OS
 .DS_Store
