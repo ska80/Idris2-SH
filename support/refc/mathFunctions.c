@@ -2,6 +2,10 @@
 #include "runtime.h"
 #include "memoryManagement.h"
 
+float unpackFloat(Value *f)
+{
+    return ((Value_Float *)f)->f;
+}
 double unpackDouble(Value *d)
 {
     return ((Value_Double *)d)->d;
@@ -45,6 +49,10 @@ Value *add_Integer(Value *x, Value *y)
     Value_Integer *retVal = makeInteger();
     mpz_add(retVal->i, ((Value_Integer *)x)->i, ((Value_Integer *)y)->i);
     return (Value *)retVal;
+}
+Value *add_float(Value *x, Value *y)
+{
+    return (Value *)makeFloat(((Value_Float *)x)->f + ((Value_Float *)y)->f);
 }
 Value *add_double(Value *x, Value *y)
 {
@@ -90,6 +98,10 @@ Value *sub_Integer(Value *x, Value *y)
     mpz_sub(retVal->i, ((Value_Integer *)x)->i, ((Value_Integer *)y)->i);
     return (Value *)retVal;
 }
+Value *sub_float(Value *x, Value *y)
+{
+    return (Value *)makeFloat(((Value_Float *)x)->f - ((Value_Float *)y)->f);
+}
 Value *sub_double(Value *x, Value *y)
 {
     return (Value *)makeDouble(((Value_Double *)x)->d - ((Value_Double *)y)->d);
@@ -134,6 +146,10 @@ Value *negate_Integer(Value *x)
     mpz_neg(retVal->i, ((Value_Integer *)x)->i);
     return (Value *)retVal;
 }
+Value *negate_float(Value *x)
+{
+    return (Value *)makeFloat(-((Value_Float *)x)->f);
+}
 Value *negate_double(Value *x)
 {
     return (Value *)makeDouble(-((Value_Double *)x)->d);
@@ -177,6 +193,10 @@ Value *mul_Integer(Value *x, Value *y)
     Value_Integer *retVal = makeInteger();
     mpz_mul(retVal->i, ((Value_Integer *)x)->i, ((Value_Integer *)y)->i);
     return (Value *)retVal;
+}
+Value *mul_float(Value *x, Value *y)
+{
+    return (Value *)makeFloat(((Value_Float *)x)->f * ((Value_Float *)y)->f);
 }
 Value *mul_double(Value *x, Value *y)
 {
@@ -270,6 +290,10 @@ Value *div_Integer(Value *x, Value *y)
     mpz_clears(rem, yq, NULL);
 
     return (Value *)retVal;
+}
+Value *div_float(Value *x, Value *y)
+{
+    return (Value *)makeFloat(((Value_Float *)x)->f / ((Value_Float *)y)->f);
 }
 Value *div_double(Value *x, Value *y)
 {
@@ -569,6 +593,10 @@ Value *lt_Integer(Value *x, Value *y)
         mpz_cmp(((Value_Integer *)x)->i, ((Value_Integer *)y)->i) < 0
     );
 }
+Value *lt_float(Value *x, Value *y)
+{
+    return (Value *)makeBool(((Value_Float *)x)->f < ((Value_Float *)y)->f);
+}
 Value *lt_double(Value *x, Value *y)
 {
     return (Value *)makeBool(((Value_Double *)x)->d < ((Value_Double *)y)->d);
@@ -620,6 +648,10 @@ Value *gt_Integer(Value *x, Value *y)
     return (Value *)makeBool(
         mpz_cmp(((Value_Integer *)x)->i, ((Value_Integer *)y)->i) > 0
     );
+}
+Value *gt_float(Value *x, Value *y)
+{
+    return (Value *)makeBool(((Value_Float *)x)->f > ((Value_Float *)y)->f);
 }
 Value *gt_double(Value *x, Value *y)
 {
@@ -673,6 +705,10 @@ Value *eq_Integer(Value *x, Value *y)
         mpz_cmp(((Value_Integer *)x)->i, ((Value_Integer *)y)->i) == 0
     );
 }
+Value *eq_float(Value *x, Value *y)
+{
+    return (Value *)makeBool(((Value_Float *)x)->f == ((Value_Float *)y)->f);
+}
 Value *eq_double(Value *x, Value *y)
 {
     return (Value *)makeBool(((Value_Double *)x)->d == ((Value_Double *)y)->d);
@@ -725,6 +761,10 @@ Value *lte_Integer(Value *x, Value *y)
         mpz_cmp(((Value_Integer *)x)->i, ((Value_Integer *)y)->i) <= 0
     );
 }
+Value *lte_float(Value *x, Value *y)
+{
+    return (Value *)makeBool(((Value_Float *)x)->f <= ((Value_Float *)y)->f);
+}
 Value *lte_double(Value *x, Value *y)
 {
     return (Value *)makeBool(((Value_Double *)x)->d <= ((Value_Double *)y)->d);
@@ -776,6 +816,10 @@ Value *gte_Integer(Value *x, Value *y)
     return (Value *)makeBool(
         mpz_cmp(((Value_Integer *)x)->i, ((Value_Integer *)y)->i) >= 0
     );
+}
+Value *gte_float(Value *x, Value *y)
+{
+    return (Value *)makeBool(((Value_Float *)x)->f >= ((Value_Float *)y)->f);
 }
 Value *gte_double(Value *x, Value *y)
 {

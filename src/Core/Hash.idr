@@ -207,34 +207,36 @@ Hashable CFType where
       h `hashWithSalt` 5
     CFString =>
       h `hashWithSalt` 6
-    CFDouble =>
+    CFFloat =>
       h `hashWithSalt` 7
-    CFChar =>
+    CFDouble =>
       h `hashWithSalt` 8
-    CFPtr =>
+    CFChar =>
       h `hashWithSalt` 9
-    CFGCPtr =>
+    CFPtr =>
       h `hashWithSalt` 10
-    CFBuffer =>
+    CFGCPtr =>
       h `hashWithSalt` 11
-    CFWorld =>
+    CFBuffer =>
       h `hashWithSalt` 12
+    CFWorld =>
+      h `hashWithSalt` 13
     CFFun a b =>
-      h `hashWithSalt` 13 `hashWithSalt` a `hashWithSalt` b
+      h `hashWithSalt` 14 `hashWithSalt` a `hashWithSalt` b
     CFIORes a =>
-      h `hashWithSalt` 14 `hashWithSalt` a
+      h `hashWithSalt` 15 `hashWithSalt` a
     CFStruct n fs =>
-      h `hashWithSalt` 15 `hashWithSalt` n `hashWithSalt` fs
+      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` fs
     CFUser n xs =>
-      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` xs
+      h `hashWithSalt` 17 `hashWithSalt` n `hashWithSalt` xs
     CFInt8 =>
-      h `hashWithSalt` 17
-    CFInt16 =>
       h `hashWithSalt` 18
-    CFInt32 =>
+    CFInt16 =>
       h `hashWithSalt` 19
-    CFInt64 =>
+    CFInt32 =>
       h `hashWithSalt` 20
+    CFInt64 =>
+      h `hashWithSalt` 21
 
 export
 Hashable Constant where

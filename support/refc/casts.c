@@ -54,6 +54,12 @@ Value *cast_Int8_to_Integer(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_Int8_to_float(Value *input)
+{
+    Value_Int8 *from = (Value_Int8 *)input;
+    return (Value *)makeFloat((float)from->i8);
+}
+
 Value *cast_Int8_to_double(Value *input)
 {
     Value_Int8 *from = (Value_Int8 *)input;
@@ -130,6 +136,12 @@ Value *cast_Int16_to_Integer(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_Int16_to_float(Value *input)
+{
+    Value_Int16 *from = (Value_Int16 *)input;
+    return (Value *)makeFloat((float)from->i16);
+}
+
 Value *cast_Int16_to_double(Value *input)
 {
     Value_Int16 *from = (Value_Int16 *)input;
@@ -204,6 +216,12 @@ Value *cast_Int32_to_Integer(Value *input)
     mpz_set_si(retVal->i, from->i32);
 
     return (Value *)retVal;
+}
+
+Value *cast_Int32_to_float(Value *input)
+{
+    Value_Int32 *from = (Value_Int32 *)input;
+    return (Value *)makeFloat((float)from->i32);
 }
 
 Value *cast_Int32_to_double(Value *input)
@@ -288,6 +306,12 @@ Value *cast_Int64_to_Integer(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_Int64_to_float(Value *input)
+{
+    Value_Int64 *from = (Value_Int64 *)input;
+    return (Value *)makeFloat((float)from->i64);
+}
+
 Value *cast_Int64_to_double(Value *input)
 {
     Value_Int64 *from = (Value_Int64 *)input;
@@ -307,6 +331,81 @@ Value *cast_Int64_to_string(Value *input)
     int l = snprintf(NULL, 0, "%" PRId64 "", from->i64);
     Value_String *retVal = makeEmptyString(l + 1);
     sprintf(retVal->str, "%" PRId64 "", from->i64);
+
+    return (Value *)retVal;
+}
+
+Value *cast_float_to_Bits8(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeBits8((uint8_t)from->f);
+}
+
+Value *cast_float_to_Bits16(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeBits16((uint16_t)from->f);
+}
+
+Value *cast_float_to_Bits32(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeBits32((uint32_t)from->f);
+}
+
+Value *cast_float_to_Bits64(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeBits64((uint64_t)from->f);
+}
+
+Value *cast_float_to_Int8(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeInt8((int8_t)from->f);
+}
+
+Value *cast_float_to_Int16(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeInt16((int16_t)from->f);
+}
+
+Value *cast_float_to_Int32(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeInt32((int32_t)from->f);
+}
+
+Value *cast_float_to_Int64(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeInt64((int64_t)from->f);
+}
+
+Value *cast_float_to_Integer(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+
+    Value_Integer *retVal = makeInteger();
+    mpz_set_d(retVal->i, from->f);
+
+    return (Value *)retVal;
+}
+
+Value *cast_float_to_char(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeChar((unsigned char)from->f);
+}
+
+Value *cast_float_to_string(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+
+    int l = snprintf(NULL, 0, "%f", from->f);
+    Value_String *retVal = makeEmptyString(l + 1);
+    sprintf(retVal->str, "%f", from->f);
 
     return (Value *)retVal;
 }
@@ -444,6 +543,12 @@ Value *cast_char_to_Integer(Value *input)
 	return (Value *)retVal;
 }
 
+Value *cast_char_to_float(Value *input)
+{
+    Value_Char *from = (Value_Char *)input;
+    return (Value *)makeFloat((unsigned char)from->c);
+}
+
 Value *cast_char_to_double(Value *input)
 {
     Value_Char *from = (Value_Char *)input;
@@ -514,6 +619,16 @@ Value *cast_string_to_Integer(Value *input)
 
     Value_Integer *retVal = makeInteger();
     mpz_set_str(retVal->i, from->str, 10);
+
+    return (Value *)retVal;
+}
+
+Value *cast_string_to_float(Value *input)
+{
+    Value_Float *retVal = (Value_Float *)newValue();
+    retVal->header.tag = FLOAT_TAG;
+    Value_String *from = (Value_String *)input;
+    retVal->f = (float)atof(from->str);
 
     return (Value *)retVal;
 }
@@ -589,6 +704,12 @@ Value *cast_Bits8_to_Integer(Value *input)
     mpz_set_ui(retVal->i, from->ui8);
 
     return (Value *)retVal;
+}
+
+Value *cast_Bits8_to_float(Value *input)
+{
+    Value_Bits8 *from = (Value_Bits8 *)input;
+    return (Value *)makeFloat((float)from->ui8);
 }
 
 Value *cast_Bits8_to_double(Value *input)
@@ -667,6 +788,12 @@ Value *cast_Bits16_to_Integer(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_Bits16_to_float(Value *input)
+{
+    Value_Bits16 *from = (Value_Bits16 *)input;
+    return (Value *)makeFloat((float)from->ui16);
+}
+
 Value *cast_Bits16_to_double(Value *input)
 {
     Value_Bits16 *from = (Value_Bits16 *)input;
@@ -743,6 +870,12 @@ Value *cast_Bits32_to_Integer(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_Bits32_to_float(Value *input)
+{
+    Value_Bits32 *from = (Value_Bits32 *)input;
+    return (Value *)makeFloat((float)from->ui32);
+}
+
 Value *cast_Bits32_to_double(Value *input)
 {
     Value_Bits32 *from = (Value_Bits32 *)input;
@@ -817,6 +950,12 @@ Value *cast_Bits64_to_Integer(Value *input)
     mpz_set_ui(retVal->i, from->ui64);
 
     return (Value *)retVal;
+}
+
+Value *cast_Bits64_to_float(Value *input)
+{
+    Value_Bits64 *from = (Value_Bits64 *)input;
+    return (Value *)makeFloat((float)from->ui64);
 }
 
 Value *cast_Bits64_to_double(Value *input)
@@ -899,6 +1038,12 @@ Value *cast_Integer_to_Int64(Value *input)
 {
     Value_Integer *from = (Value_Integer *)input;
     return (Value *)makeInt64((int64_t)mpz_get_lsb(from->i, 64));
+}
+
+Value *cast_Integer_to_float(Value *input)
+{
+    Value_Integer *from = (Value_Integer *)input;
+    return (Value *)makeFloat(mpz_get_d(from->i));
 }
 
 Value *cast_Integer_to_double(Value *input)

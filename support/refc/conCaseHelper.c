@@ -62,6 +62,18 @@ int multiStringCompare(Value *sc, int nrDecicionOptions, char **options)
     return -1;
 }
 
+int multiFloatCompare(Value *sc, int nrDecicionOptions, float *options)
+{
+    for (int i = 0; i < nrDecicionOptions; i++)
+    {
+        if (((Value_Float *)sc)->f == options[i])
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int multiDoubleCompare(Value *sc, int nrDecicionOptions, double *options)
 {
     for (int i = 0; i < nrDecicionOptions; i++)

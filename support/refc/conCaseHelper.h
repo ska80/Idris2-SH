@@ -15,6 +15,7 @@ void constructorFieldFNextEntry(AConAlt *, char *, int);
 void freeConstructorField(AConAlt *);
 
 int multiStringCompare(Value *, int, char **);
+int multiFloatCompare(Value *, int, float *);
 int multiDoubleCompare(Value *, int, double *);
 
 #endif
