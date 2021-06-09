@@ -34,6 +34,20 @@ Random Int where
      in map (+ lo) $ liftIO $ randomInt range
 
 %foreign "scheme:blodwen-random"
+prim__randomFloat : PrimIO Float
+
+randomFloat : IO Float
+randomFloat = fromPrim prim__randomFloat
+
+public export
+Random Float where
+  -- Generate a random value within [0, 1].
+  randomIO = liftIO randomFloat
+
+  -- Generate a random value within [lo, hi].
+  randomRIO (lo, hi) = map ((+ lo) . (* (hi - lo))) (liftIO randomFloat)
+
+%foreign "scheme:blodwen-random"
 prim__randomDouble : PrimIO Double
 
 randomDouble : IO Double

@@ -125,6 +125,10 @@ Show Bits64 where
   showPrec = primNumShow prim__cast_Bits64String
 
 export
+Show Float where
+  showPrec = primNumShow prim__cast_FloatString
+
+export
 Show Double where
   showPrec = primNumShow prim__cast_DoubleString
 

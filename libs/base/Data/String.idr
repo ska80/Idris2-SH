@@ -290,6 +290,73 @@ parseInteger s = parseIntTrimmed (trim s)
               else Nothing
 
 
+||| Convert a number string to a Float.
+|||
+||| ```idris example
+||| parseFloat "+123.123e-2"
+||| ```
+||| ```idris example
+||| parseFloat {a=Int} " -123.123E+2"
+||| ```
+||| ```idris example
+||| parseFloat {a=Int} " +123.123"
+||| ```
+export -- it's a bit too slow at compile time
+covering
+parseFloat : String -> Maybe Float
+parseFloat = mkFloat . wfe . trim
+  where
+    intPow : Integer -> Integer -> Float
+    intPow base exp = assert_total $ if exp > 0 then (num base exp) else 1 / (num base exp)
+      where
+        num : Integer -> Integer -> Float
+        num base 0 = 1
+        num base e = if e < 0
+                     then cast base * num base (e + 1)
+                     else cast base * num base (e - 1)
+
+    natpow : Float -> Nat -> Float
+    natpow x Z = 1
+    natpow x (S n) = x * (natpow x n)
+
+    mkFloat : Maybe (Float, Float, Integer) -> Maybe Float
+    mkFloat (Just (w, f, e)) = let ex = intPow 10 e in
+                                   Just $ (w * ex + f * ex)
+    mkFloat Nothing = Nothing
+
+    wfe : String -> Maybe (Float, Float, Integer)
+    wfe cs = case split (== '.') cs of
+               (wholeAndExp ::: []) =>
+                 case split (\c => c == 'e' || c == 'E') wholeAndExp of
+                   (whole:::exp::[]) =>
+                     do
+                       w <- cast {from=Integer} <$> parseInteger whole
+                       e <- parseInteger exp
+                       pure (w, 0, e)
+                   (whole:::[]) =>
+                     do
+                       w <- cast {from=Integer} <$> parseInteger whole
+                       pure (w, 0, 0)
+                   _ => Nothing
+               (whole:::fracAndExp::[]) =>
+                 case split (\c => c == 'e' || c == 'E') fracAndExp of
+                   ("":::exp::[]) => Nothing
+                   (frac:::exp::[]) =>
+                     do
+                       w <- cast {from=Integer} <$> parseInteger whole
+                       f <- (/ (natpow 10 (length frac))) <$>
+                            (cast <$> parseNumWithoutSign (unpack frac) 0)
+                       e <- parseInteger exp
+                       pure (w, if w < 0 then (-f) else f, e)
+                   (frac:::[]) =>
+                     do
+                       w <- cast {from=Integer} <$> parseInteger whole
+                       f <- (/ (natpow 10 (length frac))) <$>
+                            (cast <$> parseNumWithoutSign (unpack frac) 0)
+                       pure (w, if w < 0 then (-f) else f, 0)
+                   _ => Nothing
+               _ => Nothing
+
 ||| Convert a number string to a Double.
 |||
 ||| ```idris example
