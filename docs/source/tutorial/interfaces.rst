@@ -4,11 +4,11 @@
 Interfaces
 **********
 
-We often want to define functions which work across several different
-data types. For example, we would like arithmetic operators to work on
-``Int``, ``Integer`` and ``Double`` at the very least. We would like
-``==`` to work on the majority of data types. We would like to be able
-to display different types in a uniform way.
+We often want to define functions which work across several different data
+types.  For example, we would like arithmetic operators to work on ``Int``,
+``Integer``, ``Float`` and ``Double`` at the very least. We would like ``==``
+to work on the majority of data types.  We would like to be able to display
+different types in a uniform way.
 
 To achieve this, we use *interfaces*, which are similar to type classes in
 Haskell or traits in Rust. To define an interface, we provide a collection of

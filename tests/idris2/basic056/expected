@@ -2,3 +2,7 @@
 Main> MkInUnit 0.25 _
 MkNewtype 123.456
 Main> Bye for now!
+1/1: Building FloatLit (FloatLit.idr)
+Main> MkInUnit 0.25 _
+MkNewtype 123.456
+Main> Bye for now!

@@ -173,6 +173,7 @@ others.  Argument types can be any of the following primitives:
 
 * ``Int``
 * ``Char``
+* ``Float`` (as ``float`` in C)
 * ``Double`` (as ``double`` in C)
 * ``Bits8``
 * ``Bits16``
@@ -401,6 +402,7 @@ The field types of a ``Struct`` can be any of the following:
 
 * ``Int``
 * ``Char``
+* ``Float`` (``float`` in C)
 * ``Double`` (``double`` in C)
 * ``Bits8``
 * ``Bits16``

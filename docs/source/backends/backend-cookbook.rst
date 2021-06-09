@@ -144,6 +144,7 @@ Idris has the following primitive types:
 - ``Bits(8/16/32/64)``
 - ``Char``
 - ``String``
+- ``Float``
 - ``Double``
 - ``WorldVal`` (token for IO computations)
 
@@ -155,6 +156,7 @@ their primitive counterpart for describing a type:
 - ``Bits(8/16/32/64)Type``
 - ``StringType``
 - ``CharType``
+- ``FloatType``
 - ``DoubleType``
 - ``WorldType``
 
@@ -586,6 +588,7 @@ The foreign types are:
 - ``CFInt``
 - ``CFUnsigned(8/16/32/64)``
 - ``CFString``
+- ``CFFloat``
 - ``CFDouble``
 - ``CFChar``
 - ``CFFun`` of type  ``CFType -> CFType -> CFType``
