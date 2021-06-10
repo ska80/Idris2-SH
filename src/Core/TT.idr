@@ -60,6 +60,7 @@ data Constant
     | Bits64Type
     | StringType
     | CharType
+    | FloatType
     | DoubleType
     | WorldType
 
@@ -78,6 +79,7 @@ isConstantType (UN n) = case n of
   "Bits64"  => Just Bits64Type
   "String"  => Just StringType
   "Char"    => Just CharType
+  "Float"   => Just FloatType
   "Double"  => Just DoubleType
   "%World"  => Just WorldType
   _ => Nothing
@@ -154,6 +156,7 @@ constantEq Int64Type Int64Type = Just Refl
 constantEq IntegerType IntegerType = Just Refl
 constantEq StringType StringType = Just Refl
 constantEq CharType CharType = Just Refl
+constantEq FloatType FloatType = Just Refl
 constantEq DoubleType DoubleType = Just Refl
 constantEq WorldType WorldType = Just Refl
 constantEq _ _ = Nothing
@@ -187,6 +190,7 @@ Show Constant where
   show Bits64Type = "Bits64"
   show StringType = "String"
   show CharType = "Char"
+  show FloatType = "Float"
   show DoubleType = "Double"
   show WorldType = "%World"
 
@@ -219,6 +223,7 @@ Pretty Constant where
   pretty Bits64Type = pretty "Bits64"
   pretty StringType = pretty "String"
   pretty CharType = pretty "Char"
+  pretty FloatType = pretty "Float"
   pretty DoubleType = pretty "Double"
   pretty WorldType = pretty "%World"
 
@@ -251,6 +256,7 @@ Eq Constant where
   Bits64Type == Bits64Type = True
   StringType == StringType = True
   CharType == CharType = True
+  FloatType == FloatType = True
   DoubleType == DoubleType = True
   WorldType == WorldType = True
   _ == _ = False
@@ -267,12 +273,13 @@ constTag Bits32Type = 7
 constTag Bits64Type = 8
 constTag StringType = 9
 constTag CharType = 10
-constTag DoubleType = 11
-constTag WorldType = 12
-constTag Int8Type = 13
-constTag Int16Type = 14
-constTag Int32Type = 15
-constTag Int64Type = 16
+constTag FloatType = 11
+constTag DoubleType = 12
+constTag WorldType = 13
+constTag Int8Type = 14
+constTag Int16Type = 15
+constTag Int32Type = 16
+constTag Int64Type = 17
 constTag _ = 0
 
 ||| Precision of integral types.

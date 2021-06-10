@@ -647,6 +647,7 @@ castTo Bits32Type = castBits32
 castTo Bits64Type = castBits64
 castTo StringType = castString
 castTo CharType = castChar
+castTo FloatType = castFloat
 castTo DoubleType = castDouble
 castTo _ = const Nothing
 
@@ -779,7 +780,7 @@ integralTypes = [ IntType
                 ]
 
 numTypes : List Constant
-numTypes = integralTypes ++ [DoubleType]
+numTypes = integralTypes ++ [FloatType, DoubleType]
 
 primTypes : List Constant
 primTypes = numTypes ++ [StringType, CharType]
@@ -842,12 +843,16 @@ allPrimitives =
      MkPrim DoubleCeiling doubleTy isTotal] ++
 
     -- support all combinations of primitive casts with the following
-    -- exceptions: String -> Char, Double -> Char, Char -> Double
+    -- exceptions: String -> Char,
+    --             Float -> Char, Char -> Float,
+    --             Double -> Char, Char -> Double
     [ MkPrim (Cast t1 t2) (predTy t1 t2) isTotal
     | t1 <- primTypes
     , t2 <- primTypes
     , t1 /= t2                         &&
       (t1,t2) /= (StringType,CharType) &&
+      (t1,t2) /= (FloatType,CharType) &&
+      (t1,t2) /= (CharType,FloatType) &&
       (t1,t2) /= (DoubleType,CharType) &&
       (t1,t2) /= (CharType,DoubleType)
     ]

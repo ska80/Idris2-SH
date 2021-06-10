@@ -281,20 +281,22 @@ Hashable Constant where
       h `hashWithSalt` 17
     CharType =>
       h `hashWithSalt` 18
-    DoubleType =>
+    FloatType =>
       h `hashWithSalt` 19
-    WorldType =>
+    DoubleType =>
       h `hashWithSalt` 20
+    WorldType =>
+      h `hashWithSalt` 21
 
-    I8 x => h `hashWithSalt` 21 `hashWithSalt` x
-    I16 x => h `hashWithSalt` 22 `hashWithSalt` x
-    I32 x => h `hashWithSalt` 23 `hashWithSalt` x
-    I64 x => h `hashWithSalt` 24 `hashWithSalt` x
+    I8 x => h `hashWithSalt` 22 `hashWithSalt` x
+    I16 x => h `hashWithSalt` 23 `hashWithSalt` x
+    I32 x => h `hashWithSalt` 24 `hashWithSalt` x
+    I64 x => h `hashWithSalt` 25 `hashWithSalt` x
 
-    Int8Type => h `hashWithSalt` 25
-    Int16Type => h `hashWithSalt` 26
-    Int32Type => h `hashWithSalt` 27
-    Int64Type => h `hashWithSalt` 28
+    Int8Type => h `hashWithSalt` 26
+    Int16Type => h `hashWithSalt` 27
+    Int32Type => h `hashWithSalt` 28
+    Int64Type => h `hashWithSalt` 29
 
 export
 Hashable LazyReason where

@@ -431,6 +431,8 @@ Reify Constant where
                   => pure StringType
              (NS _ (UN "CharType"), [])
                   => pure CharType
+             (NS _ (UN "FloatType"), [])
+                  => pure FloatType
              (NS _ (UN "DoubleType"), [])
                   => pure DoubleType
              (NS _ (UN "WorldType"), [])
@@ -508,6 +510,8 @@ Reflect Constant where
       = getCon fc defs (reflectiontt "StringType")
   reflect fc defs lhs env CharType
       = getCon fc defs (reflectiontt "CharType")
+  reflect fc defs lhs env FloatType
+      = getCon fc defs (reflectiontt "FloatType")
   reflect fc defs lhs env DoubleType
       = getCon fc defs (reflectiontt "DoubleType")
   reflect fc defs lhs env WorldType

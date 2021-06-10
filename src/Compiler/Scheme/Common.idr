@@ -295,6 +295,7 @@ schConstant _ Bits32Type = "#t"
 schConstant _ Bits64Type = "#t"
 schConstant _ StringType = "#t"
 schConstant _ CharType = "#t"
+schConstant _ FloatType = "#t"
 schConstant _ DoubleType = "#t"
 schConstant _ WorldType = "#t"
 

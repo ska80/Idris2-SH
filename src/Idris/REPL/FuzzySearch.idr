@@ -101,6 +101,7 @@ fuzzySearch expr = do
                    | ABits64
                    | AString
                    | AChar
+                   | AFloat
                    | ADouble
                    | AWorld
                    | AType
@@ -129,6 +130,7 @@ fuzzySearch expr = do
   parseNameOrConst (PPrimVal _ Bits64Type)  = Just ABits64
   parseNameOrConst (PPrimVal _ StringType)  = Just AString
   parseNameOrConst (PPrimVal _ CharType)    = Just AChar
+  parseNameOrConst (PPrimVal _ FloatType)   = Just AFloat
   parseNameOrConst (PPrimVal _ DoubleType)  = Just ADouble
   parseNameOrConst (PPrimVal _ WorldType)   = Just AWorld
   parseNameOrConst (PType _)                = Just AType
