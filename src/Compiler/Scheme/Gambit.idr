@@ -78,6 +78,7 @@ mutual
   tySpec : NamedCExp -> Core String
   tySpec (NmCon fc (UN "Int") _ _ []) = pure "int"
   tySpec (NmCon fc (UN "String") _ _ []) = pure "UTF-8-string"
+  tySpec (NmCon fc (UN "Float") _ _ []) = pure "float"
   tySpec (NmCon fc (UN "Double") _ _ []) = pure "double"
   tySpec (NmCon fc (UN "Char") _ _ []) = pure "char"
   tySpec (NmCon fc (NS _ n) _ _ [_])

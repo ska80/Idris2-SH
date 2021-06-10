@@ -96,6 +96,7 @@ constPrimitives = MkConstantPrimitives {
   , intToChar    = \_,x   => pure $ op "cast-int-char" [x]
   , stringToInt  = \k     => pure . strTo k
   , intToString  = \_,x   => pure $ op "number->string" [x]
+  , floatToInt   = \k     => pure . fltTo k
   , doubleToInt  = \k     => pure . dblTo k
   , intToDouble  = \_,x   => pure $ op "exact->inexact" [x]
   , intToInt     = \k1,k2 => pure . intTo k1 k2
@@ -109,6 +110,11 @@ constPrimitives = MkConstantPrimitives {
         strTo (Signed Unlimited) x = op "cast-string-int" [x]
         strTo (Signed $ P n)     x = op "cast-string-boundedInt" [x, show (n-1)]
         strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x,show n]
+
+        fltTo : IntKind -> String -> String
+        fltTo (Signed Unlimited) x = op "exact-truncate" [x]
+        fltTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, show (n-1)]
+        fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
 
         dblTo : IntKind -> String -> String
         dblTo (Signed Unlimited) x = op "exact-truncate" [x]
@@ -168,6 +174,17 @@ schOp StrReverse [x] = pure $ op "string-reverse" [x]
 schOp StrSubstr [x, y, z] = pure $ op "string-substr" [x, y, z]
 
 -- `e` is Euler's number, which approximates to: 2.718281828459045
+schOp FloatExp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
+schOp FloatLog [x] = pure $ op "fllog" [x] -- Base is `e`.
+schOp FloatSin [x] = pure $ op "flsin" [x]
+schOp FloatCos [x] = pure $ op "flcos" [x]
+schOp FloatTan [x] = pure $ op "fltan" [x]
+schOp FloatASin [x] = pure $ op "flasin" [x]
+schOp FloatACos [x] = pure $ op "flacos" [x]
+schOp FloatATan [x] = pure $ op "flatan" [x]
+schOp FloatSqrt [x] = pure $ op "flsqrt" [x]
+schOp FloatFloor [x] = pure $ op "flfloor" [x]
+schOp FloatCeiling [x] = pure $ op "flceiling" [x]
 schOp DoubleExp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
 schOp DoubleLog [x] = pure $ op "fllog" [x] -- Base is `e`.
 schOp DoubleSin [x] = pure $ op "flsin" [x]
@@ -180,8 +197,10 @@ schOp DoubleSqrt [x] = pure $ op "flsqrt" [x]
 schOp DoubleFloor [x] = pure $ op "flfloor" [x]
 schOp DoubleCeiling [x] = pure $ op "flceiling" [x]
 
+schOp (Cast FloatType StringType)   [x] = pure $ op "number->string" [x]
 schOp (Cast DoubleType StringType)  [x] = pure $ op "number->string" [x]
 schOp (Cast CharType StringType)    [x] = pure $ op "string" [x]
+schOp (Cast StringType FloatType)   [x] = pure $ op "cast-string-float" [x]
 schOp (Cast StringType DoubleType)  [x] = pure $ op "cast-string-double" [x]
 
 schOp (Cast from to)                [x] = castInt constPrimitives from to x
@@ -261,6 +280,7 @@ schConstant _ (Ch x)
    = if (the Int (cast x) >= 32 && the Int (cast x) < 127)
         then "#\\" ++ cast x
         else "(integer->char " ++ show (the Int (cast x)) ++ ")"
+schConstant _ (Fl x) = show x
 schConstant _ (Db x) = show x
 schConstant _ WorldVal = "#f"
 schConstant _ IntType = "#t"

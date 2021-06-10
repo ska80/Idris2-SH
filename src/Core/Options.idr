@@ -103,6 +103,7 @@ record PrimNames where
   fromIntegerName : Maybe Name
   fromStringName : Maybe Name
   fromCharName : Maybe Name
+  fromFloatName : Maybe Name
   fromDoubleName : Maybe Name
 
 export
@@ -250,6 +251,10 @@ setFromString n = record { primnames->fromStringName = Just n }
 export
 setFromChar : Name -> Options -> Options
 setFromChar n = record { primnames->fromCharName = Just n }
+
+export
+setFromFloat : Name -> Options -> Options
+setFromFloat n = record { primnames->fromFloatName = Just n }
 
 export
 setFromDouble : Name -> Options -> Options

@@ -42,6 +42,7 @@ constant
                            CharLit c => case getCharLit c of
                                              Nothing => Nothing
                                              Just c' => Just (Ch c')
+                           FloatLit f  => Just (Fl f)
                            DoubleLit d  => Just (Db d)
                            IntegerLit i => Just (BI i)
                            Ident s      => isConstantType (UN s) >>=

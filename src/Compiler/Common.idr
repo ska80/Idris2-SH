@@ -469,6 +469,7 @@ record ConstantPrimitives where
   intToChar    : IntKind -> String -> Core String
   stringToInt  : IntKind -> String -> Core String
   intToString  : IntKind -> String -> Core String
+  floatToInt   : IntKind -> String -> Core String
   doubleToInt  : IntKind -> String -> Core String
   intToDouble  : IntKind -> String -> Core String
   intToInt     : IntKind -> IntKind -> String -> Core String
@@ -485,6 +486,7 @@ castInt p from to x =
   case ((from, intKind from), (to, intKind to)) of
        ((CharType, _)  , (_, Just k)) => p.charToInt k x
        ((StringType, _), (_, Just k)) => p.stringToInt k x
+       ((FloatType, _), (_, Just k))  => p.floatToInt k x
        ((DoubleType, _), (_, Just k)) => p.doubleToInt k x
        ((_, Just k), (CharType, _))   => p.intToChar k x
        ((_, Just k), (StringType, _)) => p.intToString k x

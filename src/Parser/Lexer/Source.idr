@@ -52,6 +52,7 @@ export
 Show Token where
   -- Literals
   show (CharLit x) = "character " ++ show x
+  show (FloatLit x) = "float " ++ show x
   show (DoubleLit x) = "double " ++ show x
   show (IntegerLit x) = "literal " ++ show x
   -- String
@@ -81,6 +82,7 @@ export
 Pretty Token where
   -- Literals
   pretty (CharLit x) = pretty "character" <++> squotes (pretty x)
+  pretty (FloatLit x) = pretty "float" <++> pretty x
   pretty (DoubleLit x) = pretty "double" <++> pretty x
   pretty (IntegerLit x) = pretty "literal" <++> pretty x
   -- String
@@ -164,6 +166,11 @@ dotIdent = is '.' <+> identNormal
 
 pragma : Lexer
 pragma = is '%' <+> identNormal
+
+floatLit : Lexer
+floatLit
+    = digits <+> is '.' <+> digits <+> opt
+           (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
 
 doubleLit : Lexer
 doubleLit
@@ -320,6 +327,7 @@ mutual
                   (exact . groupClose)
                   Symbol
       <|> match (choice $ exact <$> symbols) Symbol
+      <|> match floatLit (\x => FloatLit (cast x))
       <|> match doubleLit (\x => DoubleLit (cast x))
       <|> match binLit (\x => IntegerLit (fromBinLit x))
       <|> match hexLit (\x => IntegerLit (fromHexLit x))

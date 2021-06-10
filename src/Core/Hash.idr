@@ -257,42 +257,44 @@ Hashable Constant where
       h `hashWithSalt` 6 `hashWithSalt` x
     Ch x =>
       h `hashWithSalt` 7 `hashWithSalt` x
-    Db x =>
+    Fl x =>
       h `hashWithSalt` 8 `hashWithSalt` x
+    Db x =>
+      h `hashWithSalt` 9 `hashWithSalt` x
 
     WorldVal =>
-      h `hashWithSalt` 9
+      h `hashWithSalt` 10
 
     IntType =>
-      h `hashWithSalt` 10
-    IntegerType =>
       h `hashWithSalt` 11
-    Bits8Type =>
+    IntegerType =>
       h `hashWithSalt` 12
-    Bits16Type =>
+    Bits8Type =>
       h `hashWithSalt` 13
-    Bits32Type =>
+    Bits16Type =>
       h `hashWithSalt` 14
-    Bits64Type =>
+    Bits32Type =>
       h `hashWithSalt` 15
-    StringType =>
+    Bits64Type =>
       h `hashWithSalt` 16
-    CharType =>
+    StringType =>
       h `hashWithSalt` 17
-    DoubleType =>
+    CharType =>
       h `hashWithSalt` 18
-    WorldType =>
+    DoubleType =>
       h `hashWithSalt` 19
+    WorldType =>
+      h `hashWithSalt` 20
 
-    I8 x => h `hashWithSalt` 20 `hashWithSalt` x
-    I16 x => h `hashWithSalt` 21 `hashWithSalt` x
-    I32 x => h `hashWithSalt` 22 `hashWithSalt` x
-    I64 x => h `hashWithSalt` 23 `hashWithSalt` x
+    I8 x => h `hashWithSalt` 21 `hashWithSalt` x
+    I16 x => h `hashWithSalt` 22 `hashWithSalt` x
+    I32 x => h `hashWithSalt` 23 `hashWithSalt` x
+    I64 x => h `hashWithSalt` 24 `hashWithSalt` x
 
-    Int8Type => h `hashWithSalt` 24
-    Int16Type => h `hashWithSalt` 25
-    Int32Type => h `hashWithSalt` 26
-    Int64Type => h `hashWithSalt` 27
+    Int8Type => h `hashWithSalt` 25
+    Int16Type => h `hashWithSalt` 26
+    Int32Type => h `hashWithSalt` 27
+    Int64Type => h `hashWithSalt` 28
 
 export
 Hashable LazyReason where
@@ -356,35 +358,58 @@ Hashable (PrimFn arity) where
     StrSubstr =>
       h `hashWithSalt` 23
 
-    DoubleExp =>
+    FloatExp =>
       h `hashWithSalt` 24
-    DoubleLog =>
+    FloatLog =>
       h `hashWithSalt` 25
-    DoubleSin =>
+    FloatSin =>
       h `hashWithSalt` 26
-    DoubleCos =>
+    FloatCos =>
       h `hashWithSalt` 27
-    DoubleTan =>
+    FloatTan =>
       h `hashWithSalt` 28
-    DoubleASin =>
+    FloatASin =>
       h `hashWithSalt` 29
-    DoubleACos =>
+    FloatACos =>
       h `hashWithSalt` 30
-    DoubleATan =>
+    FloatATan =>
       h `hashWithSalt` 31
-    DoubleSqrt =>
+    FloatSqrt =>
       h `hashWithSalt` 32
-    DoubleFloor =>
+    FloatFloor =>
       h `hashWithSalt` 33
-    DoubleCeiling =>
+    FloatCeiling =>
       h `hashWithSalt` 34
 
-    Cast f t =>
-      h `hashWithSalt` 35 `hashWithSalt` f `hashWithSalt` t
-    BelieveMe =>
+    DoubleExp =>
+      h `hashWithSalt` 35
+    DoubleLog =>
       h `hashWithSalt` 36
-    Crash =>
+    DoubleSin =>
       h `hashWithSalt` 37
+    DoubleCos =>
+      h `hashWithSalt` 38
+    DoubleTan =>
+      h `hashWithSalt` 39
+    DoubleASin =>
+      h `hashWithSalt` 40
+    DoubleACos =>
+      h `hashWithSalt` 41
+    DoubleATan =>
+      h `hashWithSalt` 42
+    DoubleSqrt =>
+      h `hashWithSalt` 43
+    DoubleFloor =>
+      h `hashWithSalt` 44
+    DoubleCeiling =>
+      h `hashWithSalt` 45
+
+    Cast f t =>
+      h `hashWithSalt` 46 `hashWithSalt` f `hashWithSalt` t
+    BelieveMe =>
+      h `hashWithSalt` 47
+    Crash =>
+      h `hashWithSalt` 48
 
 export
 Hashable ConInfo where

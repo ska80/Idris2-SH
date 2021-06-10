@@ -297,6 +297,13 @@ mutual
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
+  desugarB side ps (PPrimVal fc (Fl x))
+      = case !fromFloatName of
+             Nothing =>
+                pure $ IPrimVal fc (Fl x)
+             Just f =>
+               let vfc = virtualiseFC fc in
+               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Fl x))
   desugarB side ps (PPrimVal fc (Db x))
       = case !fromDoubleName of
              Nothing =>

@@ -18,6 +18,7 @@ checkPrim fc (B32 i) = (PrimVal fc (B32 i), PrimVal fc Bits32Type)
 checkPrim fc (B64 i) = (PrimVal fc (B64 i), PrimVal fc Bits64Type)
 checkPrim fc (Str s) = (PrimVal fc (Str s), PrimVal fc StringType)
 checkPrim fc (Ch c) = (PrimVal fc (Ch c), PrimVal fc CharType)
+checkPrim fc (Fl f) = (PrimVal fc (Fl f), PrimVal fc FloatType)
 checkPrim fc (Db d) = (PrimVal fc (Db d), PrimVal fc DoubleType)
 checkPrim fc WorldVal = (PrimVal fc WorldVal, PrimVal fc WorldType)
 

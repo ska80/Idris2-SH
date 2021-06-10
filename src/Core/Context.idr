@@ -2513,6 +2513,13 @@ fromCharName
          pure $ fromCharName (primnames (options defs))
 
 export
+fromFloatName : {auto c : Ref Ctxt Defs} ->
+               Core (Maybe Name)
+fromFloatName
+    = do defs <- get Ctxt
+         pure $ fromFloatName (primnames (options defs))
+
+export
 fromDoubleName : {auto c : Ref Ctxt Defs} ->
                Core (Maybe Name)
 fromDoubleName
@@ -2521,7 +2528,7 @@ fromDoubleName
 
 export
 getPrimNames : {auto c : Ref Ctxt Defs} -> Core PrimNames
-getPrimNames = [| MkPrimNs fromIntegerName fromStringName fromCharName fromDoubleName |]
+getPrimNames = [| MkPrimNs fromIntegerName fromStringName fromCharNamef fromFloatName fromDoubleName |]
 
 export
 getPrimitiveNames : {auto c : Ref Ctxt Defs} -> Core (List Name)

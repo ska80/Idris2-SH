@@ -359,6 +359,7 @@ updatePrimNames p
     = record { fromIntegerName $= ((fromIntegerName p) <+>),
                fromStringName $= ((fromStringName p) <+>),
                fromCharName $= ((fromCharName p) <+>),
+               fromFloatName $= ((fromFloatName p) <+>)
                fromDoubleName $= ((fromDoubleName p) <+>)
              }
 

@@ -151,28 +151,30 @@ TTC Constant where
   toBuf b (B64 x) = do tag 5; toBuf b x
   toBuf b (Str x) = do tag 6; toBuf b x
   toBuf b (Ch x) = do tag 7; toBuf b x
-  toBuf b (Db x) = do tag 8; toBuf b x
+  toBuf b (Fl x) = do tag 8; toBuf b x
+  toBuf b (Db x) = do tag 9; toBuf b x
 
-  toBuf b WorldVal = tag 9
-  toBuf b IntType = tag 10
-  toBuf b IntegerType = tag 11
-  toBuf b Bits8Type = tag 12
-  toBuf b Bits16Type = tag 13
-  toBuf b Bits32Type = tag 14
-  toBuf b Bits64Type = tag 15
-  toBuf b StringType = tag 16
-  toBuf b CharType = tag 17
-  toBuf b DoubleType = tag 18
-  toBuf b WorldType = tag 19
+  toBuf b WorldVal = tag 10
+  toBuf b IntType = tag 11
+  toBuf b IntegerType = tag 12
+  toBuf b Bits8Type = tag 13
+  toBuf b Bits16Type = tag 14
+  toBuf b Bits32Type = tag 15
+  toBuf b Bits64Type = tag 16
+  toBuf b StringType = tag 17
+  toBuf b CharType = tag 18
+  toBuf b FloatType = tag 19
+  toBuf b DoubleType = tag 20
+  toBuf b WorldType = tag 21
 
-  toBuf b (I32 x) = do tag 20; toBuf b x
-  toBuf b (I64 x) = do tag 21; toBuf b x
-  toBuf b Int32Type = tag 22
-  toBuf b Int64Type = tag 23
-  toBuf b (I8 x) = do tag 24; toBuf b x
-  toBuf b (I16 x) = do tag 25; toBuf b x
-  toBuf b Int8Type = tag 26
-  toBuf b Int16Type = tag 27
+  toBuf b (I32 x) = do tag 22; toBuf b x
+  toBuf b (I64 x) = do tag 23; toBuf b x
+  toBuf b Int32Type = tag 24
+  toBuf b Int64Type = tag 25
+  toBuf b (I8 x) = do tag 26; toBuf b x
+  toBuf b (I16 x) = do tag 27; toBuf b x
+  toBuf b Int8Type = tag 28
+  toBuf b Int16Type = tag 29
 
   fromBuf b
       = case !getTag of
@@ -184,26 +186,28 @@ TTC Constant where
              5 => do x <- fromBuf b; pure (B64 x)
              6 => do x <- fromBuf b; pure (Str x)
              7 => do x <- fromBuf b; pure (Ch x)
-             8 => do x <- fromBuf b; pure (Db x)
-             9 => pure WorldVal
-             10 => pure IntType
-             11 => pure IntegerType
-             12 => pure Bits8Type
-             13 => pure Bits16Type
-             14 => pure Bits32Type
-             15 => pure Bits64Type
-             16 => pure StringType
-             17 => pure CharType
-             18 => pure DoubleType
-             19 => pure WorldType
-             20 => do x <- fromBuf b; pure (I32 x)
-             21 => do x <- fromBuf b; pure (I64 x)
-             22 => pure Int32Type
-             23 => pure Int64Type
-             24 => do x <- fromBuf b; pure (I8 x)
-             25 => do x <- fromBuf b; pure (I16 x)
-             26 => pure Int8Type
-             27 => pure Int16Type
+             8 => do x <- fromBuf b; pure (Fl x)
+             9 => do x <- fromBuf b; pure (Db x)
+             10 => pure WorldVal
+             11 => pure IntType
+             12 => pure IntegerType
+             13 => pure Bits8Type
+             14 => pure Bits16Type
+             15 => pure Bits32Type
+             16 => pure Bits64Type
+             17 => pure StringType
+             18 => pure CharType
+             19 => pure FloatType
+             20 => pure DoubleType
+             21 => pure WorldType
+             22 => do x <- fromBuf b; pure (I32 x)
+             23 => do x <- fromBuf b; pure (I64 x)
+             24 => pure Int32Type
+             25 => pure Int64Type
+             26 => do x <- fromBuf b; pure (I8 x)
+             27 => do x <- fromBuf b; pure (I16 x)
+             28 => pure Int8Type
+             29 => pure Int16Type
              _ => corrupt "Constant"
 
 export
@@ -572,17 +576,28 @@ export
   toBuf b StrReverse = tag 17
   toBuf b StrSubstr = tag 18
 
-  toBuf b DoubleExp = tag 19
-  toBuf b DoubleLog = tag 20
-  toBuf b DoubleSin = tag 22
-  toBuf b DoubleCos = tag 23
-  toBuf b DoubleTan = tag 24
-  toBuf b DoubleASin = tag 25
-  toBuf b DoubleACos = tag 26
-  toBuf b DoubleATan = tag 27
-  toBuf b DoubleSqrt = tag 32
-  toBuf b DoubleFloor = tag 33
-  toBuf b DoubleCeiling = tag 34
+  toBuf b FloatExp = tag 19
+  toBuf b FloatLog = tag 20
+  toBuf b FloatSin = tag 22
+  toBuf b FloatCos = tag 23
+  toBuf b FloatTan = tag 24
+  toBuf b FloatASin = tag 25
+  toBuf b FloatACos = tag 26
+  toBuf b FloatATan = tag 27
+  toBuf b FloatSqrt = tag 32
+  toBuf b FloatFloor = tag 33
+  toBuf b FloatCeiling = tag 34
+  toBuf b DoubleExp = tag 40
+  toBuf b DoubleLog = tag 41
+  toBuf b DoubleSin = tag 42
+  toBuf b DoubleCos = tag 43
+  toBuf b DoubleTan = tag 44
+  toBuf b DoubleASin = tag 45
+  toBuf b DoubleACos = tag 46
+  toBuf b DoubleATan = tag 47
+  toBuf b DoubleSqrt = tag 48
+  toBuf b DoubleFloor = tag 49
+  toBuf b DoubleCeiling = tag 50
 
   toBuf b (Cast x y) = do tag 99; toBuf b x; toBuf b y
   toBuf b BelieveMe = tag 100
@@ -603,17 +618,29 @@ export
                  12 => pure StrHead
                  13 => pure StrTail
                  17 => pure StrReverse
-                 19 => pure DoubleExp
-                 20 => pure DoubleLog
-                 22 => pure DoubleSin
-                 23 => pure DoubleCos
-                 24 => pure DoubleTan
-                 25 => pure DoubleASin
-                 26 => pure DoubleACos
-                 27 => pure DoubleATan
-                 32 => pure DoubleSqrt
-                 33 => pure DoubleFloor
-                 34 => pure DoubleCeiling
+
+                 19 => pure FloatExp
+                 20 => pure FloatLog
+                 22 => pure FloatSin
+                 23 => pure FloatCos
+                 24 => pure FloatTan
+                 25 => pure FloatASin
+                 26 => pure FloatACos
+                 27 => pure FloatATan
+                 32 => pure FloatSqrt
+                 33 => pure FloatFloor
+                 34 => pure FloatCeiling
+                 40 => pure DoubleExp
+                 41 => pure DoubleLog
+                 42 => pure DoubleSin
+                 43 => pure DoubleCos
+                 44 => pure DoubleTan
+                 45 => pure DoubleASin
+                 46 => pure DoubleACos
+                 47 => pure DoubleATan
+                 48 => pure DoubleSqrt
+                 49 => pure DoubleFloor
+                 50 => pure DoubleCeiling
 
                  99 => do x <- fromBuf b; y <- fromBuf b; pure (Cast x y)
                  _ => corrupt "PrimFn 1"
@@ -882,6 +909,7 @@ TTC PrimNames where
       = do toBuf b (fromIntegerName l)
            toBuf b (fromStringName l)
            toBuf b (fromCharName l)
+           toBuf b (fromFloatName l)
            toBuf b (fromDoubleName l)
   fromBuf b
       = do i <- fromBuf b

@@ -165,6 +165,9 @@ fromInt k = if useBigInt k then fromBigInt else id
 jsIntOfChar : IntKind -> String -> String
 jsIntOfChar k s = toInt k $ s ++ ".codePointAt(0)"
 
+jsIntOfFloat : IntKind -> String -> String
+jsIntOfFloat k s = toInt k $ "Math.trunc(" ++ s ++ ")"
+
 jsIntOfDouble : IntKind -> String -> String
 jsIntOfDouble k s = toInt k $ "Math.trunc(" ++ s ++ ")"
 
@@ -238,6 +241,7 @@ jsConstant (I64 i) = pure $ show i ++ "n"
 jsConstant (BI i) = pure $ show i ++ "n"
 jsConstant (Str s) = pure $ jsString s
 jsConstant (Ch c) = pure $ jsString $ Data.Strings.singleton c
+jsConstant (Fl f) = pure $ show f
 jsConstant (Db f) = pure $ show f
 jsConstant WorldVal = addConstToPreamble "idrisworld" "Symbol('idrisworld')";
 jsConstant (B8 i) = pure $ show i
@@ -314,6 +318,7 @@ constPrimitives = MkConstantPrimitives {
   , intToChar    = \k => jsCharOfInt k
   , stringToInt  = \k,s => jsIntOfString k s >>= truncInt (useBigInt k) k
   , intToString  = \_   => pure . jsAnyToString
+  , floatToInt   = \k => truncInt (useBigInt k) k . jsIntOfFloat k
   , doubleToInt  = \k => truncInt (useBigInt k) k . jsIntOfDouble k
   , intToDouble  = \k => pure . fromInt k
   , intToInt     = intImpl
@@ -393,6 +398,17 @@ jsOp StrReverse [x] =
     pure $ n ++ "(" ++ x ++ ")"
 jsOp StrSubstr [offset, length, str] =
   pure $ str ++ ".slice(" ++ fromBigInt offset ++ ", " ++ fromBigInt offset ++ " + " ++ fromBigInt length ++ ")"
+jsOp FloatExp [x] = pure $ "Math.exp(" ++ x ++ ")"
+jsOp FloatLog [x] = pure $ "Math.log(" ++ x ++ ")"
+jsOp FloatSin [x] = pure $ "Math.sin(" ++ x ++ ")"
+jsOp FloatCos [x] = pure $ "Math.cos(" ++ x ++ ")"
+jsOp FloatTan [x] = pure $ "Math.tan(" ++ x ++ ")"
+jsOp FloatASin [x] = pure $ "Math.asin(" ++ x ++ ")"
+jsOp FloatACos [x] = pure $ "Math.acos(" ++ x ++ ")"
+jsOp FloatATan [x] = pure $ "Math.atan(" ++ x ++ ")"
+jsOp FloatSqrt [x] = pure $ "Math.sqrt(" ++ x ++ ")"
+jsOp FloatFloor [x] = pure $ "Math.floor(" ++ x ++ ")"
+jsOp FloatCeiling [x] = pure $ "Math.ceil(" ++ x ++ ")"
 jsOp DoubleExp [x] = pure $ "Math.exp(" ++ x ++ ")"
 jsOp DoubleLog [x] = pure $ "Math.log(" ++ x ++ ")"
 jsOp DoubleSin [x] = pure $ "Math.sin(" ++ x ++ ")"

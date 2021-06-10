@@ -90,6 +90,8 @@ expandAmbigName mode nest env orig args (IVar fc x) exp
         = UniqueDefault (IPrimVal fc (Str x))
     uniqType (MkPrimNs _ _ (Just ci) _) n [(_, _, IPrimVal fc (Ch x))]
         = UniqueDefault (IPrimVal fc (Ch x))
+    uniqType (MkPrimNs _ _ _ (Just di)) n [(_, _, IPrimVal fc (Fl x))]
+        = UniqueDefault (IPrimVal fc (Fl x))
     uniqType (MkPrimNs _ _ _ (Just di)) n [(_, _, IPrimVal fc (Db x))]
         = UniqueDefault (IPrimVal fc (Db x))
     uniqType _ _ _ = Unique
