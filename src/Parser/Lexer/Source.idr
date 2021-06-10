@@ -24,7 +24,7 @@ public export
 data Token
   -- Literals
   = CharLit String
-  | FloatLit Float
+  | FloatLit Double --FIXME_Float
   | DoubleLit Double
   | IntegerLit Integer
   -- String
