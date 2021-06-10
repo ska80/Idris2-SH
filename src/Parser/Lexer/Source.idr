@@ -171,7 +171,14 @@ pragma = is '%' <+> identNormal
 floatLit : Lexer
 floatLit
     = digits <+> is '.' <+> digits <+> opt
-           (is 'e' <+> opt (is '-' <|> is '+') <+> digits <+> is 'f')
+           (is 'e' <+> opt (is '-' <|> is '+') <+> digits) <+> exact "f"
+
+fromFloatLit : String -> Double --FIXME_Float
+fromFloatLit str
+  = if length str <= 1
+       then 0
+       else let num = assert_total (strTail $ reverse str) in
+                cast (reverse num)
 
 doubleLit : Lexer
 doubleLit
@@ -328,7 +335,7 @@ mutual
                   (exact . groupClose)
                   Symbol
       <|> match (choice $ exact <$> symbols) Symbol
-      <|> match floatLit (\x => FloatLit (cast x))
+      <|> match floatLit (\x => FloatLit (fromFloatLit x))
       <|> match doubleLit (\x => DoubleLit (cast x))
       <|> match binLit (\x => IntegerLit (fromBinLit x))
       <|> match hexLit (\x => IntegerLit (fromHexLit x))
