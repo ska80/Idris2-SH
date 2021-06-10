@@ -124,8 +124,8 @@ HasNames e => HasNames (TTCFile e) where
           = pure $ Just $ MkRewriteNs !(full gam e) !(full gam r)
 
       fullPrim : Context -> PrimNames -> Core PrimNames
-      fullPrim gam (MkPrimNs mi ms mc md)
-          = [| MkPrimNs (full gam mi) (full gam ms) (full gam mc) (full gam md) |]
+      fullPrim gam (MkPrimNs mi ms mc mf md)
+          = [| MkPrimNs (full gam mi) (full gam ms) (full gam mc) (full gam mf) (full gam md) |]
 
 
   -- I don't think we ever actually want to call this, because after we read
@@ -162,10 +162,11 @@ HasNames e => HasNames (TTCFile e) where
           = pure $ Just $ MkRewriteNs !(resolved gam e) !(resolved gam r)
 
       resolvedPrim : Context -> PrimNames -> Core PrimNames
-      resolvedPrim gam (MkPrimNs mi ms mc md)
+      resolvedPrim gam (MkPrimNs mi ms mc mf md)
           = pure $ MkPrimNs !(resolved gam mi)
                             !(resolved gam ms)
                             !(resolved gam mc)
+                            !(resolved gam mf)
                             !(resolved gam md)
 
 -- NOTE: TTC files are only compatible if the version number is the same,
@@ -213,7 +214,7 @@ readTTCFile readall file as b
               then pure (MkTTCFile ver ifaceHash importHashes [] [] [] [] []
                                    0 (mkNamespace "") [] Nothing
                                    Nothing
-                                   (MkPrimNs Nothing Nothing Nothing Nothing)
+                                   (MkPrimNs Nothing Nothing Nothing Nothing Nothing)
                                    [] [] [] ex)
               else do
                  defs <- fromBuf b
@@ -359,7 +360,7 @@ updatePrimNames p
     = record { fromIntegerName $= ((fromIntegerName p) <+>),
                fromStringName $= ((fromStringName p) <+>),
                fromCharName $= ((fromCharName p) <+>),
-               fromFloatName $= ((fromFloatName p) <+>)
+               fromFloatName $= ((fromFloatName p) <+>),
                fromDoubleName $= ((fromDoubleName p) <+>)
              }
 

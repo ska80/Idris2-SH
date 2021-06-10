@@ -198,7 +198,6 @@ castInt64 _ = Nothing
 
 castFloat : Vect 1 (NF vars) -> Maybe (NF vars)
 castFloat [NPrimVal fc (I i)] = Just (NPrimVal fc (Fl (cast i)))
-castFloat [NPrimVal fc (I i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (I16 i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Fl (cast i)))

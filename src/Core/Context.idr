@@ -2535,7 +2535,7 @@ fromDoubleName
 
 export
 getPrimNames : {auto c : Ref Ctxt Defs} -> Core PrimNames
-getPrimNames = [| MkPrimNs fromIntegerName fromStringName fromCharNamef fromFloatName fromDoubleName |]
+getPrimNames = [| MkPrimNs fromIntegerName fromStringName fromCharName fromFloatName fromDoubleName |]
 
 export
 getPrimitiveNames : {auto c : Ref Ctxt Defs} -> Core (List Name)

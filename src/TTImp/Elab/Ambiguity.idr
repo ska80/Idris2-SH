@@ -84,15 +84,15 @@ expandAmbigName mode nest env orig args (IVar fc x) exp
     -- If there's multiple alternatives and all else fails, resort to using
     -- the primitive directly
     uniqType : PrimNames -> Name -> List (FC, Maybe (Maybe Name), RawImp) -> AltType
-    uniqType (MkPrimNs (Just fi) _ _ _) n [(_, _, IPrimVal fc (BI x))]
+    uniqType (MkPrimNs (Just fi) _ _ _ _) n [(_, _, IPrimVal fc (BI x))]
         = UniqueDefault (IPrimVal fc (BI x))
-    uniqType (MkPrimNs _ (Just si) _ _) n [(_, _, IPrimVal fc (Str x))]
+    uniqType (MkPrimNs _ (Just si) _ _ _) n [(_, _, IPrimVal fc (Str x))]
         = UniqueDefault (IPrimVal fc (Str x))
-    uniqType (MkPrimNs _ _ (Just ci) _) n [(_, _, IPrimVal fc (Ch x))]
+    uniqType (MkPrimNs _ _ (Just ci) _ _) n [(_, _, IPrimVal fc (Ch x))]
         = UniqueDefault (IPrimVal fc (Ch x))
-    uniqType (MkPrimNs _ _ _ (Just di)) n [(_, _, IPrimVal fc (Fl x))]
+    uniqType (MkPrimNs _ _ _ (Just fi) _) n [(_, _, IPrimVal fc (Fl x))]
         = UniqueDefault (IPrimVal fc (Fl x))
-    uniqType (MkPrimNs _ _ _ (Just di)) n [(_, _, IPrimVal fc (Db x))]
+    uniqType (MkPrimNs _ _ _ _ (Just di)) n [(_, _, IPrimVal fc (Db x))]
         = UniqueDefault (IPrimVal fc (Db x))
     uniqType _ _ _ = Unique
 

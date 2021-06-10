@@ -915,8 +915,9 @@ TTC PrimNames where
       = do i <- fromBuf b
            str <- fromBuf b
            c <- fromBuf b
+           f <- fromBuf b
            d <- fromBuf b
-           pure (MkPrimNs i str c d)
+           pure (MkPrimNs i str c f d)
 
 export
 TTC HoleInfo where
