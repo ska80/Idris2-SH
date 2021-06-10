@@ -171,7 +171,7 @@ pragma = is '%' <+> identNormal
 floatLit : Lexer
 floatLit
     = digits <+> is '.' <+> digits <+> opt
-           (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
+           (is 'e' <+> opt (is '-' <|> is '+') <+> digits <+> is 'f')
 
 doubleLit : Lexer
 doubleLit
