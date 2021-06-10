@@ -24,6 +24,7 @@ public export
 data Token
   -- Literals
   = CharLit String
+  | FloatLit Float
   | DoubleLit Double
   | IntegerLit Integer
   -- String

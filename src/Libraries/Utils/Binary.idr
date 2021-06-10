@@ -272,6 +272,27 @@ TTC Char where
            pure (cast {from=Int} i)
 
 export
+TTC Float where
+  toBuf b val
+    = do chunk <- get Bin
+         if avail chunk >= 4
+            then
+              do coreLift $ setFloat (buf chunk) (loc chunk) val
+                 put Bin (appended 4 chunk)
+            else do chunk' <- extendBinary 4 chunk
+                    coreLift $ setFloat (buf chunk') (loc chunk') val
+                    put Bin (appended 4 chunk')
+
+  fromBuf b
+    = do chunk <- get Bin
+         if toRead chunk >= 4
+            then
+              do val <- coreLift $ getFloat (buf chunk) (loc chunk)
+                 put Bin (incLoc 4 chunk)
+                 pure val
+              else throw (TTCError (EndOfBuffer "Float"))
+
+export
 TTC Double where
   toBuf b val
     = do chunk <- get Bin

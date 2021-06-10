@@ -2436,6 +2436,13 @@ setFromChar n
          put Ctxt (record { options $= setFromChar n } defs)
 
 export
+setFromFloat : {auto c : Ref Ctxt Defs} ->
+               Name -> Core ()
+setFromFloat n
+    = do defs <- get Ctxt
+         put Ctxt (record { options $= setFromFloat n } defs)
+
+export
 setFromDouble : {auto c : Ref Ctxt Defs} ->
               Name -> Core ()
 setFromDouble n

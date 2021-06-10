@@ -115,6 +115,7 @@ fuzzySearch expr = do
   eqConst ABits64  ABits64  = True
   eqConst AString  AString  = True
   eqConst AChar    AChar    = True
+  eqConst AFloat   AFloat   = True
   eqConst ADouble  ADouble  = True
   eqConst AWorld   AWorld   = True
   eqConst AType    AType    = True
