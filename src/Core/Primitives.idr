@@ -509,7 +509,6 @@ gt (Ch x) (Ch y) = pure $ toInt (x > y)
 gt (Fl x) (Fl y) = pure $ toInt (x > y)
 gt (Db x) (Db y) = pure $ toInt (x > y)
 gt _ _ = Nothing
-
 {-FIXME_Float
 floatOp : (Float -> Float) -> Vect 1 (NF vars) -> Maybe (NF vars)
 floatOp f [NPrimVal fc (Fl x)] = Just (NPrimVal fc (Fl (f x)))
