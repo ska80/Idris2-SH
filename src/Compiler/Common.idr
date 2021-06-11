@@ -494,4 +494,4 @@ castInt p from to x =
        ((_, Just k), (FloatType, _))  => p.intToFloat k x
        ((_, Just k), (DoubleType, _)) => p.intToDouble k x
        ((_, Just k1), (_, Just k2))   => p.intToInt k1 k2 x
-       _ => throw $ InternalError $ "invalid cast: + " ++ show from ++ " + ' -> ' + " ++ show to
+       _ => throw $ InternalError $ "invalid cast: " ++ show from ++ " -> " ++ show to
