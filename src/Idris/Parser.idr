@@ -1189,7 +1189,7 @@ directive fname indents
          n <- name
          atEnd indents
          pure (PrimChar n)
-  <|> do decorate fname Keyword $ pragma "doubleLit"
+  <|> do decorate fname Keyword $ pragma "floatLit"
          n <- name
          atEnd indents
          pure (PrimFloat n)
