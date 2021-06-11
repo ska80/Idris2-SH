@@ -57,11 +57,11 @@ Eq Bits32 where
 public export
 Eq Bits64 where
   x == y = intToBool (prim__eq_Bits64 x y)
-
+{-FIXME_Float
 public export
 Eq Float where
   x == y = intToBool (prim__eq_Float x y)
-
+-}
 public export
 Eq Double where
   x == y = intToBool (prim__eq_Double x y)
@@ -184,7 +184,7 @@ Ord Bits64 where
   (<=) x y = intToBool (prim__lte_Bits64 x y)
   (>) x y = intToBool (prim__gt_Bits64 x y)
   (>=) x y = intToBool (prim__gte_Bits64 x y)
-
+{-FIXME_Float
 public export
 Ord Float where
   compare x y = if x < y then LT else if x == y then EQ else GT
@@ -193,7 +193,7 @@ Ord Float where
   (<=) x y = intToBool (prim__lte_Float x y)
   (>) x y = intToBool (prim__gt_Float x y)
   (>=) x y = intToBool (prim__gte_Float x y)
-
+-}
 public export
 Ord Double where
   compare x y = if x < y then LT else if x == y then EQ else GT

@@ -177,7 +177,7 @@ export %inline
 getInt : HasIO io => Buffer -> (loc : Int) -> io Int
 getInt buf loc
     = primIO (prim__getInt buf loc)
-
+{-FIXME_Float
 %foreign "scheme:blodwen-buffer-setfloat"
          "C:idris2_setBufferFloat, libidris2_support, idris_buffer.h"
          "node:lambda:(buf,offset,value)=>buf.writeFloatLE(value, Number(offset))"
@@ -187,7 +187,7 @@ export %inline
 setFloat : HasIO io => Buffer -> (loc : Int) -> (val : Float) -> io ()
 setFloat buf loc val
     = primIO (prim__setFloat buf loc val)
-
+-}
 %foreign "scheme:blodwen-buffer-setdouble"
          "C:idris2_setBufferDouble, libidris2_support, idris_buffer.h"
          "node:lambda:(buf,offset,value)=>buf.writeDoubleLE(value, Number(offset))"
@@ -197,7 +197,7 @@ export %inline
 setDouble : HasIO io => Buffer -> (loc : Int) -> (val : Double) -> io ()
 setDouble buf loc val
     = primIO (prim__setDouble buf loc val)
-
+{-FIXME_Float
 %foreign "scheme:blodwen-buffer-getfloat"
          "C:idris2_getBufferFloat, libidris2_support, idris_buffer.h"
          "node:lambda:(buf,offset)=>buf.readFloatLE(Number(offset))"
@@ -207,7 +207,7 @@ export %inline
 getFloat : HasIO io => Buffer -> (loc : Int) -> io Float
 getFloat buf loc
     = primIO (prim__getFloat buf loc)
-
+-}
 %foreign "scheme:blodwen-buffer-getdouble"
          "C:idris2_getBufferDouble, libidris2_support, idris_buffer.h"
          "node:lambda:(buf,offset)=>buf.readDoubleLE(Number(offset))"

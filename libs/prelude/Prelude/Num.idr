@@ -159,7 +159,7 @@ Num Bits64 where
   fromInteger = prim__cast_IntegerBits64
 
 -- Float
-
+{-FIXME_Float
 public export
 Num Float where
   (+) = prim__add_Float
@@ -178,7 +178,7 @@ Abs Float where
 public export
 Fractional Float where
   (/) = prim__div_Float
-
+-}
 -- Double
 
 public export

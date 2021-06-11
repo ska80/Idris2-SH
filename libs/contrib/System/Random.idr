@@ -32,7 +32,7 @@ Random Int where
   randomRIO (lo, hi) =
     let range = hi - lo + 1
      in map (+ lo) $ liftIO $ randomInt range
-
+{-FIXME_Float
 %foreign "scheme:blodwen-random"
 prim__randomFloat : PrimIO Float
 
@@ -46,7 +46,7 @@ Random Float where
 
   -- Generate a random value within [lo, hi].
   randomRIO (lo, hi) = map ((+ lo) . (* (hi - lo))) (liftIO randomFloat)
-
+-}
 %foreign "scheme:blodwen-random"
 prim__randomDouble : PrimIO Double
 

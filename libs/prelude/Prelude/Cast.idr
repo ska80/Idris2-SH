@@ -36,11 +36,11 @@ Cast Integer String where
 export
 Cast Char String where
   cast = prim__cast_CharString
-
+{-FIXME_Float
 export
 Cast Float String where
   cast = prim__cast_FloatString
-
+-}
 export
 Cast Double String where
   cast = prim__cast_DoubleString
@@ -54,11 +54,11 @@ Cast Int Integer where
 export
 Cast Char Integer where
   cast = prim__cast_CharInteger
-
+{-FIXME_Float
 export
 Cast Float Integer where
   cast = prim__cast_FloatInteger
-
+-}
 export
 Cast Double Integer where
   cast = prim__cast_DoubleInteger
@@ -96,11 +96,11 @@ Cast Integer Int where
 export
 Cast Char Int where
   cast = prim__cast_CharInt
-
+{-FIXME_Float
 export
 Cast Float Int where
   cast = prim__cast_FloatInt
-
+-}
 export
 Cast Double Int where
   cast = prim__cast_DoubleInt
@@ -136,7 +136,7 @@ Cast Int Char where
   cast = prim__cast_IntChar
 
 -- To Float
-
+{-FIXME_Float
 export
 Cast Int Float where
   cast = prim__cast_IntFloat
@@ -156,7 +156,7 @@ Cast Nat Float where
 export
 Cast Double Float where
   cast = prim__cast_DoubleFloat
-
+-}
 -- To Double
 
 export
@@ -174,11 +174,11 @@ Cast String Double where
 export
 Cast Nat Double where
   cast = prim__cast_IntegerDouble . natToInteger
-
+{-FIXME_Float
 export
 Cast Float Double where
   cast = prim__cast_FloatDouble
-
+-}
 -- To Bits8
 
 export

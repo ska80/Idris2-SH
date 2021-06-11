@@ -288,8 +288,7 @@ parseInteger s = parseIntTrimmed (trim s)
             else if (x >= '0' && x <= '9')
             then map fromInteger (parseNumWithoutSign (unpack xs) (cast (ord x - ord '0')))
               else Nothing
-
-
+{-FIXME_Float
 ||| Convert a number string to a Float.
 |||
 ||| ```idris example
@@ -356,7 +355,7 @@ parseFloat = mkFloat . wfe . trim
                        pure (w, if w < 0 then (-f) else f, 0)
                    _ => Nothing
                _ => Nothing
-
+-}
 ||| Convert a number string to a Double.
 |||
 ||| ```idris example

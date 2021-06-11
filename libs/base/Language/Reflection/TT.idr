@@ -74,7 +74,7 @@ data Constant
     | B64 Integer
     | Str String
     | Ch Char
-    | Fl Float
+    | Fl Double --FIXME_Float
     | Db Double
     | WorldVal
 

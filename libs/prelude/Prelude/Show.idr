@@ -123,11 +123,11 @@ Show Bits32 where
 export
 Show Bits64 where
   showPrec = primNumShow prim__cast_Bits64String
-
+{-FIXME_Float
 export
 Show Float where
   showPrec = primNumShow prim__cast_FloatString
-
+-}
 export
 Show Double where
   showPrec = primNumShow prim__cast_DoubleString

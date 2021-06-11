@@ -149,7 +149,7 @@ integral = fromMaybe mkError parseInteger
     where
     mkError : String -> String
     mkError s = "'" <+> s <+> "' is not an integer."
-
+{-FIXME_Float
 ||| Verify that a string represents a decimal fraction.
 export
 float : Monad m => ValidatorT m String Float
@@ -157,7 +157,7 @@ float = fromMaybe mkError parseFloat
     where
     mkError : String -> String
     mkError s = "'" <+> s <+> "is not a decimal."
-
+-}
 ||| Verify that a string represents a decimal fraction.
 export
 double : Monad m => ValidatorT m String Double
