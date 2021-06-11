@@ -121,16 +121,7 @@ Reify Char where
 export
 Reflect Char where
   reflect fc defs lhs env x = pure (PrimVal fc (Ch x))
-{-FIXME_Float
-export
-Reify Float where
-  reify defs (NPrimVal _ (Fl v)) = pure v
-  reify defs val = cantReify val "Float"
 
-export
-Reflect Float where
-  reflect fc defs lhs env x = pure (PrimVal fc (Fl x))
---}
 export
 Reify Double where
   reify defs (NPrimVal _ (Db v)) = pure v
