@@ -153,6 +153,10 @@ export
 Cast Nat Float where
   cast = prim__cast_IntegerFloat . natToInteger
 
+export
+Cast Double Float where
+  cast = prim__cast_DoubleFloat
+
 -- To Double
 
 export
@@ -170,6 +174,10 @@ Cast String Double where
 export
 Cast Nat Double where
   cast = prim__cast_IntegerDouble . natToInteger
+
+export
+Cast Float Double where
+  cast = prim__cast_FloatDouble
 
 -- To Bits8
 
