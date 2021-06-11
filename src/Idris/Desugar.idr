@@ -297,13 +297,6 @@ mutual
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
-  desugarB side ps (PPrimVal fc (Fl x))
-      = case !fromFloatName of
-             Nothing =>
-                pure $ IPrimVal fc (Fl x)
-             Just f =>
-               let vfc = virtualiseFC fc in
-               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Fl x))
   desugarB side ps (PPrimVal fc (Db x))
       = case !fromDoubleName of
              Nothing =>
@@ -1022,7 +1015,6 @@ mutual
              PrimInteger n => pure [IPragma [] (\nest, env => setFromInteger n)]
              PrimString n => pure [IPragma [] (\nest, env => setFromString n)]
              PrimChar n => pure [IPragma [] (\nest, env => setFromChar n)]
-             PrimFloat n => pure [IPragma [] (\nest, env => setFromFloat n)]
              PrimDouble n => pure [IPragma [] (\nest, env => setFromDouble n)]
              CGAction cg dir => pure [IPragma [] (\nest, env => addDirective cg dir)]
              Names n ns => pure [IPragma [] (\nest, env => addNameDirective fc n ns)]
