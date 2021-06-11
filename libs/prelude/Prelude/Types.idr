@@ -685,7 +685,7 @@ ord = prim__cast_CharInt
 -----------------------
 -- FLOAT PRIMITIVES --
 -----------------------
-
+{-FIXME_Float
 public export
 expf : Float -> Float
 expf x = prim__floatExp x
@@ -745,7 +745,7 @@ floorf x = prim__floatFloor x
 public export
 ceilingf : Float -> Float
 ceilingf x = prim__floatCeiling x
-
+-}
 -----------------------
 -- DOUBLE PRIMITIVES --
 -----------------------
