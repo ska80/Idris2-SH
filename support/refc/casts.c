@@ -410,6 +410,12 @@ Value *cast_float_to_string(Value *input)
     return (Value *)retVal;
 }
 
+Value *cast_float_to_double(Value *input)
+{
+    Value_Float *from = (Value_Float *)input;
+    return (Value *)makeDouble((double)from->f);
+}
+
 Value *cast_double_to_Bits8(Value *input)
 {
     Value_Double *from = (Value_Double *)input;
@@ -483,6 +489,12 @@ Value *cast_double_to_string(Value *input)
     sprintf(retVal->str, "%f", from->d);
 
     return (Value *)retVal;
+}
+
+Value *cast_double_to_float(Value *input)
+{
+    Value_Double *from = (Value_Double *)input;
+    return (Value *)makeFloat((float)from->d);
 }
 
 Value *cast_char_to_Bits8(Value *input)

@@ -69,6 +69,7 @@ Value *cast_float_to_Int64(Value *);
 Value *cast_float_to_Integer(Value *);
 Value *cast_float_to_char(Value *);
 Value *cast_float_to_string(Value *);
+Value *cast_float_to_double(Value *);
 
 Value *cast_double_to_Bits8(Value *);
 Value *cast_double_to_Bits16(Value *);
@@ -81,6 +82,7 @@ Value *cast_double_to_Int64(Value *);
 Value *cast_double_to_Integer(Value *);
 Value *cast_double_to_char(Value *);
 Value *cast_double_to_string(Value *);
+Value *cast_double_to_float(Value *);
 
 Value *cast_char_to_Bits8(Value *);
 Value *cast_char_to_Bits16(Value *);
