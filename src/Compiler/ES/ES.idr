@@ -422,13 +422,15 @@ jsOp DoubleSqrt [x] = pure $ "Math.sqrt(" ++ x ++ ")"
 jsOp DoubleFloor [x] = pure $ "Math.floor(" ++ x ++ ")"
 jsOp DoubleCeiling [x] = pure $ "Math.ceil(" ++ x ++ ")"
 
+jsOp (Cast FloatType DoubleType) [x] = pure x
+jsOp (Cast DoubleType FloatType) [x] = pure x
 jsOp (Cast StringType FloatType) [x] = jsNumberOfString x
 jsOp (Cast StringType DoubleType) [x] = jsNumberOfString x
 jsOp (Cast ty StringType) [x] = pure $ jsAnyToString x
-jsOp (Cast ty ty2) [x]        = castInt constPrimitives ty ty2 x
+jsOp (Cast ty ty2) [x] = castInt constPrimitives ty ty2 x
+
 jsOp BelieveMe [_,_,x] = pure x
 jsOp (Crash) [_, msg] = jsCrashExp msg
-
 
 readCCPart : String -> (String, String)
 readCCPart x =
