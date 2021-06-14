@@ -356,29 +356,33 @@ charLit = let q = '\'' in
                 <|> (is 'o' <+> octDigits)
                 <|> digits
 
+export
+withUnderscoresLit : Lexer -> Lexer
+withUnderscoresLit l = l <+> many (is '_' <+> l)
+
 ||| Recognise an integer literal (possibly with a '-' prefix)
 ||| /-?[0-9]+/
 export
 intLit : Lexer
-intLit = opt (is '-') <+> digits
+intLit = opt (is '-') <+> withUnderscoresLit digits
 
 ||| Recognise a binary literal, prefixed by "0b"
 ||| /0b[0-1]+/
 export
 binLit : Lexer
-binLit = exact "0b" <+> binDigits
+binLit = exact "0b" <+> withUnderscoresLit binDigits
 
 ||| Recognise a hexidecimal literal, prefixed by "0x" or "0X"
 ||| /0[Xx][0-9A-Fa-f]+/
 export
 hexLit : Lexer
-hexLit = approx "0x" <+> hexDigits
+hexLit = approx "0x" <+> withUnderscoresLit hexDigits
 
 ||| Recognise an octal literal, prefixed by "0o"
 ||| /0o[0-9A-Fa-f]+/
 export
 octLit : Lexer
-octLit = exact "0o" <+> octDigits
+octLit = exact "0o" <+> withUnderscoresLit octDigits
 
 ||| Recognise `start`, then recognise all input until a newline is encountered,
 ||| and consume the newline. Will succeed if end-of-input is encountered before

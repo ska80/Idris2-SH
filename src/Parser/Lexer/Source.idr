@@ -166,9 +166,10 @@ pragma : Lexer
 pragma = is '%' <+> identNormal
 
 doubleLit : Lexer
-doubleLit
-    = digits <+> is '.' <+> digits <+> opt
-           (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
+doubleLit = withUnderscoresLit digits
+            <+> is '.'
+            <+> withUnderscoresLit digits
+            <+> opt (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
 
 stringBegin : Lexer
 stringBegin = many (is '#') <+> (is '"')
@@ -260,6 +261,9 @@ reservedSymbols
       ["%", "\\", ":", "=", ":=", "|", "|||", "<-", "->", "=>", "?", "!",
        "&", "**", "..", "~"]
 
+fromUnderscoresLit : String -> String
+fromUnderscoresLit s = fastPack $ filter (/= '_') (fastUnpack s)
+
 fromBinLit : String -> Integer
 fromBinLit str
     = if length str <= 2
@@ -320,10 +324,10 @@ mutual
                   (exact . groupClose)
                   Symbol
       <|> match (choice $ exact <$> symbols) Symbol
-      <|> match doubleLit (\x => DoubleLit (cast x))
-      <|> match binLit (\x => IntegerLit (fromBinLit x))
-      <|> match hexLit (\x => IntegerLit (fromHexLit x))
-      <|> match octLit (\x => IntegerLit (fromOctLit x))
+      <|> match doubleLit (\x => DoubleLit (cast $ fromUnderscoresLit x))
+      <|> match binLit (\x => IntegerLit (fromBinLit $ fromUnderscoresLit x))
+      <|> match hexLit (\x => IntegerLit (fromHexLit $ fromUnderscoresLit x))
+      <|> match octLit (\x => IntegerLit (fromOctLit $ fromUnderscoresLit x))
       <|> match digits (\x => IntegerLit (cast x))
       <|> compose multilineBegin
                   (const $ StringBegin True)
