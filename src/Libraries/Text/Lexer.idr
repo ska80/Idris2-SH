@@ -356,7 +356,6 @@ charLit = let q = '\'' in
                 <|> (is 'o' <+> octDigits)
                 <|> digits
 
-export
 withUnderscoresLit : Lexer -> Lexer
 withUnderscoresLit l = l <+> many (is '_' <+> l)
 

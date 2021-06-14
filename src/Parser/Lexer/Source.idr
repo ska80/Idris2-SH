@@ -166,10 +166,8 @@ pragma : Lexer
 pragma = is '%' <+> identNormal
 
 doubleLit : Lexer
-doubleLit = withUnderscoresLit digits
-            <+> is '.'
-            <+> withUnderscoresLit digits
-            <+> opt (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
+doubleLit = digits <+> is '.' <+> digits
+              <+> opt (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
 
 stringBegin : Lexer
 stringBegin = many (is '#') <+> (is '"')
@@ -261,9 +259,6 @@ reservedSymbols
       ["%", "\\", ":", "=", ":=", "|", "|||", "<-", "->", "=>", "?", "!",
        "&", "**", "..", "~"]
 
-fromUnderscoresLit : String -> String
-fromUnderscoresLit s = fastPack $ filter (/= '_') (fastUnpack s)
-
 fromBinLit : String -> Integer
 fromBinLit str
     = if length str <= 2
@@ -324,10 +319,10 @@ mutual
                   (exact . groupClose)
                   Symbol
       <|> match (choice $ exact <$> symbols) Symbol
-      <|> match doubleLit (\x => DoubleLit (cast $ fromUnderscoresLit x))
-      <|> match binLit (\x => IntegerLit (fromBinLit $ fromUnderscoresLit x))
-      <|> match hexLit (\x => IntegerLit (fromHexLit $ fromUnderscoresLit x))
-      <|> match octLit (\x => IntegerLit (fromOctLit $ fromUnderscoresLit x))
+      <|> match doubleLit (\x => DoubleLit (cast x))
+      <|> match binLit (\x => IntegerLit (fromBinLit $ removeUnderscores x))
+      <|> match hexLit (\x => IntegerLit (fromHexLit $ removeUnderscores x))
+      <|> match octLit (\x => IntegerLit (fromOctLit $ removeUnderscores x))
       <|> match digits (\x => IntegerLit (cast x))
       <|> compose multilineBegin
                   (const $ StringBegin True)
@@ -353,17 +348,22 @@ mutual
       parseIdent : String -> Token
       parseIdent x = if x `elem` keywords then Keyword x
                      else Ident x
+
       parseNamespace : String -> Token
       parseNamespace ns = case mkNamespacedIdent ns of
                                (Nothing, ident) => parseIdent ident
                                (Just ns, n)     => DotSepIdent ns n
+
       countHashtag : String -> Nat
       countHashtag = count (== '#') . unpack
 
       removeOptionalLeadingSpace : String -> String
       removeOptionalLeadingSpace str = case strM str of
-        StrCons ' ' tail => tail
-        _ => str
+                                            StrCons ' ' tail => tail
+                                            _ => str
+
+      removeUnderscores : String -> String
+      removeUnderscores s = fastPack $ filter (/= '_') (fastUnpack s)
 
 export
 lexTo : Lexer ->
