@@ -880,7 +880,7 @@ TTC PrimNames where
       = do toBuf b (fromIntegerName l)
            toBuf b (fromStringName l)
            toBuf b (fromCharName l)
-           toBuf b (fromDoubleName l)
+           toBuf b (fromFloatName l)
   fromBuf b
       = do i <- fromBuf b
            str <- fromBuf b

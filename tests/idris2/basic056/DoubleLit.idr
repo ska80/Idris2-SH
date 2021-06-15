@@ -1,6 +1,6 @@
 import Data.So
 
-%doubleLit fromDouble
+%floatLit fromDouble
 
 public export
 interface FromDouble ty where

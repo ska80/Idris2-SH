@@ -298,7 +298,7 @@ mutual
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
   desugarB side ps (PPrimVal fc (Db x))
-      = case !fromDoubleName of
+      = case !fromFloatName of
              Nothing =>
                 pure $ IPrimVal fc (Db x)
              Just f =>
@@ -1015,7 +1015,7 @@ mutual
              PrimInteger n => pure [IPragma [] (\nest, env => setFromInteger n)]
              PrimString n => pure [IPragma [] (\nest, env => setFromString n)]
              PrimChar n => pure [IPragma [] (\nest, env => setFromChar n)]
-             PrimDouble n => pure [IPragma [] (\nest, env => setFromDouble n)]
+             PrimFloat n => pure [IPragma [] (\nest, env => setFromFloat n)]
              CGAction cg dir => pure [IPragma [] (\nest, env => addDirective cg dir)]
              Names n ns => pure [IPragma [] (\nest, env => addNameDirective fc n ns)]
              StartExpr tm => pure [IPragma [] (\nest, env => throw (InternalError "%start not implemented"))] -- TODO!
