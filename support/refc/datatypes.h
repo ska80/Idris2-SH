@@ -17,9 +17,10 @@
 #define INT32_TAG 7
 #define INT64_TAG 8
 #define INTEGER_TAG 9
-#define DOUBLE_TAG 10
-#define CHAR_TAG 11
-#define STRING_TAG 12
+#define FLOAT_TAG 10
+#define DOUBLE_TAG 11
+#define CHAR_TAG 12
+#define STRING_TAG 13
 
 #define CLOSURE_TAG 15
 #define ARGLIST_TAG 16
@@ -102,6 +103,12 @@ typedef struct
     Value_header header;
     mpz_t i;
 } Value_Integer;
+
+typedef struct
+{
+    Value_header header;
+    float f;
+} Value_Float;
 
 typedef struct
 {

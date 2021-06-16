@@ -56,6 +56,18 @@ void setBufferInt(void* buffer, int loc, int64_t val) {
     }
 }
 
+void setBufferFloat(void* buffer, int loc, float val) {
+    Buffer* b = buffer;
+    // I am not proud of this
+    if (loc >= 0 && loc + sizeof(float) <= b->size) {
+        unsigned char* c = (unsigned char*)(& val);
+        int i;
+        for (i = 0; i < sizeof(float); ++i) {
+            b->data[loc+i] = c[i];
+        }
+    }
+}
+
 void setBufferDouble(void* buffer, int loc, double val) {
     Buffer* b = buffer;
     // I am not proud of this
@@ -100,6 +112,23 @@ int64_t getBufferInt(void* buffer, int loc) {
         }
         return result;
     } else {
+        return 0;
+    }
+}
+
+float getBufferFloat(void* buffer, int loc) {
+    Buffer* b = buffer;
+    float f;
+    // I am even less proud of this
+    unsigned char *c = (unsigned char*)(& f);
+    if (loc >= 0 && loc + sizeof(float) <= b->size) {
+        int i;
+        for (i = 0; i < sizeof(float); ++i) {
+            c[i] = b->data[loc+i];
+        }
+        return f;
+    }
+    else {
         return 0;
     }
 }

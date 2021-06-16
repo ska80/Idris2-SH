@@ -4,7 +4,9 @@
 #include <math.h>
 #include <gmp.h>
 
+float unpackFloat(Value *f);
 double unpackDouble(Value *d);
+
 Value *believe_me(Value *, Value *, Value *);
 
 /* add */
@@ -17,6 +19,7 @@ Value *add_Int16(Value *x, Value *y);
 Value *add_Int32(Value *x, Value *y);
 Value *add_Int64(Value *x, Value *y);
 Value *add_Integer(Value *x, Value *y);
+Value *add_float(Value *x, Value *y);
 Value *add_double(Value *x, Value *y);
 
 /* sub */
@@ -29,6 +32,7 @@ Value *sub_Int16(Value *x, Value *y);
 Value *sub_Int32(Value *x, Value *y);
 Value *sub_Int64(Value *x, Value *y);
 Value *sub_Integer(Value *x, Value *y);
+Value *sub_float(Value *x, Value *y);
 Value *sub_double(Value *x, Value *y);
 
 /* negate */
@@ -41,6 +45,7 @@ Value *negate_Int16(Value *x);
 Value *negate_Int32(Value *x);
 Value *negate_Int64(Value *x);
 Value *negate_Integer(Value *x);
+Value *negate_float(Value *x);
 Value *negate_double(Value *x);
 
 /* mul */
@@ -53,6 +58,7 @@ Value *mul_Int16(Value *x, Value *y);
 Value *mul_Int32(Value *x, Value *y);
 Value *mul_Int64(Value *x, Value *y);
 Value *mul_Integer(Value *x, Value *y);
+Value *mul_float(Value *x, Value *y);
 Value *mul_double(Value *x, Value *y);
 
 /* div */
@@ -65,6 +71,7 @@ Value *div_Int16(Value *x, Value *y);
 Value *div_Int32(Value *x, Value *y);
 Value *div_Int64(Value *x, Value *y);
 Value *div_Integer(Value *x, Value *y);
+Value *div_float(Value *x, Value *y);
 Value *div_double(Value *x, Value *y);
 
 /* mod */
@@ -143,6 +150,7 @@ Value *lt_Int16(Value *x, Value *y);
 Value *lt_Int32(Value *x, Value *y);
 Value *lt_Int64(Value *x, Value *y);
 Value *lt_Integer(Value *x, Value *y);
+Value *lt_float(Value *x, Value *y);
 Value *lt_double(Value *x, Value *y);
 Value *lt_char(Value *x, Value *y);
 Value *lt_string(Value *x, Value *y);
@@ -157,6 +165,7 @@ Value *gt_Int16(Value *x, Value *y);
 Value *gt_Int32(Value *x, Value *y);
 Value *gt_Int64(Value *x, Value *y);
 Value *gt_Integer(Value *x, Value *y);
+Value *gt_float(Value *x, Value *y);
 Value *gt_double(Value *x, Value *y);
 Value *gt_char(Value *x, Value *y);
 Value *gt_string(Value *x, Value *y);
@@ -171,6 +180,7 @@ Value *eq_Int16(Value *x, Value *y);
 Value *eq_Int32(Value *x, Value *y);
 Value *eq_Int64(Value *x, Value *y);
 Value *eq_Integer(Value *x, Value *y);
+Value *eq_float(Value *x, Value *y);
 Value *eq_double(Value *x, Value *y);
 Value *eq_char(Value *x, Value *y);
 Value *eq_string(Value *x, Value *y);
@@ -185,6 +195,7 @@ Value *lte_Int16(Value *x, Value *y);
 Value *lte_Int32(Value *x, Value *y);
 Value *lte_Int64(Value *x, Value *y);
 Value *lte_Integer(Value *x, Value *y);
+Value *lte_float(Value *x, Value *y);
 Value *lte_double(Value *x, Value *y);
 Value *lte_char(Value *x, Value *y);
 Value *lte_string(Value *x, Value *y);
@@ -199,6 +210,7 @@ Value *gte_Int16(Value *x, Value *y);
 Value *gte_Int32(Value *x, Value *y);
 Value *gte_Int64(Value *x, Value *y);
 Value *gte_Integer(Value *x, Value *y);
+Value *gte_float(Value *x, Value *y);
 Value *gte_double(Value *x, Value *y);
 Value *gte_char(Value *x, Value *y);
 Value *gte_string(Value *x, Value *y);

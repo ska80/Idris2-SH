@@ -106,9 +106,14 @@
         (integer->char x)
         (integer->char 0))))
 
+(define cast-string-float
+  (lambda (x)
+    (cast-num (string->number (destroy-prefix x)))))
+
 (define cast-string-double
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
+
 (define (string-concat xs) (apply string-append xs))
 (define (string-unpack s) (string->list s))
 (define (string-pack xs) (list->string xs))
@@ -206,6 +211,12 @@
 
 (define (blodwen-buffer-getint buf loc)
   (bytevector-s64-ref buf loc (native-endianness)))
+
+(define (blodwen-buffer-setfloat buf loc val)
+  (bytevector-ieee-single-set! buf loc val (native-endianness)))
+
+(define (blodwen-buffer-getfloat buf loc)
+  (bytevector-ieee-single-ref buf loc (native-endianness)))
 
 (define (blodwen-buffer-setdouble buf loc val)
   (bytevector-ieee-double-set! buf loc val (native-endianness)))

@@ -98,6 +98,11 @@ int extractInt(Value *v)
     return (int)((Value_Int64 *)v)->i64;
   }
 
+  if (v->header.tag == FLOAT_TAG)
+  {
+    return (int)((Value_Float *)v)->f;
+  }
+
   if (v->header.tag == DOUBLE_TAG)
   {
     return (int)((Value_Double *)v)->d;
