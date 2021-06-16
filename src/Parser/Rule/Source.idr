@@ -257,7 +257,8 @@ reservedNames : List String
 reservedNames
     = [ "Type", "Int", "Int8", "Int16", "Int32", "Int64", "Integer"
       , "Bits8", "Bits16", "Bits32", "Bits64"
-      , "String", "Char", "Double", "Lazy", "Inf", "Force", "Delay"
+      , "String", "Char", "Float", "Double"
+      , "Lazy", "Inf", "Force", "Delay"
       ]
 
 isNotReservedName : WithBounds String -> EmptyRule ()

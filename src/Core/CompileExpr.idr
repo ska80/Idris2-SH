@@ -169,6 +169,7 @@ data CFType : Type where
      CFUnsigned32 : CFType
      CFUnsigned64 : CFType
      CFString : CFType
+     CFFloat : CFType
      CFDouble : CFType
      CFChar : CFType
      CFPtr : CFType
@@ -368,6 +369,7 @@ Show CFType where
   show CFUnsigned32 = "Bits_32"
   show CFUnsigned64 = "Bits_64"
   show CFString = "String"
+  show CFFloat = "Float"
   show CFDouble = "Double"
   show CFChar = "Char"
   show CFPtr = "Ptr"
