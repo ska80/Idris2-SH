@@ -278,6 +278,7 @@ add (B16 x) (B16 y) = pure $ B16 $ (x + y) `mod` b16max
 add (B32 x) (B32 y) = pure $ B32 $ (x + y) `mod` b32max
 add (B64 x) (B64 y) = pure $ B64 $ (x + y) `mod` b64max
 add (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x + cast y))
+add (Fl x) (Fl y) = pure $ Fl (x + y)
 add (Db x) (Db y) = pure $ Db (x + y)
 add _ _ = Nothing
 
@@ -289,6 +290,7 @@ sub (I16 x) (I16 y) = pure $ I16 (int16CastWrap $ x - y)
 sub (I32 x) (I32 y) = pure $ I32 (int32CastWrap $ x - y)
 sub (I64 x) (I64 y) = pure $ I64 (int64CastWrap $ x - y)
 sub (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x - cast y))
+sub (Fl x) (Fl y) = pure $ Fl (x - y)
 sub (Db x) (Db y) = pure $ Db (x - y)
 sub _ _ = Nothing
 
@@ -303,6 +305,7 @@ mul (I8 x) (I8 y) = pure $ I8 (int8CastWrap $ x * y)
 mul (I16 x) (I16 y) = pure $ I16 (int16CastWrap $ x * y)
 mul (I32 x) (I32 y) = pure $ I32 (int32CastWrap $ x * y)
 mul (I64 x) (I64 y) = pure $ I64 (int64CastWrap $ x * y)
+mul (Fl x) (Fl y) = pure $ Fl (x * y)
 mul (Db x) (Db y) = pure $ Db (x * y)
 mul _ _ = Nothing
 
@@ -319,6 +322,7 @@ div (I32 x) (I32 0) = Nothing
 div (I32 x) (I32 y) = pure $ I32 (int32CastWrap $ assert_total (x `div` y))
 div (I64 x) (I64 0) = Nothing
 div (I64 x) (I64 y) = pure $ I64 (int64CastWrap $ assert_total (x `div` y))
+div (Fl x) (Fl y) = pure $ Fl (x / y)
 div (Db x) (Db y) = pure $ Db (x / y)
 div _ _ = Nothing
 
@@ -415,6 +419,7 @@ neg (I8 x) = pure . I8 $ int8CastWrap (-x)
 neg (I16 x) = pure . I16 $ int16CastWrap (-x)
 neg (I32 x) = pure . I32 $ int32CastWrap (-x)
 neg (I64 x) = pure . I64 $ int64CastWrap (-x)
+neg (Fl x) = pure $ Fl (-x)
 neg (Db x) = pure $ Db (-x)
 neg _ = Nothing
 
@@ -435,6 +440,7 @@ lt (B32 x) (B32 y) = pure $ toInt (x < y)
 lt (B64 x) (B64 y) = pure $ toInt (x < y)
 lt (Str x) (Str y) = pure $ toInt (x < y)
 lt (Ch x) (Ch y) = pure $ toInt (x < y)
+lt (Fl x) (Fl y) = pure $ toInt (x < y)
 lt (Db x) (Db y) = pure $ toInt (x < y)
 lt _ _ = Nothing
 
@@ -451,6 +457,7 @@ lte (B32 x) (B32 y) = pure $ toInt (x <= y)
 lte (B64 x) (B64 y) = pure $ toInt (x <= y)
 lte (Str x) (Str y) = pure $ toInt (x <= y)
 lte (Ch x) (Ch y) = pure $ toInt (x <= y)
+lte (Fl x) (Fl y) = pure $ toInt (x <= y)
 lte (Db x) (Db y) = pure $ toInt (x <= y)
 lte _ _ = Nothing
 
@@ -467,6 +474,7 @@ eq (B32 x) (B32 y) = pure $ toInt (x == y)
 eq (B64 x) (B64 y) = pure $ toInt (x == y)
 eq (Str x) (Str y) = pure $ toInt (x == y)
 eq (Ch x) (Ch y) = pure $ toInt (x == y)
+eq (Fl x) (Fl y) = pure $ toInt (x == y)
 eq (Db x) (Db y) = pure $ toInt (x == y)
 eq _ _ = Nothing
 
@@ -483,6 +491,7 @@ gte (B32 x) (B32 y) = pure $ toInt (x >= y)
 gte (B64 x) (B64 y) = pure $ toInt (x >= y)
 gte (Str x) (Str y) = pure $ toInt (x >= y)
 gte (Ch x) (Ch y) = pure $ toInt (x >= y)
+gte (Fl x) (Fl y) = pure $ toInt (x >= y)
 gte (Db x) (Db y) = pure $ toInt (x >= y)
 gte _ _ = Nothing
 
@@ -499,6 +508,7 @@ gt (B32 x) (B32 y) = pure $ toInt (x > y)
 gt (B64 x) (B64 y) = pure $ toInt (x > y)
 gt (Str x) (Str y) = pure $ toInt (x > y)
 gt (Ch x) (Ch y) = pure $ toInt (x > y)
+gt (Fl x) (Fl y) = pure $ toInt (x > y)
 gt (Db x) (Db y) = pure $ toInt (x > y)
 gt _ _ = Nothing
 
@@ -785,14 +795,16 @@ allPrimitives =
      MkPrim DoubleCeiling doubleTy isTotal] ++
 
     -- support all combinations of primitive casts with the following
-    -- exceptions: String -> Char, Double -> Char, Char -> Double
+    -- exceptions: String -> Char,
+    --             Float -> Char, Char -> Float,
+    --             Double -> Char, Char -> Double
     [ MkPrim (Cast t1 t2) (predTy t1 t2) isTotal
     | t1 <- primTypes
     , t2 <- primTypes
     , t1 /= t2                         &&
       (t1,t2) /= (StringType,CharType) &&
       (t1,t2) /= (FloatType,CharType)  &&
-      (t1,t2) /= (CharType,FloatType) &&
+      (t1,t2) /= (CharType,FloatType)  &&
       (t1,t2) /= (DoubleType,CharType) &&
       (t1,t2) /= (CharType,DoubleType)
     ]
