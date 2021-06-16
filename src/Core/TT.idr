@@ -44,6 +44,7 @@ data Constant
     | B64 Integer
     | Str String
     | Ch Char
+    | Fl Double -- use 'Double' for now, since we don't have 'Float' type yet
     | Db Double
     | WorldVal
 
@@ -59,6 +60,7 @@ data Constant
     | Bits64Type
     | StringType
     | CharType
+    | FloatType
     | DoubleType
     | WorldType
 
@@ -77,6 +79,7 @@ isConstantType (UN n) = case n of
   "Bits64"  => Just Bits64Type
   "String"  => Just StringType
   "Char"    => Just CharType
+  "Float"   => Just FloatType
   "Double"  => Just DoubleType
   "%World"  => Just WorldType
   _ => Nothing
@@ -96,6 +99,7 @@ isPrimType (B32 x)  = False
 isPrimType (B64 x)  = False
 isPrimType (Str x)  = False
 isPrimType (Ch  x)  = False
+isPrimType (Fl  x)  = False
 isPrimType (Db  x)  = False
 isPrimType WorldVal = False
 
@@ -111,6 +115,7 @@ isPrimType Bits32Type  = True
 isPrimType Bits64Type  = True
 isPrimType StringType  = True
 isPrimType CharType    = True
+isPrimType FloatType  = True
 isPrimType DoubleType  = True
 isPrimType WorldType   = True
 
@@ -140,6 +145,7 @@ constantEq (Str x) (Str y) = case decEq x y of
 constantEq (Ch x) (Ch y) = case decEq x y of
                                 Yes Refl => Just Refl
                                 No contra => Nothing
+constantEq (Fl x) (Fl y) = Nothing -- no DecEq for Floats!
 constantEq (Db x) (Db y) = Nothing -- no DecEq for Doubles!
 constantEq WorldVal WorldVal = Just Refl
 constantEq IntType IntType = Just Refl
@@ -150,6 +156,7 @@ constantEq Int64Type Int64Type = Just Refl
 constantEq IntegerType IntegerType = Just Refl
 constantEq StringType StringType = Just Refl
 constantEq CharType CharType = Just Refl
+constantEq FloatType FloatType = Just Refl
 constantEq DoubleType DoubleType = Just Refl
 constantEq WorldType WorldType = Just Refl
 constantEq _ _ = Nothing
@@ -168,6 +175,7 @@ Show Constant where
   show (B64 x) = show x
   show (Str x) = show x
   show (Ch x) = show x
+  show (Fl x) = show x
   show (Db x) = show x
   show WorldVal = "%MkWorld"
   show IntType = "Int"
@@ -182,6 +190,7 @@ Show Constant where
   show Bits64Type = "Bits64"
   show StringType = "String"
   show CharType = "Char"
+  show FloatType = "Float"
   show DoubleType = "Double"
   show WorldType = "%World"
 
@@ -199,6 +208,7 @@ Pretty Constant where
   pretty (B64 x) = pretty x
   pretty (Str x) = dquotes (pretty x)
   pretty (Ch x) = squotes (pretty x)
+  pretty (Fl x) = pretty x
   pretty (Db x) = pretty x
   pretty WorldVal = pretty "%MkWorld"
   pretty IntType = pretty "Int"
@@ -213,6 +223,7 @@ Pretty Constant where
   pretty Bits64Type = pretty "Bits64"
   pretty StringType = pretty "String"
   pretty CharType = pretty "Char"
+  pretty FloatType = pretty "Float"
   pretty DoubleType = pretty "Double"
   pretty WorldType = pretty "%World"
 
@@ -230,6 +241,7 @@ Eq Constant where
   (B64 x) == (B64 y) = x == y
   (Str x) == (Str y) = x == y
   (Ch x) == (Ch y) = x == y
+  (Fl x) == (Fl y) = x == y
   (Db x) == (Db y) = x == y
   WorldVal == WorldVal = True
   IntType == IntType = True
@@ -244,6 +256,7 @@ Eq Constant where
   Bits64Type == Bits64Type = True
   StringType == StringType = True
   CharType == CharType = True
+  FloatType == FloatType = True
   DoubleType == DoubleType = True
   WorldType == WorldType = True
   _ == _ = False
@@ -340,6 +353,18 @@ data PrimFn : Nat -> Type where
      StrReverse : PrimFn 1
      StrSubstr : PrimFn 3
 
+     FloatExp : PrimFn 1
+     FloatLog : PrimFn 1
+     FloatSin : PrimFn 1
+     FloatCos : PrimFn 1
+     FloatTan : PrimFn 1
+     FloatASin : PrimFn 1
+     FloatACos : PrimFn 1
+     FloatATan : PrimFn 1
+     FloatSqrt : PrimFn 1
+     FloatFloor : PrimFn 1
+     FloatCeiling : PrimFn 1
+
      DoubleExp : PrimFn 1
      DoubleLog : PrimFn 1
      DoubleSin : PrimFn 1
@@ -382,6 +407,17 @@ Show (PrimFn arity) where
   show StrAppend = "++"
   show StrReverse = "op_strrev"
   show StrSubstr = "op_strsubstr"
+  show FloatExp = "op_floatExp"
+  show FloatLog = "op_floatLog"
+  show FloatSin = "op_floatSin"
+  show FloatCos = "op_floatCos"
+  show FloatTan = "op_floatTan"
+  show FloatASin = "op_floatASin"
+  show FloatACos = "op_floatACos"
+  show FloatATan = "op_floatATan"
+  show FloatSqrt = "op_floatSqrt"
+  show FloatFloor = "op_floatFloor"
+  show FloatCeiling = "op_floatCeiling"
   show DoubleExp = "op_doubleExp"
   show DoubleLog = "op_doubleLog"
   show DoubleSin = "op_doubleSin"

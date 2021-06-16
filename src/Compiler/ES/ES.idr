@@ -240,7 +240,8 @@ jsConstant (I64 i) = pure $ show i ++ "n"
 jsConstant (BI i) = pure $ show i ++ "n"
 jsConstant (Str s) = pure $ jsString s
 jsConstant (Ch c) = pure $ jsString $ Data.Strings.singleton c
-jsConstant (Db f) = pure $ show f
+jsConstant (Fl f) = pure $ show f
+jsConstant (Db d) = pure $ show d
 jsConstant WorldVal = addConstToPreamble "idrisworld" "Symbol('idrisworld')";
 jsConstant (B8 i) = pure $ show i
 jsConstant (B16 i) = pure $ show i
@@ -395,6 +396,17 @@ jsOp StrReverse [x] =
     pure $ n ++ "(" ++ x ++ ")"
 jsOp StrSubstr [offset, length, str] =
   pure $ str ++ ".slice(" ++ fromBigInt offset ++ ", " ++ fromBigInt offset ++ " + " ++ fromBigInt length ++ ")"
+jsOp FloatExp [x] = pure $ "Math.exp(" ++ x ++ ")"
+jsOp FloatLog [x] = pure $ "Math.log(" ++ x ++ ")"
+jsOp FloatSin [x] = pure $ "Math.sin(" ++ x ++ ")"
+jsOp FloatCos [x] = pure $ "Math.cos(" ++ x ++ ")"
+jsOp FloatTan [x] = pure $ "Math.tan(" ++ x ++ ")"
+jsOp FloatASin [x] = pure $ "Math.asin(" ++ x ++ ")"
+jsOp FloatACos [x] = pure $ "Math.acos(" ++ x ++ ")"
+jsOp FloatATan [x] = pure $ "Math.atan(" ++ x ++ ")"
+jsOp FloatSqrt [x] = pure $ "Math.sqrt(" ++ x ++ ")"
+jsOp FloatFloor [x] = pure $ "Math.floor(" ++ x ++ ")"
+jsOp FloatCeiling [x] = pure $ "Math.ceil(" ++ x ++ ")"
 jsOp DoubleExp [x] = pure $ "Math.exp(" ++ x ++ ")"
 jsOp DoubleLog [x] = pure $ "Math.log(" ++ x ++ ")"
 jsOp DoubleSin [x] = pure $ "Math.sin(" ++ x ++ ")"

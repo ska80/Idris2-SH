@@ -151,28 +151,30 @@ TTC Constant where
   toBuf b (B64 x) = do tag 5; toBuf b x
   toBuf b (Str x) = do tag 6; toBuf b x
   toBuf b (Ch x) = do tag 7; toBuf b x
-  toBuf b (Db x) = do tag 8; toBuf b x
+  toBuf b (Fl x) = do tag 8; toBuf b x
+  toBuf b (Db x) = do tag 9; toBuf b x
 
-  toBuf b WorldVal = tag 9
-  toBuf b IntType = tag 10
-  toBuf b IntegerType = tag 11
-  toBuf b Bits8Type = tag 12
-  toBuf b Bits16Type = tag 13
-  toBuf b Bits32Type = tag 14
-  toBuf b Bits64Type = tag 15
-  toBuf b StringType = tag 16
-  toBuf b CharType = tag 17
-  toBuf b DoubleType = tag 18
-  toBuf b WorldType = tag 19
+  toBuf b WorldVal = tag 10
+  toBuf b IntType = tag 11
+  toBuf b IntegerType = tag 12
+  toBuf b Bits8Type = tag 13
+  toBuf b Bits16Type = tag 14
+  toBuf b Bits32Type = tag 15
+  toBuf b Bits64Type = tag 16
+  toBuf b StringType = tag 17
+  toBuf b CharType = tag 18
+  toBuf b FloatType = tag 19
+  toBuf b DoubleType = tag 20
+  toBuf b WorldType = tag 21
 
-  toBuf b (I32 x) = do tag 20; toBuf b x
-  toBuf b (I64 x) = do tag 21; toBuf b x
-  toBuf b Int32Type = tag 22
-  toBuf b Int64Type = tag 23
-  toBuf b (I8 x) = do tag 24; toBuf b x
-  toBuf b (I16 x) = do tag 25; toBuf b x
-  toBuf b Int8Type = tag 26
-  toBuf b Int16Type = tag 27
+  toBuf b (I32 x) = do tag 22; toBuf b x
+  toBuf b (I64 x) = do tag 23; toBuf b x
+  toBuf b Int32Type = tag 24
+  toBuf b Int64Type = tag 25
+  toBuf b (I8 x) = do tag 26; toBuf b x
+  toBuf b (I16 x) = do tag 27; toBuf b x
+  toBuf b Int8Type = tag 28
+  toBuf b Int16Type = tag 29
 
   fromBuf b
       = case !getTag of
@@ -184,26 +186,28 @@ TTC Constant where
              5 => do x <- fromBuf b; pure (B64 x)
              6 => do x <- fromBuf b; pure (Str x)
              7 => do x <- fromBuf b; pure (Ch x)
-             8 => do x <- fromBuf b; pure (Db x)
-             9 => pure WorldVal
-             10 => pure IntType
-             11 => pure IntegerType
-             12 => pure Bits8Type
-             13 => pure Bits16Type
-             14 => pure Bits32Type
-             15 => pure Bits64Type
-             16 => pure StringType
-             17 => pure CharType
-             18 => pure DoubleType
-             19 => pure WorldType
-             20 => do x <- fromBuf b; pure (I32 x)
-             21 => do x <- fromBuf b; pure (I64 x)
-             22 => pure Int32Type
-             23 => pure Int64Type
-             24 => do x <- fromBuf b; pure (I8 x)
-             25 => do x <- fromBuf b; pure (I16 x)
-             26 => pure Int8Type
-             27 => pure Int16Type
+             8 => do x <- fromBuf b; pure (Fl x)
+             9 => do x <- fromBuf b; pure (Db x)
+             10 => pure WorldVal
+             11 => pure IntType
+             12 => pure IntegerType
+             13 => pure Bits8Type
+             14 => pure Bits16Type
+             15 => pure Bits32Type
+             16 => pure Bits64Type
+             17 => pure StringType
+             18 => pure CharType
+             19 => pure FloatType
+             20 => pure DoubleType
+             21 => pure WorldType
+             22 => do x <- fromBuf b; pure (I32 x)
+             23 => do x <- fromBuf b; pure (I64 x)
+             24 => pure Int32Type
+             25 => pure Int64Type
+             26 => do x <- fromBuf b; pure (I8 x)
+             27 => do x <- fromBuf b; pure (I16 x)
+             28 => pure Int8Type
+             29 => pure Int16Type
              _ => corrupt "Constant"
 
 export
@@ -584,6 +588,18 @@ export
   toBuf b DoubleFloor = tag 33
   toBuf b DoubleCeiling = tag 34
 
+  toBuf b FloatExp = tag 35
+  toBuf b FloatLog = tag 36
+  toBuf b FloatSin = tag 37
+  toBuf b FloatCos = tag 38
+  toBuf b FloatTan = tag 39
+  toBuf b FloatASin = tag 40
+  toBuf b FloatACos = tag 41
+  toBuf b FloatATan = tag 42
+  toBuf b FloatSqrt = tag 43
+  toBuf b FloatFloor = tag 44
+  toBuf b FloatCeiling = tag 45
+
   toBuf b (Cast x y) = do tag 99; toBuf b x; toBuf b y
   toBuf b BelieveMe = tag 100
   toBuf b Crash = tag 101
@@ -603,6 +619,7 @@ export
                  12 => pure StrHead
                  13 => pure StrTail
                  17 => pure StrReverse
+
                  19 => pure DoubleExp
                  20 => pure DoubleLog
                  22 => pure DoubleSin
@@ -614,6 +631,18 @@ export
                  32 => pure DoubleSqrt
                  33 => pure DoubleFloor
                  34 => pure DoubleCeiling
+
+                 35 => pure FloatExp
+                 36 => pure FloatLog
+                 37 => pure FloatSin
+                 38 => pure FloatCos
+                 39 => pure FloatTan
+                 40 => pure FloatASin
+                 41 => pure FloatACos
+                 42 => pure FloatATan
+                 43 => pure FloatSqrt
+                 44 => pure FloatFloor
+                 45 => pure FloatCeiling
 
                  99 => do x <- fromBuf b; y <- fromBuf b; pure (Cast x y)
                  _ => corrupt "PrimFn 1"
@@ -769,20 +798,21 @@ TTC CFType where
   toBuf b CFUnsigned32 = tag 4
   toBuf b CFUnsigned64 = tag 5
   toBuf b CFString = tag 6
-  toBuf b CFDouble = tag 7
-  toBuf b CFChar = tag 8
-  toBuf b CFPtr = tag 9
-  toBuf b CFWorld = tag 10
-  toBuf b (CFFun s t) = do tag 11; toBuf b s; toBuf b t
-  toBuf b (CFIORes t) = do tag 12; toBuf b t
-  toBuf b (CFStruct n a) = do tag 13; toBuf b n; toBuf b a
-  toBuf b (CFUser n a) = do tag 14; toBuf b n; toBuf b a
-  toBuf b CFGCPtr = tag 15
-  toBuf b CFBuffer = tag 16
-  toBuf b CFInt8 = tag 17
-  toBuf b CFInt16 = tag 18
-  toBuf b CFInt32 = tag 19
-  toBuf b CFInt64 = tag 20
+  toBuf b CFFloat = tag 7
+  toBuf b CFDouble = tag 8
+  toBuf b CFChar = tag 9
+  toBuf b CFPtr = tag 10
+  toBuf b CFWorld = tag 11
+  toBuf b (CFFun s t) = do tag 12; toBuf b s; toBuf b t
+  toBuf b (CFIORes t) = do tag 13; toBuf b t
+  toBuf b (CFStruct n a) = do tag 14; toBuf b n; toBuf b a
+  toBuf b (CFUser n a) = do tag 15; toBuf b n; toBuf b a
+  toBuf b CFGCPtr = tag 16
+  toBuf b CFBuffer = tag 17
+  toBuf b CFInt8 = tag 18
+  toBuf b CFInt16 = tag 19
+  toBuf b CFInt32 = tag 20
+  toBuf b CFInt64 = tag 21
 
   fromBuf b
       = case !getTag of

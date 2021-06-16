@@ -193,6 +193,17 @@ castInt64 [NPrimVal fc constant] = do
     pure (NPrimVal fc (I64 wrapped))
 castInt64 _ = Nothing
 
+castFloat : Vect 1 (NF vars) -> Maybe (NF vars)
+castFloat [NPrimVal fc (I i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I16 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (BI i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (Str i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (Db d)] = Just (NPrimVal fc (Fl (cast d)))
+castFloat _ = Nothing
+
 castDouble : Vect 1 (NF vars) -> Maybe (NF vars)
 castDouble [NPrimVal fc (I i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Db (cast i)))
@@ -201,6 +212,7 @@ castDouble [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (BI i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (Str i)] = Just (NPrimVal fc (Db (cast i)))
+castDouble [NPrimVal fc (Fl f)] = Just (NPrimVal fc (Db (cast f)))
 castDouble _ = Nothing
 
 castChar : Vect 1 (NF vars) -> Maybe (NF vars)
@@ -554,6 +566,9 @@ arithTy t = constTy t t t
 cmpTy : Constant -> ClosedTerm
 cmpTy t = constTy t t IntType
 
+floatTy : ClosedTerm
+floatTy = predTy FloatType FloatType
+
 doubleTy : ClosedTerm
 doubleTy = predTy DoubleType DoubleType
 
@@ -583,6 +598,7 @@ castTo Bits32Type = castBits32
 castTo Bits64Type = castBits64
 castTo StringType = castString
 castTo CharType = castChar
+castTo FloatType = castFloat
 castTo DoubleType = castDouble
 castTo _ = const Nothing
 
@@ -663,6 +679,17 @@ opName StrCons = prim "strCons"
 opName StrAppend = prim "strAppend"
 opName StrReverse = prim "strReverse"
 opName StrSubstr = prim "strSubstr"
+opName FloatExp = prim "floatExp"
+opName FloatLog = prim "floatLog"
+opName FloatSin = prim "floatSin"
+opName FloatCos = prim "floatCos"
+opName FloatTan = prim "floatTan"
+opName FloatASin = prim "floatASin"
+opName FloatACos = prim "floatACos"
+opName FloatATan = prim "floatATan"
+opName FloatSqrt = prim "floatSqrt"
+opName FloatFloor = prim "floatFloor"
+opName FloatCeiling = prim "floatCeiling"
 opName DoubleExp = prim "doubleExp"
 opName DoubleLog = prim "doubleLog"
 opName DoubleSin = prim "doubleSin"
@@ -692,7 +719,7 @@ integralTypes = [ IntType
                 ]
 
 numTypes : List Constant
-numTypes = integralTypes ++ [DoubleType]
+numTypes = integralTypes ++ [FloatType, DoubleType]
 
 primTypes : List Constant
 primTypes = numTypes ++ [StringType, CharType]
@@ -730,6 +757,18 @@ allPrimitives =
      MkPrim BelieveMe believeMeTy isTotal,
      MkPrim Crash crashTy notCovering] ++
 
+    [MkPrim FloatExp floatTy isTotal,
+     MkPrim FloatLog floatTy isTotal,
+     MkPrim FloatSin floatTy isTotal,
+     MkPrim FloatCos floatTy isTotal,
+     MkPrim FloatTan floatTy isTotal,
+     MkPrim FloatASin floatTy isTotal,
+     MkPrim FloatACos floatTy isTotal,
+     MkPrim FloatATan floatTy isTotal,
+     MkPrim FloatSqrt floatTy isTotal,
+     MkPrim FloatFloor floatTy isTotal,
+     MkPrim FloatCeiling floatTy isTotal] ++
+
     [MkPrim DoubleExp doubleTy isTotal,
      MkPrim DoubleLog doubleTy isTotal,
      MkPrim DoubleSin doubleTy isTotal,
@@ -749,6 +788,8 @@ allPrimitives =
     , t2 <- primTypes
     , t1 /= t2                         &&
       (t1,t2) /= (StringType,CharType) &&
+      (t1,t2) /= (FloatType,CharType)  &&
+      (t1,t2) /= (CharType,FloatType) &&
       (t1,t2) /= (DoubleType,CharType) &&
       (t1,t2) /= (CharType,DoubleType)
     ]

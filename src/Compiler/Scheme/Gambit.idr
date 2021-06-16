@@ -78,6 +78,7 @@ mutual
   tySpec : NamedCExp -> Core String
   tySpec (NmCon fc (UN "Int") _ _ []) = pure "int"
   tySpec (NmCon fc (UN "String") _ _ []) = pure "UTF-8-string"
+  tySpec (NmCon fc (UN "Float") _ _ []) = pure "float"
   tySpec (NmCon fc (UN "Double") _ _ []) = pure "double"
   tySpec (NmCon fc (UN "Char") _ _ []) = pure "char"
   tySpec (NmCon fc (NS _ n) _ _ [_])
@@ -132,6 +133,7 @@ cType : FC -> CFType -> Core String
 cType fc CFUnit = pure "void"
 cType fc CFInt = pure "int"
 cType fc CFString = pure "char *"
+cType fc CFFloat = pure "float"
 cType fc CFDouble = pure "double"
 cType fc CFChar = pure "char"
 cType fc CFPtr = pure "void *"
@@ -161,6 +163,7 @@ cftySpec fc CFUnsigned16 = pure "unsigned-short"
 cftySpec fc CFUnsigned32 = pure "unsigned-int"
 cftySpec fc CFUnsigned64 = pure "unsigned-long"
 cftySpec fc CFString = pure "UTF-8-string"
+cftySpec fc CFFloat = pure "float"
 cftySpec fc CFDouble = pure "double"
 cftySpec fc CFChar = pure "char"
 cftySpec fc CFPtr = pure "(pointer void)"
