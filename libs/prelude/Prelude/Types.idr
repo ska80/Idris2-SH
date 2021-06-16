@@ -684,6 +684,70 @@ ord : Char -> Int
 ord = prim__cast_CharInt
 
 -----------------------
+-- FLOAT PRIMITIVES --
+-----------------------
+
+public export
+expf : Float -> Float
+expf x = prim__floatExp x
+
+public export
+logf : Float -> Float
+logf x = prim__floatLog x
+
+public export
+powf : Float -> Float -> Float
+powf x y = expf (y * logf x)
+
+public export
+sinf : Float -> Float
+sinf x = prim__floatSin x
+
+public export
+cosf : Float -> Float
+cosf x = prim__floatCos x
+
+public export
+tanf : Float -> Float
+tanf x = prim__floatTan x
+
+public export
+asinf : Float -> Float
+asinf x = prim__floatASin x
+
+public export
+acosf : Float -> Float
+acosf x = prim__floatACos x
+
+public export
+atanf : Float -> Float
+atanf x = prim__floatATan x
+
+public export
+sinhf : Float -> Float
+sinhf x = (expf x - expf (-x)) / 2
+
+public export
+coshf : Float -> Float
+coshf x = (expf x + expf (-x)) / 2
+
+public export
+tanhf : Float -> Float
+tanhf x = sinhf x / coshf x
+
+public export
+sqrtf : Float -> Float
+sqrtf x = prim__floatSqrt x
+
+public export
+floorf : Float -> Float
+floorf x = prim__floatFloor x
+
+public export
+ceilingf : Float -> Float
+ceilingf x = prim__floatCeiling x
+
+-----------------------
 -- DOUBLE PRIMITIVES --
 -----------------------
 

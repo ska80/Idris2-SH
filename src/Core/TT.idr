@@ -44,7 +44,7 @@ data Constant
     | B64 Integer
     | Str String
     | Ch Char
-    | Fl Double -- use 'Double' for now, since we don't have 'Float' type yet
+    | Fl Float
     | Db Double
     | WorldVal
 

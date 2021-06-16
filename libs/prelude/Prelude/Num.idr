@@ -158,6 +158,27 @@ Num Bits64 where
   (*) = prim__mul_Bits64
   fromInteger = prim__cast_IntegerBits64
 
+-- Float
+
+public export
+Num Float where
+  (+) = prim__add_Float
+  (*) = prim__mul_Float
+  fromInteger = prim__cast_IntegerFloat
+
+public export
+Neg Float where
+  negate x = prim__negate_Float x
+  (-) = prim__sub_Float
+
+public export
+Abs Float where
+  abs x = if x < 0 then -x else x
+
+public export
+Fractional Float where
+  (/) = prim__div_Float
+
 -- Double
 
 public export

@@ -289,7 +289,6 @@ parseInteger s = parseIntTrimmed (trim s)
             then map fromInteger (parseNumWithoutSign (unpack xs) (cast (ord x - ord '0')))
               else Nothing
 
-
 ||| Convert a number string to a Double.
 |||
 ||| ```idris example
@@ -356,3 +355,19 @@ parseDouble = mkDouble . wfe . trim
                        pure (w, if w < 0 then (-f) else f, 0)
                    _ => Nothing
                _ => Nothing
+
+||| Convert a number string to a Float.
+|||
+||| ```idris example
+||| parseFloat "+123.123e-2"
+||| ```
+||| ```idris example
+||| parseFloat {a=Int} " -123.123E+2"
+||| ```
+||| ```idris example
+||| parseFloat {a=Int} " +123.123"
+||| ```
+export -- it's a bit too slow at compile time
+covering
+parseFloat : String -> Maybe Float
+parseFloat s = map cast (parseDouble s)
