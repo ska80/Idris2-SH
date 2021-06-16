@@ -167,8 +167,8 @@ fromInt k = if useBigInt k then fromBigInt else id
 jsIntOfChar : IntKind -> String -> String
 jsIntOfChar k s = toInt k $ s ++ ".codePointAt(0)"
 
-jsIntOfDouble : IntKind -> String -> String
-jsIntOfDouble k s = toInt k $ "Math.trunc(" ++ s ++ ")"
+jsIntOfFloat : IntKind -> String -> String
+jsIntOfFloat k s = toInt k $ "Math.trunc(" ++ s ++ ")"
 
 jsAnyToString : String -> String
 jsAnyToString s = "(''+" ++ s ++ ")"
@@ -274,10 +274,10 @@ div :  {auto c : Ref ESs ESSt}
 div (Just $ Signed $ Unlimited) x y = pure $ binOp "/" x y
 div (Just $ k@(Signed $ P n)) x y =
   if useBigInt k then boundedIntOp n "/" x y
-                 else boundedInt False n (jsIntOfDouble k (x ++ " / " ++ y))
+                 else boundedInt False n (jsIntOfFloat k (x ++ " / " ++ y))
 div (Just $ k@(Unsigned n)) x y =
   if useBigInt k then pure $ binOp "/" x y
-                 else pure $ jsIntOfDouble k (x ++ " / " ++ y)
+                 else pure $ jsIntOfFloat k (x ++ " / " ++ y)
 div Nothing x y = pure $ binOp "/" x y
 
 -- Creates the definition of a binary arithmetic operation.
@@ -316,8 +316,8 @@ constPrimitives = MkConstantPrimitives {
   , intToChar   = \k => jsCharOfInt k
   , stringToInt = \k,s => jsIntOfString k s >>= truncInt (useBigInt k) k
   , intToString = \_ => pure . jsAnyToString
-  , floatToInt  = \k => truncInt (useBigInt k) k . jsIntOfDouble k
-  , intTofloat  = \k => pure . fromInt k
+  , floatToInt  = \k => truncInt (useBigInt k) k . jsIntOfFloat k
+  , intToFloat  = \k => pure . fromInt k
   , intToInt    = intImpl
   }
   where truncInt : (isBigInt : Bool) -> IntKind -> String -> Core String
