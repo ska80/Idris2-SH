@@ -14,6 +14,7 @@ Value_Constructor *newConstructor(int total, int tag, const char *name);
 // copies arglist, no pointer bending
 Value_Closure *makeClosureFromArglist(fun_ptr_t f, Value_Arglist *);
 
+Value_Float *makeFloat(float f);
 Value_Double *makeDouble(double d);
 Value_Char *makeChar(char d);
 Value_Bits8 *makeBits8(uint8_t i);

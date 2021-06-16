@@ -61,6 +61,18 @@ void setBufferInt(void* buffer, int loc, int64_t val) {
     b->data[loc+7] = (val >> 56) & 0xff;
 }
 
+void setBufferFloat(void* buffer, int loc, float val) {
+    Buffer* b = buffer;
+    // I am not proud of this
+    if (loc >= 0 && loc + sizeof(float) <= b->size) {
+        unsigned char* c = (unsigned char*)(& val);
+        int i;
+        for (i = 0; i < sizeof(float); ++i) {
+            b->data[loc+i] = c[i];
+        }
+    }
+}
+
 void setBufferDouble(void* buffer, int loc, double val) {
     Buffer* b = buffer;
     assert_valid_range(b, loc, sizeof(double));
@@ -92,6 +104,23 @@ int64_t getBufferInt(void* buffer, int loc) {
         result |= (uint64_t)(uint8_t)b->data[loc + i] << (8 * i);
     }
     return result;
+}
+
+float getBufferFloat(void* buffer, int loc) {
+    Buffer* b = buffer;
+    float f;
+    // I am even less proud of this
+    unsigned char *c = (unsigned char*)(& f);
+    if (loc >= 0 && loc + sizeof(float) <= b->size) {
+        int i;
+        for (i = 0; i < sizeof(float); ++i) {
+            c[i] = b->data[loc+i];
+        }
+        return f;
+    }
+    else {
+        return 0;
+    }
 }
 
 double getBufferDouble(void* buffer, int loc) {

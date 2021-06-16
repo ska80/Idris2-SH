@@ -48,6 +48,14 @@ Value_Closure *makeClosureFromArglist(fun_ptr_t f, Value_Arglist *arglist)
     return retVal;
 }
 
+Value_Float *makeFloat(float f)
+{
+    Value_Float *retVal = (Value_Float *)newValue();
+    retVal->header.tag = FLOAT_TAG;
+    retVal->f = f;
+    return retVal;
+}
+
 Value_Double *makeDouble(double d)
 {
     Value_Double *retVal = IDRIS2_NEW_VALUE(Value_Double);
@@ -251,6 +259,7 @@ void removeReference(Value *elem)
             mpz_clear(((Value_Integer *)elem)->i);
             break;
         }
+        case FLOAT_TAG:
         case DOUBLE_TAG:
             /* nothing to delete, added for sake of completeness */
             break;
