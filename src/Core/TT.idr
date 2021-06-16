@@ -273,12 +273,13 @@ constTag Bits32Type = 7
 constTag Bits64Type = 8
 constTag StringType = 9
 constTag CharType = 10
-constTag DoubleType = 11
-constTag WorldType = 12
-constTag Int8Type = 13
-constTag Int16Type = 14
-constTag Int32Type = 15
-constTag Int64Type = 16
+constTag FloatType = 11
+constTag DoubleType = 12
+constTag WorldType = 13
+constTag Int8Type = 14
+constTag Int16Type = 15
+constTag Int32Type = 16
+constTag Int64Type = 17
 constTag _ = 0
 
 ||| Precision of integral types.

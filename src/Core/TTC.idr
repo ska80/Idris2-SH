@@ -589,17 +589,17 @@ export
   toBuf b DoubleFloor = tag 33
   toBuf b DoubleCeiling = tag 34
 
-  toBuf b FloatExp = tag 35
-  toBuf b FloatLog = tag 36
-  toBuf b FloatSin = tag 37
-  toBuf b FloatCos = tag 38
-  toBuf b FloatTan = tag 39
-  toBuf b FloatASin = tag 40
-  toBuf b FloatACos = tag 41
-  toBuf b FloatATan = tag 42
-  toBuf b FloatSqrt = tag 43
-  toBuf b FloatFloor = tag 44
-  toBuf b FloatCeiling = tag 45
+  toBuf b DoubleExp = tag 40
+  toBuf b DoubleLog = tag 41
+  toBuf b DoubleSin = tag 42
+  toBuf b DoubleCos = tag 43
+  toBuf b DoubleTan = tag 44
+  toBuf b DoubleASin = tag 45
+  toBuf b DoubleACos = tag 46
+  toBuf b DoubleATan = tag 47
+  toBuf b DoubleSqrt = tag 48
+  toBuf b DoubleFloor = tag 49
+  toBuf b DoubleCeiling = tag 50
 
   toBuf b (Cast x y) = do tag 99; toBuf b x; toBuf b y
   toBuf b BelieveMe = tag 100
@@ -621,29 +621,29 @@ export
                  13 => pure StrTail
                  17 => pure StrReverse
 
-                 19 => pure DoubleExp
-                 20 => pure DoubleLog
-                 22 => pure DoubleSin
-                 23 => pure DoubleCos
-                 24 => pure DoubleTan
-                 25 => pure DoubleASin
-                 26 => pure DoubleACos
-                 27 => pure DoubleATan
-                 32 => pure DoubleSqrt
-                 33 => pure DoubleFloor
-                 34 => pure DoubleCeiling
+                 19 => pure FloatExp
+                 20 => pure FloatLog
+                 22 => pure FloatSin
+                 23 => pure FloatCos
+                 24 => pure FloatTan
+                 25 => pure FloatASin
+                 26 => pure FloatACos
+                 27 => pure FloatATan
+                 32 => pure FloatSqrt
+                 33 => pure FloatFloor
+                 34 => pure FloatCeiling
 
-                 35 => pure FloatExp
-                 36 => pure FloatLog
-                 37 => pure FloatSin
-                 38 => pure FloatCos
-                 39 => pure FloatTan
-                 40 => pure FloatASin
-                 41 => pure FloatACos
-                 42 => pure FloatATan
-                 43 => pure FloatSqrt
-                 44 => pure FloatFloor
-                 45 => pure FloatCeiling
+                 40 => pure DoubleExp
+                 41 => pure DoubleLog
+                 42 => pure DoubleSin
+                 43 => pure DoubleCos
+                 44 => pure DoubleTan
+                 45 => pure DoubleASin
+                 46 => pure DoubleACos
+                 47 => pure DoubleATan
+                 48 => pure DoubleSqrt
+                 49 => pure DoubleFloor
+                 50 => pure DoubleCeiling
 
                  99 => do x <- fromBuf b; y <- fromBuf b; pure (Cast x y)
                  _ => corrupt "PrimFn 1"
@@ -875,11 +875,11 @@ TTC CG where
   toBuf b ChezSep = tag 1
   toBuf b Racket = tag 2
   toBuf b Gambit = tag 3
-  toBuf b (Other s) = do tag 4; toBuf b s
-  toBuf b Node = tag 5
-  toBuf b Javascript = tag 6
-  toBuf b RefC = tag 7
-  toBuf b VMCodeInterp = tag 8
+  toBuf b Node = tag 4
+  toBuf b Javascript = tag 5
+  toBuf b RefC = tag 6
+  toBuf b VMCodeInterp = tag 7
+  toBuf b (Other s) = do tag 8; toBuf b s
 
   fromBuf b
       = case !getTag of
@@ -887,12 +887,12 @@ TTC CG where
              1 => pure ChezSep
              2 => pure Racket
              3 => pure Gambit
-             4 => do s <- fromBuf b
+             4 => pure Node
+             5 => pure Javascript
+             6 => pure RefC
+             7 => pure VMCodeInterp
+             8 => do s <- fromBuf b
                      pure (Other s)
-             5 => pure Node
-             6 => pure Javascript
-             7 => pure RefC
-             8 => pure VMCodeInterp
              _ => corrupt "CG"
 
 export
