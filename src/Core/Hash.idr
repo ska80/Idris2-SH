@@ -72,6 +72,10 @@ Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
 
 export
+Hashable Float where
+  hash = hash . show
+
+export
 Hashable Double where
   hash = hash . show
 
