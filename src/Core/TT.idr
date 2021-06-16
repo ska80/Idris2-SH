@@ -115,7 +115,7 @@ isPrimType Bits32Type  = True
 isPrimType Bits64Type  = True
 isPrimType StringType  = True
 isPrimType CharType    = True
-isPrimType FloatType  = True
+isPrimType FloatType   = True
 isPrimType DoubleType  = True
 isPrimType WorldType   = True
 
