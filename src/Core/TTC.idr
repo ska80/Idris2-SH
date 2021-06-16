@@ -823,20 +823,21 @@ TTC CFType where
              4 => pure CFUnsigned32
              5 => pure CFUnsigned64
              6 => pure CFString
-             7 => pure CFDouble
-             8 => pure CFChar
-             9 => pure CFPtr
-             10 => pure CFWorld
-             11 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
-             12 => do t <- fromBuf b; pure (CFIORes t)
-             13 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
-             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
-             15 => pure CFGCPtr
-             16 => pure CFBuffer
-             17 => pure CFInt8
-             18 => pure CFInt16
-             19 => pure CFInt32
-             20 => pure CFInt64
+             7 => pure CFFloat
+             8 => pure CFDouble
+             9 => pure CFChar
+             10 => pure CFPtr
+             11 => pure CFWorld
+             12 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
+             13 => do t <- fromBuf b; pure (CFIORes t)
+             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
+             15 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
+             16 => pure CFGCPtr
+             17 => pure CFBuffer
+             18 => pure CFInt8
+             19 => pure CFInt16
+             20 => pure CFInt32
+             21 => pure CFInt64
              _ => corrupt "CFType"
 
 export
