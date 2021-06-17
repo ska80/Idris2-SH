@@ -216,7 +216,7 @@ chezTests = MkTestPool "Chez backend" [Chez]
 refcTests : TestPool
 refcTests = MkTestPool "Reference counting C backend" [C]
     [ "refc001" , "refc002"
-    , "strings", "integers", "doubles"
+    , "strings", "integers", "floats"
     , "buffer", "clock", "args"
     ]
 

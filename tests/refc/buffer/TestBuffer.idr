@@ -8,13 +8,14 @@ put = (>>= putStrLn . show)
 
 main : IO ()
 main = do
-    Just buf <- newBuffer 31
+    Just buf <- newBuffer 35
         | Nothing => pure ()
 
     setByte buf 0 1
     setBits8 buf 1 2
     setInt buf 2 0x1122334455667788
     setDouble buf 10 (sqrt 2)
+    setFloat buf 18 (sqrtf 2)
 
     let helloWorld = "Hello, world"
 
@@ -22,7 +23,7 @@ main = do
         | Nothing => pure ()
 
     setString helloWorldBuf 0 "Hello, world"
-    copyData helloWorldBuf 0 12 buf 18
+    copyData helloWorldBuf 0 12 buf 22
 
     put $ rawSize buf
 
@@ -30,7 +31,8 @@ main = do
     put $ getBits8 buf 1
     put $ getInt buf 2
     put $ getDouble buf 10
-    put $ getString buf 18 12
+    put $ getFloat buf 18
+    put $ getString buf 22 12
 
     put $ bufferData buf
 

@@ -28,4 +28,14 @@ the Double (cast "-12.0")
 the Double (cast "-12.3")
 the Double (cast "-12.5")
 the Double (cast "-12.7")
+"Float"
+the Float (cast "12.0")
+the Float (cast "12.3")
+the Float (cast "12.5")
+the Float (cast "12.7")
+"Negative Float"
+the Float (cast "-12.0")
+the Float (cast "-12.3")
+the Float (cast "-12.5")
+the Float (cast "-12.7")
 :q

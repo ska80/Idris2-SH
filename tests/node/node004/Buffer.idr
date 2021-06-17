@@ -17,15 +17,19 @@ main
          val <- getDouble buf 10
          printLn val
 
-         setString buf 20 "Hello there!"
-         val <- getString buf 20 5
+         setFloat buf 18 94.42
+         val <- getFloat buf 18
          printLn val
 
-         val <- getString buf 26 6
+         setString buf 22 "Hello there!"
+         val <- getString buf 22 5
          printLn val
 
-         setBits16 buf 32 65535
-         val <- getBits16 buf 32
+         val <- getString buf 30 6
+         printLn val
+
+         setBits16 buf 36 65535
+         val <- getBits16 buf 36
          printLn val
 
          ds <- bufferData buf

@@ -1,4 +1,7 @@
 $1 --no-banner --no-color --console-width 0 --cg refc -o refc_doubles TestDoubles.idr > /dev/null
 ./build/exec/refc_doubles
 
+$1 --no-banner --no-color --console-width 0 --cg refc -o refc_floats TestFloats.idr > /dev/null
+./build/exec/refc_floats
+
 rm -rf build

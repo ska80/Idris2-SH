@@ -8,9 +8,9 @@
 --    the value is checked for being in bounds, and if it is not, the
 --    unsigned remainder modulo 2^x of y is returned.
 --
---    When casting from a `Double`, the value is first truncated towards 0,
---    before applying the inbounds check and (if necessary) calculating
---    the unsigned remainder modulo 2^x.
+--    When casting from a `Double` and `Float`, the value is first truncated
+--    towards 0, before applying the inbounds check and (if necessary)
+--    calculating the unsigned remainder modulo 2^x.
 --
 --    When casting from a `String`, the value is first converted to a floating
 --    point number by the backend and then truncated as described above.
@@ -24,6 +24,8 @@
 --               cast {from = Integer} {to = Bits8} (-2) = 254
 --               cast {from = Double} {to = Bits8} (-12.001) = 244
 --               cast {from = Double} {to = Bits8} ("-12.001") = 244
+--               cast {from = Float} {to = Bits8} (-12.001) = 244
+--               cast {from = Float} {to = Bits8} ("-12.001") = 244
 --
 -- b. Signed integers
 --
@@ -33,9 +35,9 @@
 --    is calculated. If the result is >= 2^(x-1), 2^x is subtracted
 --    from the result. This is the same behavior as for instance in Haskell.
 --
---    When casting from a `Double`, the value is first truncated towards 0,
---    before applying the inbounds check and (if necessary) truncating
---    the value.
+--    When casting from a `Double` and `Float`, the value is first truncated
+--    towards 0, before applying the inbounds check and (if necessary)
+--    truncating the value.
 --
 --    When casting from a `String`, the value is first converted to a floating
 --    point number by the backend and then truncated as described above.
@@ -48,8 +50,10 @@
 --               cast {from = Integer} {to = Int8} 259  = 4
 --               cast {from = Integer} {to = Int8} (-128) = (-128)
 --               cast {from = Integer} {to = Int8} (-129) = 127
---               cast {from = Double}  {to = Int8} (-12.001) = (-12)
---               cast {from = Double}  {to = Int8} ("-12.001") = (-12)
+--               cast {from = Double} {to = Int8} (-12.001) = (-12)
+--               cast {from = Double} {to = Int8} ("-12.001") = (-12)
+--               cast {from = Float} {to = Int8} (-12.001) = (-12)
+--               cast {from = Float} {to = Int8} ("-12.001") = (-12)
 --
 -- c. Characters
 --
@@ -130,6 +134,9 @@ Cast Int8 Char where
 Cast Int8 Double where
   cast = prim__cast_Int8Double
 
+Cast Int8 Float where
+  cast = prim__cast_Int8Float
+
 --------------------------------------------------------------------------------
 --          Int16
 --------------------------------------------------------------------------------
@@ -185,6 +192,9 @@ Cast Int16 Char where
 
 Cast Int16 Double where
   cast = prim__cast_Int16Double
+
+Cast Int16 Float where
+  cast = prim__cast_Int16Float
 
 --------------------------------------------------------------------------------
 --          Int32
@@ -242,6 +252,9 @@ Cast Int32 Char where
 Cast Int32 Double where
   cast = prim__cast_Int32Double
 
+Cast Int32 Float where
+  cast = prim__cast_Int32Float
+
 --------------------------------------------------------------------------------
 --          Int64
 --------------------------------------------------------------------------------
@@ -297,6 +310,9 @@ Cast Int64 Char where
 
 Cast Int64 Double where
   cast = prim__cast_Int64Double
+
+Cast Int64 Float where
+  cast = prim__cast_Int64Float
 
 --------------------------------------------------------------------------------
 --          Int
@@ -358,6 +374,9 @@ Cast Bits8 Char where
 Cast Bits8 Double where
   cast = prim__cast_Bits8Double
 
+Cast Bits8 Float where
+  cast = prim__cast_Bits8Float
+
 --------------------------------------------------------------------------------
 --          Bits16
 --------------------------------------------------------------------------------
@@ -382,6 +401,9 @@ Cast Bits16 Char where
 
 Cast Bits16 Double where
   cast = prim__cast_Bits16Double
+
+Cast Bits16 Float where
+  cast = prim__cast_Bits16Float
 
 --------------------------------------------------------------------------------
 --          Bits32
@@ -408,6 +430,9 @@ Cast Bits32 Char where
 Cast Bits32 Double where
   cast = prim__cast_Bits32Double
 
+Cast Bits32 Float where
+  cast = prim__cast_Bits32Float
+
 --------------------------------------------------------------------------------
 --          Bits64
 --------------------------------------------------------------------------------
@@ -432,6 +457,9 @@ Cast Bits64 Char where
 
 Cast Bits64 Double where
   cast = prim__cast_Bits64Double
+
+Cast Bits64 Float where
+  cast = prim__cast_Bits64Float
 
 --------------------------------------------------------------------------------
 --          String
@@ -490,6 +518,34 @@ Cast Double Int64 where
   cast = prim__cast_DoubleInt64
 
 --------------------------------------------------------------------------------
+--          Float
+--------------------------------------------------------------------------------
+
+Cast Float Bits8 where
+  cast = prim__cast_FloatBits8
+
+Cast Float Bits16 where
+  cast = prim__cast_FloatBits16
+
+Cast Float Bits32 where
+  cast = prim__cast_FloatBits32
+
+Cast Float Bits64 where
+  cast = prim__cast_FloatBits64
+
+Cast Float Int8 where
+  cast = prim__cast_FloatInt8
+
+Cast Float Int16 where
+  cast = prim__cast_FloatInt16
+
+Cast Float Int32 where
+  cast = prim__cast_FloatInt32
+
+Cast Float Int64 where
+  cast = prim__cast_FloatInt64
+
+--------------------------------------------------------------------------------
 --          Tests
 --------------------------------------------------------------------------------
 
@@ -499,6 +555,7 @@ showTpe Bits32  = "Bits32"
 showTpe Bits64  = "Bits64"
 showTpe Bits8   = "Bits8"
 showTpe Char    = "Char"
+showTpe Float   = "Float"
 showTpe Double  = "Double"
 showTpe Int     = "Int"
 showTpe Int16   = "Int16"
@@ -537,6 +594,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Int8 Int64   [(-129,127),(-128,-128),(0,0),(127,127),(128,-128)]
         ++ testCasts Int8 Int     [(-129,127),(-128,-128),(0,0),(127,127),(128,-128)]
         ++ testCasts Int8 Double  [(-129,127),(-128,-128),(0,0),(127,127),(128,-128)]
+        ++ testCasts Int8 Float   [(-129,127),(-128,-128),(0,0),(127,127),(128,-128)]
         ++ testCasts Int8 String  [(-129,"127"),(-128,"-128"),(0,"0"),(127,"127"),(128,"-128")]
         ++ testCasts Int8 Integer [(-129,127),(-128,-128),(0,0),(127,127),(128,-128)]
         ++ testCasts Int8 Bits8   [(-129,127),(0,0),(127,127),(128,-128)]
@@ -549,6 +607,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Int16 Int64   [(-32769,32767),(-32768,-32768),(0,0),(32767,32767),(32768,-32768)]
         ++ testCasts Int16 Int     [(-32769,32767),(-32768,-32768),(0,0),(32767,32767),(32768,-32768)]
         ++ testCasts Int16 Double  [(-32769,32767),(-32768,-32768),(0,0),(32767,32767),(32768,-32768)]
+        ++ testCasts Int16 Float   [(-32769,32767),(-32768,-32768),(0,0),(32767,32767),(32768,-32768)]
         ++ testCasts Int16 String  [(-32769,"32767"),(-32768,"-32768"),(0,"0"),(32767,"32767"),(32768,"-32768")]
         ++ testCasts Int16 Integer [(-32769,32767),(-32768,-32768),(0,0),(32767,32767),(32768,-32768)]
         ++ testCasts Int16 Bits8   [(-32769,32767),(0,0),(32767,32767),(32768,-32768)]
@@ -561,6 +620,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Int32 Int64   [(-2147483649,2147483647),(-2147483648,-2147483648),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
         ++ testCasts Int32 Int     [(-2147483649,2147483647),(-2147483648,-2147483648),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
         ++ testCasts Int32 Double  [(-2147483649,2147483647),(-2147483648,-2147483648),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
+        ++ testCasts Int32 Float   [(-2147483649,2147483647),(-2147483648,-2147483648),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
         ++ testCasts Int32 String  [(-2147483649,"2147483647"),(-2147483648,"-2147483648"),(0,"0"),(2147483647,"2147483647"),(2147483648,"-2147483648")]
         ++ testCasts Int32 Integer [(-2147483649,2147483647),(-2147483648,-2147483648),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
         ++ testCasts Int32 Bits8   [(-2147483649,2147483647),(0,0),(2147483647,2147483647),(2147483648,-2147483648)]
@@ -573,6 +633,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Int64 Int32   [(-9223372036854775809,9223372036854775807),(-9223372036854775808,0),(0,0),(9223372036854775807,-1),(9223372036854775808,0)]
         ++ testCasts Int64 Int     [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int64 Double  [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
+        ++ testCasts Int64 Float   [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int64 String  [(-9223372036854775809,"9223372036854775807"),(-9223372036854775808,"-9223372036854775808"),(0,"0"),(9223372036854775807,"9223372036854775807"),(9223372036854775808,"-9223372036854775808")]
         ++ testCasts Int64 Integer [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int64 Bits8   [(-9223372036854775809,255),(0,0),(9223372036854775807,0xff),(9223372036854775808,0)]
@@ -585,6 +646,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Int Int32   [(-9223372036854775809,9223372036854775807),(-9223372036854775808,0),(0,0),(9223372036854775807,-1),(9223372036854775808,0)]
         ++ testCasts Int Int64   [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int Double  [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
+        ++ testCasts Int Float   [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int String  [(-9223372036854775809,"9223372036854775807"),(-9223372036854775808,"-9223372036854775808"),(0,"0"),(9223372036854775807,"9223372036854775807"),(9223372036854775808,"-9223372036854775808")]
         ++ testCasts Int Integer [(-9223372036854775809,9223372036854775807),(-9223372036854775808,-9223372036854775808),(0,0),(9223372036854775807,9223372036854775807),(9223372036854775808,-9223372036854775808)]
         ++ testCasts Int Bits8   [(-9223372036854775809,255),(0,0),(9223372036854775807,0xff),(9223372036854775808,0)]
@@ -609,6 +671,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Bits8 Int64   [(0,0),(255,255),(256,0)]
         ++ testCasts Bits8 Int     [(0,0),(255,255),(256,0)]
         ++ testCasts Bits8 Double  [(0,0),(255,255),(256,0)]
+        ++ testCasts Bits8 Float   [(0,0),(255,255),(256,0)]
         ++ testCasts Bits8 String  [(0,"0"),(255,"255"),(256,"0")]
         ++ testCasts Bits8 Integer [(0,0),(255,255),(256,0)]
         ++ testCasts Bits8 Bits16  [(0,0),(255,255),(256,0)]
@@ -621,6 +684,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Bits16 Int64   [(0,0),(0xffff,0xffff),(0x10000,0)]
         ++ testCasts Bits16 Int     [(0,0),(0xffff,0xffff),(0x10000,0)]
         ++ testCasts Bits16 Double  [(0,0),(0xffff,0xffff),(0x10000,0)]
+        ++ testCasts Bits16 Float   [(0,0),(0xffff,0xffff),(0x10000,0)]
         ++ testCasts Bits16 String  [(0,"0"),(0xffff,"65535"),(0x10000,"0")]
         ++ testCasts Bits16 Integer [(0,0),(0xffff,0xffff),(0x10000,0)]
         ++ testCasts Bits16 Bits8   [(0,0),(0xffff,0xff),(0x10000,0)]
@@ -633,6 +697,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Bits32 Int64   [(0,0),(0xffffffff,0xffffffff),(0x100000000,0)]
         ++ testCasts Bits32 Int     [(0,0),(0xffffffff,0xffffffff),(0x100000000,0)]
         ++ testCasts Bits32 Double  [(0,0),(0xffffffff,0xffffffff),(0x100000000,0)]
+        ++ testCasts Bits32 Float   [(0,0),(0xffffffff,0xffffffff),(0x100000000,0)]
         ++ testCasts Bits32 String  [(0,"0"),(0xffffffff,"4294967295"),(0x100000000,"0")]
         ++ testCasts Bits32 Integer [(0,0),(0xffffffff,0xffffffff),(0x100000000,0)]
         ++ testCasts Bits32 Bits8   [(0,0),(0xffffffff,0xff),(0x100000000,0)]
@@ -645,6 +710,7 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Bits64 Int64   [(0,0),(0xffffffffffffffff,-1),(0x10000000000000000,0)]
         ++ testCasts Bits64 Int     [(0,0),(0xffffffffffffffff,-1),(0x10000000000000000,0)]
         ++ testCasts Bits64 Double  [(0,0),(0xffffffffffffffff,0xffffffffffffffff),(0x10000000000000000,0)]
+        ++ testCasts Bits64 Float   [(0,0),(0xffffffffffffffff,0xffffffffffffffff),(0x10000000000000000,0)]
         ++ testCasts Bits64 String  [(0,"0"),(0xffffffffffffffff,"18446744073709551615"),(0x10000000000000000,"0")]
         ++ testCasts Bits64 Integer [(0,0),(0xffffffffffffffff,0xffffffffffffffff),(0x10000000000000000,0)]
         ++ testCasts Bits64 Bits8   [(0,0),(0xffffffffffffffff,0xff),(0x10000000000000000,0)]
@@ -671,6 +737,16 @@ results =  testCasts Int8 Int16   [(-129,127),(-128,-128),(0,0),(127,127),(128,-
         ++ testCasts Double Bits16  [(0.0,0),(65535.0,65535), (65536.0,0)]
         ++ testCasts Double Bits32  [(0.0,0),(4294967295.0,4294967295), (4294967296.0,0)]
         ++ testCasts Double Bits64  [(0.0,0),(18446744073709551616.0,0)]
+
+        ++ testCasts Float Int8     [(-129.0, 127),(-128.0,-128),(-12.001,-12),(12.001,12),(127.0,127),(128.0,-128)]
+        ++ testCasts Float Int16    [(-32769.0, 32767),(-32768.0,-32768),(-12.001,-12),(12.001,12),(32767.0,32767),(32768.0,-32768)]
+        ++ testCasts Float Int32    [(-2147483649.0,2147483647),(-2147483648.0,-2147483648),(-12.001,-12),(12.001,12),(2147483647.0,2147483647),(2147483648.0,-2147483648)]
+        ++ testCasts Float Int64    [(-9223372036854775808.0,-9223372036854775808),(-12.001,-12),(12.001,12),(9223372036854775808.0,-9223372036854775808)]
+        ++ testCasts Float Int      [(-9223372036854775808.0,-9223372036854775808),(-12.001,-12),(12.001,12),(9223372036854775808.0,-9223372036854775808)]
+        ++ testCasts Float Bits8    [(0.0,0),(255.0,255), (256.0,0)]
+        ++ testCasts Float Bits16   [(0.0,0),(65535.0,65535), (65536.0,0)]
+        ++ testCasts Float Bits32   [(0.0,0),(4294967295.0,4294967295), (4294967296.0,0)]
+        ++ testCasts Float Bits64   [(0.0,0),(18446744073709551616.0,0)]
 
         ++ testCasts Int8 Char    [(-1, '\x0'), (80, 'P')]
         ++ testCasts Int16 Char   [(-1, '\x0'), (80, 'P')]
