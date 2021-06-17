@@ -102,17 +102,17 @@ constPrimitives = MkConstantPrimitives {
   where charTo : IntKind -> String -> String
         charTo (Signed Unlimited) x = op "char->integer" [x]
         charTo (Signed $ P n)     x = op "cast-char-boundedInt" [x, show (n-1)]
-        charTo (Unsigned n)       x = op "cast-char-boundedUInt" [x,show n]
+        charTo (Unsigned n)       x = op "cast-char-boundedUInt" [x, show n]
 
         strTo : IntKind -> String -> String
         strTo (Signed Unlimited) x = op "cast-string-int" [x]
         strTo (Signed $ P n)     x = op "cast-string-boundedInt" [x, show (n-1)]
-        strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x,show n]
+        strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x, show n]
 
         fltTo : IntKind -> String -> String
         fltTo (Signed Unlimited) x = op "exact-truncate" [x]
         fltTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, show (n-1)]
-        fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
+        fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x, show n]
 
         intTo : IntKind -> IntKind -> String -> String
         intTo _ (Signed Unlimited) x = x
@@ -122,12 +122,12 @@ constPrimitives = MkConstantPrimitives {
         -- Only if the precision of the target is greater
         -- than the one of the source, there is no need to cast.
         intTo (Unsigned m) (Signed $ P n) x =
-          if n > m then x else op "blodwen-toSignedInt" [x,show (n-1)]
+          if n > m then x else op "blodwen-toSignedInt" [x, show (n-1)]
 
-        intTo (Signed _) (Unsigned n) x = op "blodwen-toUnsignedInt" [x,show n]
+        intTo (Signed _) (Unsigned n) x = op "blodwen-toUnsignedInt" [x, show n]
 
         intTo (Unsigned m) (Unsigned n) x =
-          if n >= m then x else op "blodwen-toUnsignedInt" [x,show n]
+          if n >= m then x else op "blodwen-toUnsignedInt" [x, show n]
 
 ||| Generate scheme for a primitive function.
 schOp : {0 arity : Nat} -> PrimFn arity -> Vect arity String -> Core String
