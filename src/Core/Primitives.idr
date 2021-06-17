@@ -216,7 +216,6 @@ castFloat [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (BI i)] = Just (NPrimVal fc (Fl (cast i)))
 castFloat [NPrimVal fc (Str i)] = Just (NPrimVal fc (Fl (cast i)))
-castFloat [NPrimVal fc (Db d)] = Just (NPrimVal fc (Fl (cast d)))
 castFloat _ = Nothing
 
 castDouble : Vect 1 (NF vars) -> Maybe (NF vars)
@@ -227,7 +226,6 @@ castDouble [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (BI i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (Str i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (Fl f)] = Just (NPrimVal fc (Db (cast f)))
 castDouble _ = Nothing
 
 castChar : Vect 1 (NF vars) -> Maybe (NF vars)
