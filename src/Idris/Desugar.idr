@@ -302,7 +302,7 @@ mutual
              Nothing =>
                 pure $ IAlternative fc (UniqueDefault (IPrimVal fc (Db x)))
                                     [IPrimVal fc (Db x),
-                                     IPrimVal fc (Fl (cast x))]
+                                     IPrimVal fc (Fl x)]
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Db x))
