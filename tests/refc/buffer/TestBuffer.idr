@@ -15,7 +15,7 @@ main = do
     setBits8 buf 1 2
     setInt buf 2 0x1122334455667788
     setDouble buf 10 (sqrt 2)
-    setFloat buf 18 (sqrtf 2)
+    setFloat buf 18 (sqrt 2)
 
     let helloWorld = "Hello, world"
 
