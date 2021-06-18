@@ -286,8 +286,8 @@ mutual
       = case !fromIntegerName of
              Nothing =>
                 pure $ IAlternative fc (UniqueDefault (IPrimVal fc (BI x)))
-                                [IPrimVal fc (BI x),
-                                 IPrimVal fc (I (fromInteger x))]
+                                    [IPrimVal fc (BI x),
+                                     IPrimVal fc (I (fromInteger x))]
              Just fi =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc fi) (IPrimVal fc (BI x))
@@ -298,17 +298,12 @@ mutual
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
-  desugarB side ps (PPrimVal fc (Fl x))
-      = case !fromFloatName of
-             Nothing =>
-                pure $ IPrimVal fc (Fl x)
-             Just f =>
-               let vfc = virtualiseFC fc in
-               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Fl x))
   desugarB side ps (PPrimVal fc (Db x))
       = case !fromFloatName of
              Nothing =>
-                pure $ IPrimVal fc (Db x)
+                pure $ IAlternative fc (UniqueDefault (IPrimVal fc (Db x)))
+                                    [IPrimVal fc (Db x),
+                                     IPrimVal fc (Fl (cast x))]
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Db x))
