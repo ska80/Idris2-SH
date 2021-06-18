@@ -18,7 +18,7 @@ main
          val <- getDouble buf 10
          printLn val
 
-         setFloat buf 20 (cast "94.42") --FIXME_Float
+         setFloat buf 20 94.42
          val <- getFloat buf 20
          printLn val
 
