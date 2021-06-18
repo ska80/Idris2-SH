@@ -5,17 +5,17 @@ put = putStrLn . show
 
 main : IO ()
 main = do
-    put $ expf 1
-    put $ logf 1
+    put $ exp 1
+    put $ log 1
 
-    put $ sinf 1
-    put $ cosf 1
-    put $ tanf 1
-    put $ asinf 1
-    put $ acosf 1
-    put $ atanf 1
+    put $ sin 1
+    put $ cos 1
+    put $ tan 1
+    put $ asin 1
+    put $ acos 1
+    put $ atan 1
 
-    put $ sqrtf 2
+    put $ sqrt 2
 
-    put $ floorf 1.5
-    put $ ceilingf 1.5
+    put $ floor 1.5
+    put $ ceiling 1.5

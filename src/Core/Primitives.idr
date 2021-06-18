@@ -517,37 +517,37 @@ floatOp f [NPrimVal fc (Fl x)] = Just (NPrimVal fc (Fl (f x)))
 floatOp f _ = Nothing
 
 floatExp : Vect 1 (NF vars) -> Maybe (NF vars)
-floatExp = floatOp expf
+floatExp = floatOp exp
 
 floatLog : Vect 1 (NF vars) -> Maybe (NF vars)
-floatLog = floatOp logf
+floatLog = floatOp log
 
 floatSin : Vect 1 (NF vars) -> Maybe (NF vars)
-floatSin = floatOp sinf
+floatSin = floatOp sin
 
 floatCos : Vect 1 (NF vars) -> Maybe (NF vars)
-floatCos = floatOp cosf
+floatCos = floatOp cos
 
 floatTan : Vect 1 (NF vars) -> Maybe (NF vars)
-floatTan = floatOp tanf
+floatTan = floatOp tan
 
 floatASin : Vect 1 (NF vars) -> Maybe (NF vars)
-floatASin = floatOp asinf
+floatASin = floatOp asin
 
 floatACos : Vect 1 (NF vars) -> Maybe (NF vars)
-floatACos = floatOp acosf
+floatACos = floatOp acos
 
 floatATan : Vect 1 (NF vars) -> Maybe (NF vars)
-floatATan = floatOp atanf
+floatATan = floatOp atan
 
 floatSqrt : Vect 1 (NF vars) -> Maybe (NF vars)
-floatSqrt = floatOp sqrtf
+floatSqrt = floatOp sqrt
 
 floatFloor : Vect 1 (NF vars) -> Maybe (NF vars)
-floatFloor = floatOp floorf
+floatFloor = floatOp floor
 
 floatCeiling : Vect 1 (NF vars) -> Maybe (NF vars)
-floatCeiling = floatOp ceilingf
+floatCeiling = floatOp ceiling
 
 doubleOp : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
 doubleOp f [NPrimVal fc (Db x)] = Just (NPrimVal fc (Db (f x)))

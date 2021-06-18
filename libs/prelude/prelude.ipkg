@@ -15,4 +15,5 @@ modules = Builtin,
           Prelude.Ops,
           Prelude.Show,
           Prelude.Types,
-          Prelude.Uninhabited
+          Prelude.Uninhabited,
+          Prelude.FloatingPoint
