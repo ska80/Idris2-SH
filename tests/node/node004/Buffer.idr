@@ -17,12 +17,12 @@ main
          val <- getDouble buf 10
          printLn val
 
-         setFloat buf 18 94.42
-         val <- getFloat buf 18
+         setFloat buf 20 94.42
+         val <- getFloat buf 20
          printLn val
 
-         setString buf 22 "Hello there!"
-         val <- getString buf 22 5
+         setString buf 24 "Hello there!"
+         val <- getString buf 24 5
          printLn val
 
          val <- getString buf 30 6
