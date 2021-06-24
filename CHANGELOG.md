@@ -232,7 +232,8 @@ Library changes:
           wake threads already in the queue.
     The implementation was replaced with an implementation based on asynchronous
     channels and mutexes, based on the following paper:
-    [Implementing Condition Variables with Semaphores](https://www.microsoft.com/en-us/research/wp-content/uploads/2004/12/ImplementingCVs.pdf) by Andrew Birrell
+    [Implementing Condition Variables with Semaphores](https://www.microsoft.com/en-us/research/wp-content/uploads/2004/12/ImplementingCVs.pdf)
+    by Andrew Birrell
 
   - Removed `threadID` and `blodwen-thisthread`. Formerly, in the Chez Scheme
     backend, this function returned "the thread id of the current thread" as a
