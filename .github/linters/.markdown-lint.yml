@@ -19,5 +19,9 @@
 # Rules by id #
 ###############
 MD004: false                  # Unordered list style
+MD013:                        # Line length
+  code_blocks: true
+  tables: true
+  headings:
 MD024:
   siblings_only: true         # Multiple headings with the same content
