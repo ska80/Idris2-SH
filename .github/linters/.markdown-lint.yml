@@ -18,5 +18,6 @@
 ###############
 # Rules by id #
 ###############
+MD004: false                  # Unordered list style
 MD024:
-  siblings_only: true
+  siblings_only: true         # Multiple headings with the same content

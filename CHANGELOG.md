@@ -9,6 +9,7 @@
 Changed
 
 - Removed `Data.Strings`.  Use `Data.String` instead.
+- Removed `Data.Strings`.  Use `Data.String` instead.
 
 ## v0.4.0
 
