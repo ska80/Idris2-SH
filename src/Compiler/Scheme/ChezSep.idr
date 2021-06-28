@@ -51,56 +51,56 @@ schHeader libs compilationUnits = """
   \{
     unlines ["  (load-shared-object \"" ++ escapeStringChez lib ++ "\")" | lib <- libs]
   })
-"""
+  """
 
 schFooter : String
 schFooter = """
 
-(collect 4)
-(blodwen-run-finalisers)
-"""
+  (collect 4)
+  (blodwen-run-finalisers)
+  """
 
 startChez : String -> String -> String -> String
 startChez chez appDirSh targetSh = Chez.startChezPreamble ++ #"""
-export LD_LIBRARY_PATH="$DIR/\#{ appDirSh }":$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH="$DIR/\#{ appDirSh }":$LD_LIBRARY_PATH
 
-"\#{ chez }" -q \
-  --libdirs "$DIR/\#{ appDirSh }" \
-  --program "$DIR/\#{ targetSh }" \
-  "$@"
-"""#
+  "\#{ chez }" -q \
+    --libdirs "$DIR/\#{ appDirSh }" \
+    --program "$DIR/\#{ targetSh }" \
+    "$@"
+  """#
 
 startChezCmd : String -> String -> String -> String
 startChezCmd chez appDirSh targetSh = #"""
-@echo off
+  @echo off
 
-set APPDIR=%~dp0
-set PATH=%APPDIR%\\#{ appDirSh };%PATH%
+  set APPDIR=%~dp0
+  set PATH=%APPDIR%\\#{ appDirSh };%PATH%
 
-"\#{ chez }" -q \
-  --libdirs "%APPDIR%/\#{ appDirSh }" \
-  --program "%APPDIR%/\#{ targetSh }" \
-  %*
-"""#
+  "\#{ chez }" -q \
+    --libdirs "%APPDIR%/\#{ appDirSh }" \
+    --program "%APPDIR%/\#{ targetSh }" \
+    %*
+  """#
 
 startChezWinSh : String -> String -> String -> String
 startChezWinSh chez appDirSh targetSh = #"""
-#!/bin/sh
+  #!/bin/sh
 
-set -e # exit on any error
+  set -e # exit on any error
 
-DIR=$(dirname "$(readlink -f -- "$0")")
-CHEZ=$(cygpath "\#{ chez }")
+  DIR=$(dirname "$(readlink -f -- "$0")")
+  CHEZ=$(cygpath "\#{ chez }")
 
-export PATH="$DIR/\#{ appDirSh }":$PATH
+  export PATH="$DIR/\#{ appDirSh }":$PATH
 
-"$CHEZ" --program "$DIR/\#{ targetSh }" "$@"
+  "$CHEZ" --program "$DIR/\#{ targetSh }" "$@"
 
-"$CHEZ" -q \
-  --libdirs "$DIR/\#{ appDirSh }" \
-  --program "$DIR/\#{ targetSh }" \
-  "$@"
-"""#
+  "$CHEZ" -q \
+    --libdirs "$DIR/\#{ appDirSh }" \
+    --program "$DIR/\#{ targetSh }" \
+    "$@"
+  """#
 
 -- TODO: parallelise this
 compileChezLibraries : (chez : String) -> (libDir : String) -> (ssFiles : List String) -> Core ()

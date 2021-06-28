@@ -49,15 +49,15 @@ findGSCBackend =
 
 schHeader : String
 schHeader = """
-; @generated
-(declare (block)
-  (inlining-limit 450)
-  (standard-bindings)
-  (extended-bindings)
-  (not safe)
-  (optimize-dead-definitions))
+  ; @generated
+  (declare (block)
+    (inlining-limit 450)
+    (standard-bindings)
+    (extended-bindings)
+    (not safe)
+    (optimize-dead-definitions))
 
-"""
+  """
 
 showGambitChar : Char -> String -> String
 showGambitChar '\\' = ("\\\\" ++)
