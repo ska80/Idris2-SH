@@ -50,7 +50,7 @@ Value_Closure *makeClosureFromArglist(fun_ptr_t f, Value_Arglist *arglist)
 
 Value_Float *makeFloat(float f)
 {
-    Value_Float *retVal = (Value_Float *)newValue();
+    Value_Float *retVal = IDRIS2_NEW_VALUE(Value_Float);
     retVal->header.tag = FLOAT_TAG;
     retVal->f = f;
     return retVal;

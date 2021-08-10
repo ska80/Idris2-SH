@@ -293,7 +293,8 @@ jsConstant (I64 i)  = show i ++ "n"
 jsConstant (BI i)   = show i ++ "n"
 jsConstant (Str s)  = jsString s
 jsConstant (Ch c)   = jsString $ singleton c
-jsConstant (Db f)   = show f
+jsConstant (Fl f)   = show f
+jsConstant (Db d)   = show d
 jsConstant WorldVal = esName "idrisworld"
 jsConstant (B8 i)   = show i
 jsConstant (B16 i)  = show i
@@ -311,6 +312,7 @@ jsConstant Bits32Type = "#t"
 jsConstant Bits64Type = "#t"
 jsConstant StringType = "#t"
 jsConstant CharType = "#t"
+jsConstant FloatType = "#t"
 jsConstant DoubleType = "#t"
 jsConstant WorldType = "#t"
 
@@ -337,13 +339,15 @@ jsIntKind x       = intKind x
 castInt : Constant -> Constant -> Doc -> Core Doc
 castInt from to x =
   case ((from, jsIntKind from), (to, jsIntKind to)) of
-    ((CharType,_),  (_,Just k)) => truncInt (useBigInt k) k $ jsIntOfChar k x
-    ((StringType,_),(_,Just k)) => truncInt (useBigInt k) k (jsIntOfString k x)
-    ((DoubleType,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfDouble k x
-    ((_,Just k),(CharType,_))   => pure $ jsCharOfInt k x
-    ((_,Just k),(StringType,_)) => pure $ jsAnyToString x
-    ((_,Just k),(DoubleType,_)) => pure $ fromInt k x
-    ((_,Just k1),(_,Just k2))   => intImpl k1 k2
+    ((CharType,_),  (_,Just k))  => truncInt (useBigInt k) k $ jsIntOfChar k x
+    ((StringType,_), (_,Just k)) => truncInt (useBigInt k) k (jsIntOfString k x)
+    ((FloatType,_), (_,Just k))  => truncInt (useBigInt k) k $ jsIntOfDouble k x
+    ((DoubleType,_), (_,Just k)) => truncInt (useBigInt k) k $ jsIntOfDouble k x
+    ((_,Just k), (CharType,_))   => pure $ jsCharOfInt k x
+    ((_,Just k), (StringType,_)) => pure $ jsAnyToString x
+    ((_,Just k), (FloatType,_))  => pure $ fromInt k x
+    ((_,Just k), (DoubleType,_)) => pure $ fromInt k x
+    ((_,Just k1), (_,Just k2))   => intImpl k1 k2
     _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
   where
     truncInt : (isBigInt : Bool) -> IntKind -> Doc -> Core Doc
@@ -421,6 +425,20 @@ jsOp StrAppend [x, y] = pure $ binOp "+" x y
 jsOp StrReverse [x] = pure $ callFun1 (esName "strReverse") x
 jsOp StrSubstr [offset, len, str] =
   pure $ callFun (esName "substr") [offset,len,str]
+
+jsOp FloatExp [x]     = pure $ callFun1 "Math.exp" x
+jsOp FloatLog [x]     = pure $ callFun1 "Math.log" x
+jsOp FloatPow [x, y]  = pure $ callFun "Math.pow" [x, y]
+jsOp FloatSin [x]     = pure $ callFun1 "Math.sin" x
+jsOp FloatCos [x]     = pure $ callFun1 "Math.cos" x
+jsOp FloatTan [x]     = pure $ callFun1 "Math.tan" x
+jsOp FloatASin [x]    = pure $ callFun1 "Math.asin" x
+jsOp FloatACos [x]    = pure $ callFun1 "Math.acos" x
+jsOp FloatATan [x]    = pure $ callFun1 "Math.atan" x
+jsOp FloatSqrt [x]    = pure $ callFun1 "Math.sqrt" x
+jsOp FloatFloor [x]   = pure $ callFun1 "Math.floor" x
+jsOp FloatCeiling [x] = pure $ callFun1 "Math.ceil" x
+
 jsOp DoubleExp [x]     = pure $ callFun1 "Math.exp" x
 jsOp DoubleLog [x]     = pure $ callFun1 "Math.log" x
 jsOp DoublePow [x, y]  = pure $ callFun "Math.pow" [x, y]

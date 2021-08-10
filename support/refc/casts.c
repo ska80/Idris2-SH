@@ -637,7 +637,7 @@ Value *cast_string_to_Integer(Value *input)
 
 Value *cast_string_to_float(Value *input)
 {
-    Value_Float *retVal = (Value_Float *)newValue();
+    Value_Float *retVal = IDRIS2_NEW_VALUE(Value_Float);
     retVal->header.tag = FLOAT_TAG;
     Value_String *from = (Value_String *)input;
     retVal->f = (float)atof(from->str);

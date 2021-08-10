@@ -368,57 +368,58 @@ Hashable (PrimFn arity) where
       h `hashWithSalt` 24
     FloatLog =>
       h `hashWithSalt` 25
-    FloatSin =>
+    FloatPow =>
       h `hashWithSalt` 26
-    FloatCos =>
+    FloatSin =>
       h `hashWithSalt` 27
-    FloatTan =>
+    FloatCos =>
       h `hashWithSalt` 28
-    FloatASin =>
+    FloatTan =>
       h `hashWithSalt` 29
-    FloatACos =>
+    FloatASin =>
       h `hashWithSalt` 30
-    FloatATan =>
+    FloatACos =>
       h `hashWithSalt` 31
-    FloatSqrt =>
+    FloatATan =>
       h `hashWithSalt` 32
-    FloatFloor =>
+    FloatSqrt =>
       h `hashWithSalt` 33
-    FloatCeiling =>
+    FloatFloor =>
       h `hashWithSalt` 34
+    FloatCeiling =>
+      h `hashWithSalt` 35
 
     DoubleExp =>
-      h `hashWithSalt` 35
-    DoubleLog =>
       h `hashWithSalt` 36
-    DoubleSin =>
+    DoubleLog =>
       h `hashWithSalt` 37
-    DoubleCos =>
-      h `hashWithSalt` 38
-    DoubleTan =>
-      h `hashWithSalt` 39
-    DoubleASin =>
-      h `hashWithSalt` 40
-    DoubleACos =>
-      h `hashWithSalt` 41
-    DoubleATan =>
-      h `hashWithSalt` 42
-    DoubleSqrt =>
-      h `hashWithSalt` 43
-    DoubleFloor =>
-      h `hashWithSalt` 44
-    DoubleCeiling =>
-      h `hashWithSalt` 45
-
-    Cast f t =>
-      h `hashWithSalt` 46 `hashWithSalt` f `hashWithSalt` t
-    BelieveMe =>
-      h `hashWithSalt` 47
-    Crash =>
-      h `hashWithSalt` 48
-
     DoublePow =>
       h `hashWithSalt` 38
+    DoubleSin =>
+      h `hashWithSalt` 39
+    DoubleCos =>
+      h `hashWithSalt` 40
+    DoubleTan =>
+      h `hashWithSalt` 41
+    DoubleASin =>
+      h `hashWithSalt` 42
+    DoubleACos =>
+      h `hashWithSalt` 43
+    DoubleATan =>
+      h `hashWithSalt` 44
+    DoubleSqrt =>
+      h `hashWithSalt` 45
+    DoubleFloor =>
+      h `hashWithSalt` 46
+    DoubleCeiling =>
+      h `hashWithSalt` 47
+
+    Cast f t =>
+      h `hashWithSalt` 48 `hashWithSalt` f `hashWithSalt` t
+    BelieveMe =>
+      h `hashWithSalt` 49
+    Crash =>
+      h `hashWithSalt` 50
 
 export
 Hashable ConInfo where

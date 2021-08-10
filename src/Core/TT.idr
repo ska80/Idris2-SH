@@ -356,6 +356,7 @@ data PrimFn : Nat -> Type where
 
      FloatExp : PrimFn 1
      FloatLog : PrimFn 1
+     FloatPow : PrimFn 2
      FloatSin : PrimFn 1
      FloatCos : PrimFn 1
      FloatTan : PrimFn 1
@@ -411,6 +412,7 @@ Show (PrimFn arity) where
   show StrSubstr = "op_strsubstr"
   show FloatExp = "op_floatExp"
   show FloatLog = "op_floatLog"
+  show FloatPow = "op_floatPow"
   show FloatSin = "op_floatSin"
   show FloatCos = "op_floatCos"
   show FloatTan = "op_floatTan"
