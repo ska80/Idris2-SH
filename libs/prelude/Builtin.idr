@@ -253,7 +253,7 @@ public export
 defaultChar : FromChar Char
 defaultChar = %search
 
-%doubleLit fromDouble
+%floatLit fromDouble
 
 ||| Interface for types that can be constructed from double literals.
 public export

@@ -27,7 +27,7 @@ public export
 data Token
   -- Literals
   = CharLit String
-  | DoubleLit Double
+  | FloatLit Double
   | IntegerLit Integer
   -- String
   | StringBegin IsMultiline -- Whether is multiline string
@@ -55,8 +55,8 @@ export
 Show Token where
   -- Literals
   show (CharLit x) = "character " ++ show x
-  show (DoubleLit x) = "double " ++ show x
-  show (IntegerLit x) = "literal " ++ show x
+  show (FloatLit x) = "float " ++ show x
+  show (IntegerLit x) = "integer " ++ show x
   -- String
   show (StringBegin Single) = "string begin"
   show (StringBegin Multi) = "multiline string begin"
@@ -84,8 +84,8 @@ export
 Pretty Token where
   -- Literals
   pretty (CharLit x) = pretty "character" <++> squotes (pretty x)
-  pretty (DoubleLit x) = pretty "double" <++> pretty x
-  pretty (IntegerLit x) = pretty "literal" <++> pretty x
+  pretty (FloatLit x) = pretty "float" <++> pretty x
+  pretty (IntegerLit x) = pretty "integer" <++> pretty x
   -- String
   pretty (StringBegin Single) = reflow "string begin"
   pretty (StringBegin Multi) = reflow "multiline string begin"
@@ -168,10 +168,9 @@ dotIdent = is '.' <+> identNormal
 pragma : Lexer
 pragma = is '%' <+> identNormal
 
-doubleLit : Lexer
-doubleLit
-    = digits <+> is '.' <+> digits <+> opt
-           (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
+floatLit : Lexer
+floatLit = digits <+> is '.' <+> digits <+> opt
+             (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
 
 stringBegin : Lexer
 stringBegin = many (is '#') <+> (is '"')
@@ -323,7 +322,7 @@ mutual
                   (exact . groupClose)
                   Symbol
       <|> match (choice $ exact <$> symbols) Symbol
-      <|> match doubleLit (DoubleLit . cast)
+      <|> match floatLit (FloatLit . cast)
       <|> match binUnderscoredLit (IntegerLit . fromBinLit . removeUnderscores)
       <|> match hexUnderscoredLit (IntegerLit . fromHexLit . removeUnderscores)
       <|> match octUnderscoredLit (IntegerLit . fromOctLit . removeUnderscores)

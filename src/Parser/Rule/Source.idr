@@ -40,7 +40,7 @@ constant
     = terminal "Expected constant"
                \case
                  CharLit c    =>  Ch <$> getCharLit c
-                 DoubleLit d  => Just (Db d)
+                 FloatLit f   => Just (Db f)
                  IntegerLit i => Just (BI i)
                  Ident s      => isConstantType (UN s) >>=
                                  \case WorldType => Nothing
