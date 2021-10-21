@@ -40,6 +40,7 @@ shl _ x y = Apply (Var "ct-shl") [x, y]
 shr : Maybe IntKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
 shr _ x y = Apply (Var "ct-shr") [x, y]
 
+{-
 -- Doubles don't need wrapping, since there's only one double type
 addDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
 addDbl x y = Apply (Var "+") [x, y]
@@ -52,6 +53,23 @@ mulDbl x y = Apply (Var "*") [x, y]
 
 divDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
 divDbl x y = Apply (Var "/") [x, y]
+-}
+-- Floats are wrapped, so unwrap then wrap again
+addDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+addDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s+") [x, y, toScheme (n-1)]
+addDbl _ x y = Apply (Var "ct+") [x, y]
+
+subDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+subDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s-") [x, y, toScheme (n-1)]
+subDbl _ x y = Apply (Var "ct-") [x, y]
+
+mulDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+mulDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s*") [x, y, toScheme (n-1)]
+mulDbl _ x y = Apply (Var "ct*") [x, y]
+
+divDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+divDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s/") [x, y, toScheme (n-1)]
+divDbl _ x y = Apply (Var "ct/") [x, y]
 
 -- Check necessary arguments are in canonical form before applying the
 -- operator, otherwise return the blocked form
@@ -214,11 +232,16 @@ applyCast blk from to x
 applyOp : SchemeObj Write -> -- if we don't have arguments in canonical form
           PrimFn n -> Vect n (SchemeObj Write) ->
           SchemeObj Write
-applyOp blk (Add DoubleType) [x, y] = binOp blk "+" x y
-applyOp blk (Sub DoubleType) [x, y] = binOp blk "-" x y
-applyOp blk (Mul DoubleType) [x, y] = binOp blk "*" x y
-applyOp blk (Div DoubleType) [x, y] = binOp blk "/" x y
-applyOp blk (Neg DoubleType) [x] = unaryOp blk "-" x
+applyOp blk (Add FloatType) [x, y] = canonical blk [x, y] $ addDbl (floatKind FloatType) x y
+applyOp blk (Sub FloatType) [x, y] = canonical blk [x, y] $ subDbl (floatKind FloatType) x y
+applyOp blk (Mul FloatType) [x, y] = canonical blk [x, y] $ mulDbl (floatKind FloatType) x y
+applyOp blk (Div FloatType) [x, y] = canonical blk [x, y] $ divDbl (floatKind FloatType) x y
+applyOp blk (Neg FloatType) [x] = canonical blk [x] $ Apply (Var "ct-neg") [x]
+applyOp blk (Add DoubleType) [x, y] = canonical blk [x, y] $ addDbl (floatKind DoubleType) x y
+applyOp blk (Sub DoubleType) [x, y] = canonical blk [x, y] $ subDbl (floatKind DoubleType) x y
+applyOp blk (Mul DoubleType) [x, y] = canonical blk [x, y] $ mulDbl (floatKind DoubleType) x y
+applyOp blk (Div DoubleType) [x, y] = canonical blk [x, y] $ divDbl (floatKind DoubleType) x y
+applyOp blk (Neg DoubleType) [x] = canonical blk [x] $ Apply (Var "ct-neg") [x]
 applyOp blk (Add ty) [x, y] = canonical blk [x, y] $ add (intKind ty) x y
 applyOp blk (Sub ty) [x, y] = canonical blk [x, y] $ sub (intKind ty) x y
 applyOp blk (Mul ty) [x, y] = canonical blk [x, y] $ mul (intKind ty) x y
