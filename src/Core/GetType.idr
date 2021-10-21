@@ -112,6 +112,7 @@ mutual
   chkConstant fc (B64 x)  = PrimVal fc $ PrT Bits64Type
   chkConstant fc (Str x)  = PrimVal fc $ PrT StringType
   chkConstant fc (Ch x)   = PrimVal fc $ PrT CharType
+  chkConstant fc (Fl x)   = PrimVal fc $ PrT FloatType
   chkConstant fc (Db x)   = PrimVal fc $ PrT DoubleType
   chkConstant fc WorldVal = PrimVal fc $ PrT WorldType
   chkConstant fc _        = TType fc (MN "top" 0)

@@ -47,6 +47,7 @@ Ord Constant where
     B64 x `compare` B64 y = compare x y
     Str x `compare` Str y = compare x y
     Ch x `compare` Ch y = compare x y
+    Fl x `compare` Fl y = compare x y
     Db x `compare` Db y = compare x y
     PrT x `compare` PrT y = compare x y
     compare x y = compare (tag x) (tag y)
@@ -64,9 +65,10 @@ Ord Constant where
         tag (B64 _) = 9
         tag (Str _) = 10
         tag (Ch _) = 11
-        tag (Db _) = 12
-        tag (PrT _) = 13
-        tag WorldVal = 14
+        tag (Fl _) = 12
+        tag (Db _) = 13
+        tag (PrT _) = 14
+        tag WorldVal = 15
 
 primFnEq : PrimFn a1 -> PrimFn a2 -> Maybe (a1 = a2)
 primFnEq (Add t1) (Add t2) = if t1 == t2 then Just Refl else Nothing

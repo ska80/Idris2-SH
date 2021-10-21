@@ -191,7 +191,8 @@ getDocsForPrimitive constant = do
   primDoc (B64 i) = "Primitive unsigned 64 bits value"
   primDoc (Str s) = "Primitive string value"
   primDoc (Ch c) = "Primitive character value"
-  primDoc (Db d) = "Primitive double value"
+  primDoc (Fl f) = "Primitive single-precision floating-point value"
+  primDoc (Db d) = "Primitive double-precision floating-point value"
   primDoc (PrT t) = primTyDoc t
   primDoc WorldVal = "Primitive token for IO actions"
 

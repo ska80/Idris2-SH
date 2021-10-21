@@ -101,6 +101,10 @@ Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
 
 export
+Hashable Float where
+  hash = cast
+
+export
 Hashable Double where
   hash = hash . show
 
@@ -236,38 +240,40 @@ Hashable CFType where
       h `hashWithSalt` 5
     CFString =>
       h `hashWithSalt` 6
-    CFDouble =>
+    CFFloat =>
       h `hashWithSalt` 7
-    CFChar =>
+    CFDouble =>
       h `hashWithSalt` 8
-    CFPtr =>
+    CFChar =>
       h `hashWithSalt` 9
-    CFGCPtr =>
+    CFPtr =>
       h `hashWithSalt` 10
-    CFBuffer =>
+    CFGCPtr =>
       h `hashWithSalt` 11
-    CFWorld =>
+    CFBuffer =>
       h `hashWithSalt` 12
+    CFWorld =>
+      h `hashWithSalt` 13
     CFFun a b =>
-      h `hashWithSalt` 13 `hashWithSalt` a `hashWithSalt` b
+      h `hashWithSalt` 14 `hashWithSalt` a `hashWithSalt` b
     CFIORes a =>
-      h `hashWithSalt` 14 `hashWithSalt` a
+      h `hashWithSalt` 15 `hashWithSalt` a
     CFStruct n fs =>
-      h `hashWithSalt` 15 `hashWithSalt` n `hashWithSalt` fs
+      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` fs
     CFUser n xs =>
-      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` xs
+      h `hashWithSalt` 17 `hashWithSalt` n `hashWithSalt` xs
     CFInt8 =>
-      h `hashWithSalt` 17
-    CFInt16 =>
       h `hashWithSalt` 18
-    CFInt32 =>
+    CFInt16 =>
       h `hashWithSalt` 19
-    CFInt64 =>
+    CFInt32 =>
       h `hashWithSalt` 20
-    CFForeignObj =>
+    CFInt64 =>
       h `hashWithSalt` 21
-    CFInteger =>
+    CFForeignObj =>
       h `hashWithSalt` 22
+    CFInteger =>
+      h `hashWithSalt` 23
 
 export
 Hashable PrimType where
@@ -284,8 +290,9 @@ Hashable PrimType where
     Bits64Type  => h `hashWithSalt` 10
     StringType  => h `hashWithSalt` 11
     CharType    => h `hashWithSalt` 12
-    DoubleType  => h `hashWithSalt` 13
-    WorldType   => h `hashWithSalt` 14
+    FloatType   => h `hashWithSalt` 13
+    DoubleType  => h `hashWithSalt` 14
+    WorldType   => h `hashWithSalt` 15
 
 export
 Hashable Constant where
@@ -302,8 +309,9 @@ Hashable Constant where
     B64 x => h `hashWithSalt` 9  `hashWithSalt` x
     Str x => h `hashWithSalt` 10 `hashWithSalt` x
     Ch x  => h `hashWithSalt` 11 `hashWithSalt` x
-    Db x  => h `hashWithSalt` 12 `hashWithSalt` x
-    PrT x => h `hashWithSalt` 13 `hashWithSalt` x
+    Fl x  => h `hashWithSalt` 12 `hashWithSalt` x
+    Db x  => h `hashWithSalt` 13 `hashWithSalt` x
+    PrT x => h `hashWithSalt` 14 `hashWithSalt` x
 
     WorldVal => h `hashWithSalt` 14
 

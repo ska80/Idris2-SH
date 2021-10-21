@@ -195,9 +195,10 @@ TTC Constant where
   toBuf b (B64 x)  = do tag 9;  toBuf b x
   toBuf b (Str x)  = do tag 10; toBuf b x
   toBuf b (Ch x)   = do tag 11; toBuf b x
-  toBuf b (Db x)   = do tag 12; toBuf b x
-  toBuf b (PrT x)  = do tag 13; toBuf b x
-  toBuf b WorldVal = tag 14
+  toBuf b (Fl x)   = do tag 12; toBuf b x
+  toBuf b (Db x)   = do tag 13; toBuf b x
+  toBuf b (PrT x)  = do tag 14; toBuf b x
+  toBuf b WorldVal = tag 15
 
   fromBuf b
       = case !getTag of
@@ -213,9 +214,10 @@ TTC Constant where
              9  => do x <- fromBuf b; pure (B64 x)
              10 => do x <- fromBuf b; pure (Str x)
              11 => do x <- fromBuf b; pure (Ch x)
-             12 => do x <- fromBuf b; pure (Db x)
-             13 => do x <- fromBuf b; pure (PrT x)
-             14 => pure WorldVal
+             12 => do x <- fromBuf b; pure (Fl x)
+             13 => do x <- fromBuf b; pure (Db x)
+             14 => do x <- fromBuf b; pure (PrT x)
+             15 => pure WorldVal
              _ => corrupt "Constant"
 
 export
@@ -789,22 +791,23 @@ TTC CFType where
   toBuf b CFUnsigned32 = tag 4
   toBuf b CFUnsigned64 = tag 5
   toBuf b CFString = tag 6
-  toBuf b CFDouble = tag 7
-  toBuf b CFChar = tag 8
-  toBuf b CFPtr = tag 9
-  toBuf b CFWorld = tag 10
-  toBuf b (CFFun s t) = do tag 11; toBuf b s; toBuf b t
-  toBuf b (CFIORes t) = do tag 12; toBuf b t
-  toBuf b (CFStruct n a) = do tag 13; toBuf b n; toBuf b a
-  toBuf b (CFUser n a) = do tag 14; toBuf b n; toBuf b a
-  toBuf b CFGCPtr = tag 15
-  toBuf b CFBuffer = tag 16
-  toBuf b CFInt8 = tag 17
-  toBuf b CFInt16 = tag 18
-  toBuf b CFInt32 = tag 19
-  toBuf b CFInt64 = tag 20
-  toBuf b CFForeignObj = tag 21
-  toBuf b CFInteger = tag 22
+  toBuf b CFFloat = tag 7
+  toBuf b CFDouble = tag 8
+  toBuf b CFChar = tag 9
+  toBuf b CFPtr = tag 10
+  toBuf b CFWorld = tag 11
+  toBuf b (CFFun s t) = do tag 12; toBuf b s; toBuf b t
+  toBuf b (CFIORes t) = do tag 13; toBuf b t
+  toBuf b (CFStruct n a) = do tag 14; toBuf b n; toBuf b a
+  toBuf b (CFUser n a) = do tag 15; toBuf b n; toBuf b a
+  toBuf b CFGCPtr = tag 16
+  toBuf b CFBuffer = tag 17
+  toBuf b CFInt8 = tag 18
+  toBuf b CFInt16 = tag 19
+  toBuf b CFInt32 = tag 20
+  toBuf b CFInt64 = tag 21
+  toBuf b CFForeignObj = tag 22
+  toBuf b CFInteger = tag 23
 
   fromBuf b
       = case !getTag of
@@ -815,22 +818,23 @@ TTC CFType where
              4 => pure CFUnsigned32
              5 => pure CFUnsigned64
              6 => pure CFString
-             7 => pure CFDouble
-             8 => pure CFChar
-             9 => pure CFPtr
-             10 => pure CFWorld
-             11 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
-             12 => do t <- fromBuf b; pure (CFIORes t)
-             13 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
-             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
-             15 => pure CFGCPtr
-             16 => pure CFBuffer
-             17 => pure CFInt8
-             18 => pure CFInt16
-             19 => pure CFInt32
-             20 => pure CFInt64
-             21 => pure CFForeignObj
-             22 => pure CFInteger
+             7 => pure CFFloat
+             8 => pure CFDouble
+             9 => pure CFChar
+             10 => pure CFPtr
+             11 => pure CFWorld
+             12 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
+             13 => do t <- fromBuf b; pure (CFIORes t)
+             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
+             15 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
+             16 => pure CFGCPtr
+             17 => pure CFBuffer
+             18 => pure CFInt8
+             19 => pure CFInt16
+             20 => pure CFInt32
+             21 => pure CFInt64
+             22 => pure CFForeignObj
+             23 => pure CFInteger
              _ => corrupt "CFType"
 
 export

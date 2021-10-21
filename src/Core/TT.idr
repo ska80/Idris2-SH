@@ -89,6 +89,7 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch  Char
+    | Fl  Float
     | Db  Double
     | PrT PrimType
     | WorldVal
@@ -108,6 +109,7 @@ isConstantType (UN (Basic n)) = case n of
   "Bits64"  => Just Bits64Type
   "String"  => Just StringType
   "Char"    => Just CharType
+  "Float"   => Just FloatType
   "Double"  => Just DoubleType
   "%World"  => Just WorldType
   _ => Nothing
@@ -128,6 +130,7 @@ primTypeEq Int64Type Int64Type = Just Refl
 primTypeEq IntegerType IntegerType = Just Refl
 primTypeEq StringType StringType = Just Refl
 primTypeEq CharType CharType = Just Refl
+primTypeEq FloatType FloatType = Just Refl
 primTypeEq DoubleType DoubleType = Just Refl
 primTypeEq WorldType WorldType = Just Refl
 primTypeEq _ _ = Nothing
@@ -172,10 +175,10 @@ constantEq (Str x) (Str y) = case decEq x y of
 constantEq (Ch x) (Ch y) = case decEq x y of
                                 Yes Refl => Just Refl
                                 No contra => Nothing
+constantEq (Fl x) (Fl y) = Nothing -- no DecEq for Floats!
 constantEq (Db x) (Db y) = Nothing -- no DecEq for Doubles!
 constantEq (PrT x) (PrT y) = cong PrT <$> primTypeEq x y
 constantEq WorldVal WorldVal = Just Refl
-
 constantEq _ _ = Nothing
 
 export
@@ -209,6 +212,7 @@ Show Constant where
   show (B64 x) = show x
   show (Str x) = show x
   show (Ch x) = show x
+  show (Fl x) = show x
   show (Db x) = show x
   show (PrT x) = show x
   show WorldVal = "%MkWorld"
@@ -227,6 +231,7 @@ Pretty PrimType where
   pretty Bits64Type = pretty "Bits64"
   pretty StringType = pretty "String"
   pretty CharType = pretty "Char"
+  pretty FloatType = pretty "Float"
   pretty DoubleType = pretty "Double"
   pretty WorldType = pretty "%World"
 
@@ -244,6 +249,7 @@ Pretty Constant where
   pretty (B64 x) = pretty x
   pretty (Str x) = dquotes (pretty x)
   pretty (Ch x) = squotes (pretty x)
+  pretty (Fl x) = pretty x
   pretty (Db x) = pretty x
   pretty (PrT x) = pretty x
   pretty WorldVal = pretty "%MkWorld"
@@ -262,6 +268,7 @@ Eq PrimType where
   Bits64Type == Bits64Type = True
   StringType == StringType = True
   CharType == CharType = True
+  FloatType == FloatType = True
   DoubleType == DoubleType = True
   WorldType == WorldType = True
   _ == _ = False
@@ -280,6 +287,7 @@ Eq Constant where
   (B64 x) == (B64 y) = x == y
   (Str x) == (Str y) = x == y
   (Ch x) == (Ch y) = x == y
+  (Fl x) == (Fl y) = x == y
   (Db x) == (Db y) = x == y
   (PrT x) == (PrT y) = x == y
   WorldVal == WorldVal = True
@@ -297,12 +305,13 @@ primTypeTag Bits32Type = 7
 primTypeTag Bits64Type = 8
 primTypeTag StringType = 9
 primTypeTag CharType = 10
-primTypeTag DoubleType = 11
-primTypeTag WorldType = 12
-primTypeTag Int8Type = 13
-primTypeTag Int16Type = 14
-primTypeTag Int32Type = 15
-primTypeTag Int64Type = 16
+primTypeTag FloatType = 11
+primTypeTag DoubleType = 12
+primTypeTag WorldType = 13
+primTypeTag Int8Type = 14
+primTypeTag Int16Type = 15
+primTypeTag Int32Type = 16
+primTypeTag Int64Type = 17
 
 ||| Precision of integral types.
 public export
@@ -344,6 +353,20 @@ public export
 precision : IntKind -> Precision
 precision (Signed p)   = p
 precision (Unsigned p) = P p
+
+||| Precision of floating point types
+public export
+data FloatKind = FSigned Precision
+
+public export
+floatKind : Constant -> Maybe Floatkind
+floatkind FloatType  = Just . FSigned $ P 32
+floatkind DoubleType = Just . FSigned $ P 64
+floatkind _          = Nothing
+
+public export
+floatPrecision : FloatKind -> Precision
+floatPrecision (FSigned p) = p
 
 -- All the internal operators, parameterised by their arity
 public export
