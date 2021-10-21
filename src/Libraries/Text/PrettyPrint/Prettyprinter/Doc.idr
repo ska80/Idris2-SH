@@ -419,6 +419,7 @@ Pretty Char where
 export Pretty Nat where pretty = unsafeTextWithoutNewLines . show
 export Pretty Int where pretty = unsafeTextWithoutNewLines . show
 export Pretty Integer where pretty = unsafeTextWithoutNewLines . show
+export Pretty Float where pretty = unsafeTextWithoutNewLines . show
 export Pretty Double where pretty = unsafeTextWithoutNewLines . show
 export Pretty Bits8 where pretty = unsafeTextWithoutNewLines . show
 export Pretty Bits16 where pretty = unsafeTextWithoutNewLines . show

@@ -104,6 +104,10 @@ Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
 
 export
+Hashable Float where
+  hash = cast
+
+export
 Hashable Double where
   hash = hash . show
 
@@ -239,38 +243,40 @@ Hashable CFType where
       h `hashWithSalt` 5
     CFString =>
       h `hashWithSalt` 6
-    CFDouble =>
+    CFFloat =>
       h `hashWithSalt` 7
-    CFChar =>
+    CFDouble =>
       h `hashWithSalt` 8
-    CFPtr =>
+    CFChar =>
       h `hashWithSalt` 9
-    CFGCPtr =>
+    CFPtr =>
       h `hashWithSalt` 10
-    CFBuffer =>
+    CFGCPtr =>
       h `hashWithSalt` 11
-    CFWorld =>
+    CFBuffer =>
       h `hashWithSalt` 12
+    CFWorld =>
+      h `hashWithSalt` 13
     CFFun a b =>
-      h `hashWithSalt` 13 `hashWithSalt` a `hashWithSalt` b
+      h `hashWithSalt` 14 `hashWithSalt` a `hashWithSalt` b
     CFIORes a =>
-      h `hashWithSalt` 14 `hashWithSalt` a
+      h `hashWithSalt` 15 `hashWithSalt` a
     CFStruct n fs =>
-      h `hashWithSalt` 15 `hashWithSalt` n `hashWithSalt` fs
+      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` fs
     CFUser n xs =>
-      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` xs
+      h `hashWithSalt` 17 `hashWithSalt` n `hashWithSalt` xs
     CFInt8 =>
-      h `hashWithSalt` 17
-    CFInt16 =>
       h `hashWithSalt` 18
-    CFInt32 =>
+    CFInt16 =>
       h `hashWithSalt` 19
-    CFInt64 =>
+    CFInt32 =>
       h `hashWithSalt` 20
-    CFForeignObj =>
+    CFInt64 =>
       h `hashWithSalt` 21
-    CFInteger =>
+    CFForeignObj =>
       h `hashWithSalt` 22
+    CFInteger =>
+      h `hashWithSalt` 23
 
 export
 Hashable Constant where
@@ -291,42 +297,46 @@ Hashable Constant where
       h `hashWithSalt` 6 `hashWithSalt` x
     Ch x =>
       h `hashWithSalt` 7 `hashWithSalt` x
-    Db x =>
+    Fl x =>
       h `hashWithSalt` 8 `hashWithSalt` x
+    Db x =>
+      h `hashWithSalt` 9 `hashWithSalt` x
 
     WorldVal =>
-      h `hashWithSalt` 9
+      h `hashWithSalt` 10
 
     IntType =>
-      h `hashWithSalt` 10
-    IntegerType =>
       h `hashWithSalt` 11
-    Bits8Type =>
+    IntegerType =>
       h `hashWithSalt` 12
-    Bits16Type =>
+    Bits8Type =>
       h `hashWithSalt` 13
-    Bits32Type =>
+    Bits16Type =>
       h `hashWithSalt` 14
-    Bits64Type =>
+    Bits32Type =>
       h `hashWithSalt` 15
-    StringType =>
+    Bits64Type =>
       h `hashWithSalt` 16
-    CharType =>
+    StringType =>
       h `hashWithSalt` 17
-    DoubleType =>
+    CharType =>
       h `hashWithSalt` 18
-    WorldType =>
+    FloatType =>
       h `hashWithSalt` 19
+    DoubleType =>
+      h `hashWithSalt` 20
+    WorldType =>
+      h `hashWithSalt` 21
 
-    I8 x => h `hashWithSalt` 20 `hashWithSalt` x
-    I16 x => h `hashWithSalt` 21 `hashWithSalt` x
-    I32 x => h `hashWithSalt` 22 `hashWithSalt` x
-    I64 x => h `hashWithSalt` 23 `hashWithSalt` x
+    I8 x => h `hashWithSalt` 22 `hashWithSalt` x
+    I16 x => h `hashWithSalt` 23 `hashWithSalt` x
+    I32 x => h `hashWithSalt` 24 `hashWithSalt` x
+    I64 x => h `hashWithSalt` 25 `hashWithSalt` x
 
-    Int8Type => h `hashWithSalt` 24
-    Int16Type => h `hashWithSalt` 25
-    Int32Type => h `hashWithSalt` 26
-    Int64Type => h `hashWithSalt` 27
+    Int8Type => h `hashWithSalt` 26
+    Int16Type => h `hashWithSalt` 27
+    Int32Type => h `hashWithSalt` 28
+    Int64Type => h `hashWithSalt` 29
 
 export
 Hashable LazyReason where

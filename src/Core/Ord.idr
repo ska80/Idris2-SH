@@ -27,6 +27,7 @@ Ord Constant where
     B64 x `compare` B64 y = compare x y
     Str x `compare` Str y = compare x y
     Ch x `compare` Ch y = compare x y
+    Fl x `compare` Fl y = compare x y
     Db x `compare` Db y = compare x y
     compare x y = compare (tag x) (tag y)
       where
@@ -43,22 +44,24 @@ Ord Constant where
         tag (B64 _) = 9
         tag (Str _) = 10
         tag (Ch _) = 11
-        tag (Db _) = 12
-        tag WorldVal = 13
-        tag IntType = 14
-        tag Int8Type = 15
-        tag Int16Type = 16
-        tag Int32Type = 17
-        tag Int64Type = 18
-        tag IntegerType = 19
-        tag Bits8Type = 20
-        tag Bits16Type = 21
-        tag Bits32Type = 22
-        tag Bits64Type = 23
-        tag StringType = 24
-        tag CharType = 25
-        tag DoubleType = 26
-        tag WorldType = 27
+        tag (Fl _) = 12
+        tag (Db _) = 13
+        tag WorldVal = 14
+        tag IntType = 15
+        tag Int8Type = 16
+        tag Int16Type = 17
+        tag Int32Type = 18
+        tag Int64Type = 19
+        tag IntegerType = 20
+        tag Bits8Type = 21
+        tag Bits16Type = 22
+        tag Bits32Type = 23
+        tag Bits64Type = 24
+        tag StringType = 25
+        tag CharType = 26
+        tag FloatType = 27
+        tag DoubleType = 28
+        tag WorldType = 29
 
 
 primFnEq : PrimFn a1 -> PrimFn a2 -> Maybe (a1 = a2)

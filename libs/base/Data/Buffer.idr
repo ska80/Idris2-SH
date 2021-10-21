@@ -170,6 +170,26 @@ getInt : HasIO io => Buffer -> (offset : Int) -> io Int
 getInt buf offset
     = primIO (prim__getInt buf offset)
 
+%foreign "scheme:blodwen-buffer-setfloat"
+         "RefC:setBufferFloat"
+         "node:lambda:(buf,offset,value)=>buf.writeFloatLE(value, offset)"
+prim__setFloat : Buffer -> (offset : Int) -> (val : Float) -> PrimIO ()
+
+export %inline
+setFloat : HasIO io => Buffer -> (offset : Int) -> (val : Float) -> io ()
+setFloat buf offset val
+    = primIO (prim__setFloat buf offset val)
+
+%foreign "scheme:blodwen-buffer-getfloat"
+         "RefC:getBufferFloat"
+         "node:lambda:(buf,offset)=>buf.readFloatLE(offset)"
+prim__getFloat : Buffer -> (offset : Int) -> PrimIO Float
+
+export %inline
+getFloat : HasIO io => Buffer -> (offset : Int) -> io Float
+getFloat buf offset
+    = primIO (prim__getFloat buf offset)
+
 %foreign "scheme:blodwen-buffer-setdouble"
          "RefC:setBufferDouble"
          "node:lambda:(buf,offset,value)=>buf.writeDoubleLE(value, offset)"
