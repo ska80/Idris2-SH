@@ -369,6 +369,13 @@ Scheme String where
   fromScheme _ = Nothing
 
 export
+Scheme Float where
+  toScheme x = FloatVal (cast x)
+
+  fromScheme (FloatVal x) = Just (cast x)
+  fromScheme _ = Nothing
+
+export
 Scheme Double where
   toScheme x = FloatVal x
 

@@ -41,6 +41,7 @@ castString [NPrimVal fc (B16 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (B32 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (B64 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (Ch i)] = Just (NPrimVal fc (Str (stripQuotes (show i))))
+castString [NPrimVal fc (Fl i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (Db i)] = Just (NPrimVal fc (Str (show i)))
 castString _ = Nothing
 
@@ -55,6 +56,7 @@ castInteger [NPrimVal fc (B16 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (B32 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (B64 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (Ch i)] = Just (NPrimVal fc (BI (cast (cast {to=Int} i))))
+castInteger [NPrimVal fc (Fl i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (Db i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (Str i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger _ = Nothing
@@ -69,6 +71,7 @@ castInt [NPrimVal fc (B8 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B16 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B32 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B64 i)] = Just (NPrimVal fc (I (cast i)))
+castInt [NPrimVal fc (Fl i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (Db i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (Ch i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (Str i)] = Just (NPrimVal fc (I (cast i)))
@@ -127,6 +130,21 @@ castInt64 [NPrimVal fc constant] =
     NPrimVal fc . I64 . cast <$> constantIntegerValue constant
 castInt64 _ = Nothing
 
+castFloat : Vect 1 (NF vars) -> Maybe (NF vars)
+castFloat [NPrimVal fc (I i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I16 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (B8 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (B16 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (B32 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (B64 i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (BI i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (Db i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat [NPrimVal fc (Str i)] = Just (NPrimVal fc (Fl (cast i)))
+castFloat _ = Nothing
+
 castDouble : Vect 1 (NF vars) -> Maybe (NF vars)
 castDouble [NPrimVal fc (I i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Db (cast i)))
@@ -138,6 +156,7 @@ castDouble [NPrimVal fc (B16 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (B32 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (B64 i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (BI i)] = Just (NPrimVal fc (Db (cast i)))
+castDouble [NPrimVal fc (Fl i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble [NPrimVal fc (Str i)] = Just (NPrimVal fc (Db (cast i)))
 castDouble _ = Nothing
 
@@ -210,6 +229,7 @@ add (B16 x) (B16 y) = pure $ B16 (x + y)
 add (B32 x) (B32 y) = pure $ B32 (x + y)
 add (B64 x) (B64 y) = pure $ B64 (x + y)
 add (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x + cast y))
+add (Fl x) (Fl y) = pure $ Fl (x + y)
 add (Db x) (Db y) = pure $ Db (x + y)
 add _ _ = Nothing
 
@@ -225,6 +245,7 @@ sub (B16 x) (B16 y) = pure $ B16 (x - y)
 sub (B32 x) (B32 y) = pure $ B32 (x - y)
 sub (B64 x) (B64 y) = pure $ B64 (x - y)
 sub (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x - cast y))
+sub (Fl x) (Fl y) = pure $ Fl (x - y)
 sub (Db x) (Db y) = pure $ Db (x - y)
 sub _ _ = Nothing
 
@@ -239,6 +260,7 @@ mul (I8 x) (I8 y) = pure $ I8 (x * y)
 mul (I16 x) (I16 y) = pure $ I16 (x * y)
 mul (I32 x) (I32 y) = pure $ I32 (x * y)
 mul (I64 x) (I64 y) = pure $ I64 (x * y)
+mul (Fl x) (Fl y) = pure $ Fl (x * y)
 mul (Db x) (Db y) = pure $ Db (x * y)
 mul _ _ = Nothing
 
@@ -263,6 +285,7 @@ div (B32 x) (B32 0) = Nothing
 div (B32 x) (B32 y) = pure $ B32 (assert_total (x `div` y))
 div (B64 x) (B64 0) = Nothing
 div (B64 x) (B64 y) = pure $ B64 (assert_total (x `div` y))
+div (Fl x) (Fl y) = pure $ Fl (x / y)
 div (Db x) (Db y) = pure $ Db (x / y)
 div _ _ = Nothing
 
@@ -365,6 +388,7 @@ neg (B8 x) = pure $ B8 (-x)
 neg (B16 x) = pure $ B16 (-x)
 neg (B32 x) = pure $ B32 (-x)
 neg (B64 x) = pure $ B64 (-x)
+neg (Fl x) = pure $ Fl (-x)
 neg (Db x) = pure $ Db (-x)
 neg _ = Nothing
 
@@ -385,6 +409,7 @@ lt (B32 x) (B32 y) = pure $ toInt (x < y)
 lt (B64 x) (B64 y) = pure $ toInt (x < y)
 lt (Str x) (Str y) = pure $ toInt (x < y)
 lt (Ch x) (Ch y) = pure $ toInt (x < y)
+lt (Fl x) (Fl y) = pure $ toInt (x < y)
 lt (Db x) (Db y) = pure $ toInt (x < y)
 lt _ _ = Nothing
 
@@ -401,6 +426,7 @@ lte (B32 x) (B32 y) = pure $ toInt (x <= y)
 lte (B64 x) (B64 y) = pure $ toInt (x <= y)
 lte (Str x) (Str y) = pure $ toInt (x <= y)
 lte (Ch x) (Ch y) = pure $ toInt (x <= y)
+lte (Fl x) (Fl y) = pure $ toInt (x <= y)
 lte (Db x) (Db y) = pure $ toInt (x <= y)
 lte _ _ = Nothing
 
@@ -417,6 +443,7 @@ eq (B32 x) (B32 y) = pure $ toInt (x == y)
 eq (B64 x) (B64 y) = pure $ toInt (x == y)
 eq (Str x) (Str y) = pure $ toInt (x == y)
 eq (Ch x) (Ch y) = pure $ toInt (x == y)
+eq (Fl x) (Fl y) = pure $ toInt (x == y)
 eq (Db x) (Db y) = pure $ toInt (x == y)
 eq _ _ = Nothing
 
@@ -433,6 +460,7 @@ gte (B32 x) (B32 y) = pure $ toInt (x >= y)
 gte (B64 x) (B64 y) = pure $ toInt (x >= y)
 gte (Str x) (Str y) = pure $ toInt (x >= y)
 gte (Ch x) (Ch y) = pure $ toInt (x >= y)
+gte (Fl x) (Fl y) = pure $ toInt (x >= y)
 gte (Db x) (Db y) = pure $ toInt (x >= y)
 gte _ _ = Nothing
 
@@ -449,6 +477,7 @@ gt (B32 x) (B32 y) = pure $ toInt (x > y)
 gt (B64 x) (B64 y) = pure $ toInt (x > y)
 gt (Str x) (Str y) = pure $ toInt (x > y)
 gt (Ch x) (Ch y) = pure $ toInt (x > y)
+gt (Fl x) (Fl y) = pure $ toInt (x > y)
 gt (Db x) (Db y) = pure $ toInt (x > y)
 gt _ _ = Nothing
 
@@ -558,6 +587,7 @@ castTo Bits32Type = castBits32
 castTo Bits64Type = castBits64
 castTo StringType = castString
 castTo CharType = castChar
+castTo FloatType = castFloat
 castTo DoubleType = castDouble
 castTo _ = const Nothing
 
@@ -669,7 +699,7 @@ integralTypes = [ IntType
                 ]
 
 numTypes : List Constant
-numTypes = integralTypes ++ [DoubleType]
+numTypes = integralTypes ++ [FloatType, DoubleType]
 
 primTypes : List Constant
 primTypes = numTypes ++ [StringType, CharType]

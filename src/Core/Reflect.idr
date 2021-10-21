@@ -194,6 +194,15 @@ Reflect Char where
   reflect fc defs lhs env x = pure (PrimVal fc (Ch x))
 
 export
+Reify Float where
+  reify defs (NPrimVal _ (Fl v)) = pure v
+  reify defs val = cantReify val "Float"
+
+export
+Reflect Float where
+  reflect fc defs lhs env x = pure (PrimVal fc (Fl x))
+
+export
 Reify Double where
   reify defs (NPrimVal _ (Db v)) = pure v
   reify defs val = cantReify val "Double"
@@ -541,6 +550,8 @@ Reify Constant where
                   => pure StringType
              (UN (Basic "CharType"), [])
                   => pure CharType
+             (UN (Basic "FloatType"), [])
+                  => pure FloatType
              (UN (Basic "DoubleType"), [])
                   => pure DoubleType
              (UN (Basic "WorldType"), [])
@@ -615,6 +626,8 @@ Reflect Constant where
       = getCon fc defs (reflectiontt "StringType")
   reflect fc defs lhs env CharType
       = getCon fc defs (reflectiontt "CharType")
+  reflect fc defs lhs env FloatType
+      = getCon fc defs (reflectiontt "FloatType")
   reflect fc defs lhs env DoubleType
       = getCon fc defs (reflectiontt "DoubleType")
   reflect fc defs lhs env WorldType

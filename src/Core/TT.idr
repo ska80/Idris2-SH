@@ -58,6 +58,7 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch  Char
+    | Fl  Float
     | Db  Double
     | WorldVal
 
@@ -73,6 +74,7 @@ data Constant
     | Bits64Type
     | StringType
     | CharType
+    | FloatType
     | DoubleType
     | WorldType
 
@@ -91,6 +93,7 @@ isConstantType (UN (Basic n)) = case n of
   "Bits64"  => Just Bits64Type
   "String"  => Just StringType
   "Char"    => Just CharType
+  "Float"   => Just FloatType
   "Double"  => Just DoubleType
   "%World"  => Just WorldType
   _ => Nothing
@@ -110,6 +113,7 @@ isPrimType (B32 x)  = False
 isPrimType (B64 x)  = False
 isPrimType (Str x)  = False
 isPrimType (Ch  x)  = False
+isPrimType (Fl  x)  = False
 isPrimType (Db  x)  = False
 isPrimType WorldVal = False
 
@@ -125,6 +129,7 @@ isPrimType Bits32Type  = True
 isPrimType Bits64Type  = True
 isPrimType StringType  = True
 isPrimType CharType    = True
+isPrimType FloatType   = True
 isPrimType DoubleType  = True
 isPrimType WorldType   = True
 
@@ -168,6 +173,7 @@ constantEq (Str x) (Str y) = case decEq x y of
 constantEq (Ch x) (Ch y) = case decEq x y of
                                 Yes Refl => Just Refl
                                 No contra => Nothing
+constantEq (Fl x) (Fl y) = Nothing -- no DecEq for Floats!
 constantEq (Db x) (Db y) = Nothing -- no DecEq for Doubles!
 constantEq WorldVal WorldVal = Just Refl
 constantEq IntType IntType = Just Refl
@@ -178,6 +184,7 @@ constantEq Int64Type Int64Type = Just Refl
 constantEq IntegerType IntegerType = Just Refl
 constantEq StringType StringType = Just Refl
 constantEq CharType CharType = Just Refl
+constantEq FloatType FloatType = Just Refl
 constantEq DoubleType DoubleType = Just Refl
 constantEq WorldType WorldType = Just Refl
 constantEq _ _ = Nothing
@@ -196,6 +203,7 @@ Show Constant where
   show (B64 x) = show x
   show (Str x) = show x
   show (Ch x) = show x
+  show (Fl x) = show x
   show (Db x) = show x
   show WorldVal = "%MkWorld"
   show IntType = "Int"
@@ -210,6 +218,7 @@ Show Constant where
   show Bits64Type = "Bits64"
   show StringType = "String"
   show CharType = "Char"
+  show FloatType = "Float"
   show DoubleType = "Double"
   show WorldType = "%World"
 
@@ -227,6 +236,7 @@ Pretty Constant where
   pretty (B64 x) = pretty x
   pretty (Str x) = dquotes (pretty x)
   pretty (Ch x) = squotes (pretty x)
+  pretty (Fl x) = pretty x
   pretty (Db x) = pretty x
   pretty WorldVal = pretty "%MkWorld"
   pretty IntType = pretty "Int"
@@ -241,6 +251,7 @@ Pretty Constant where
   pretty Bits64Type = pretty "Bits64"
   pretty StringType = pretty "String"
   pretty CharType = pretty "Char"
+  pretty FloatType = pretty "Float"
   pretty DoubleType = pretty "Double"
   pretty WorldType = pretty "%World"
 
@@ -258,6 +269,7 @@ Eq Constant where
   (B64 x) == (B64 y) = x == y
   (Str x) == (Str y) = x == y
   (Ch x) == (Ch y) = x == y
+  (Fl x) == (Fl y) = x == y
   (Db x) == (Db y) = x == y
   WorldVal == WorldVal = True
   IntType == IntType = True
@@ -272,6 +284,7 @@ Eq Constant where
   Bits64Type == Bits64Type = True
   StringType == StringType = True
   CharType == CharType = True
+  FloatType == FloatType = True
   DoubleType == DoubleType = True
   WorldType == WorldType = True
   _ == _ = False
@@ -288,12 +301,13 @@ constTag Bits32Type = 7
 constTag Bits64Type = 8
 constTag StringType = 9
 constTag CharType = 10
-constTag DoubleType = 11
-constTag WorldType = 12
-constTag Int8Type = 13
-constTag Int16Type = 14
-constTag Int32Type = 15
-constTag Int64Type = 16
+constTag FloatType = 11
+constTag DoubleType = 12
+constTag WorldType = 13
+constTag Int8Type = 14
+constTag Int16Type = 15
+constTag Int32Type = 16
+constTag Int64Type = 17
 constTag _ = 0
 
 ||| Precision of integral types.
@@ -336,6 +350,20 @@ public export
 precision : IntKind -> Precision
 precision (Signed p)   = p
 precision (Unsigned p) = P p
+
+||| Precision of floating point types
+public export
+data FloatKind = FSigned Precision
+
+public export
+floatKind : Constant -> Maybe Floatkind
+floatkind FloatType  = Just . FSigned $ P 32
+floatkind DoubleType = Just . FSigned $ P 64
+floatkind _          = Nothing
+
+public export
+floatPrecision : FloatKind -> Precision
+floatPrecision (FSigned p) = p
 
 -- All the internal operators, parameterised by their arity
 public export
