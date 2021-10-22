@@ -40,36 +40,22 @@ shl _ x y = Apply (Var "ct-shl") [x, y]
 shr : Maybe IntKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
 shr _ x y = Apply (Var "ct-shr") [x, y]
 
-{-
--- Doubles don't need wrapping, since there's only one double type
-addDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-addDbl x y = Apply (Var "+") [x, y]
-
-subDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-subDbl x y = Apply (Var "-") [x, y]
-
-mulDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-mulDbl x y = Apply (Var "*") [x, y]
-
-divDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-divDbl x y = Apply (Var "/") [x, y]
--}
--- Floats are wrapped, so unwrap then wrap again
+-- Doubles are wrapped, so unwrap then wrap again
 addDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-addDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s+") [x, y, toScheme (n-1)]
-addDbl _ x y = Apply (Var "ct+") [x, y]
+addDbl (Just Float32) x y = Apply (Var "ct-f+") [x, y]
+addDbl _ x y = Apply (Var "ct-d+") [x, y]
 
 subDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-subDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s-") [x, y, toScheme (n-1)]
-subDbl _ x y = Apply (Var "ct-") [x, y]
+subDbl (Just Float32) x y = Apply (Var "ct-f-") [x, y]
+subDbl _ x y = Apply (Var "ct-d-") [x, y]
 
 mulDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-mulDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s*") [x, y, toScheme (n-1)]
-mulDbl _ x y = Apply (Var "ct*") [x, y]
+mulDbl (Just Float32) x y = Apply (Var "ct-f*") [x, y]
+mulDbl _ x y = Apply (Var "ct-d*") [x, y]
 
 divDbl : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-divDbl (Just (FSigned (P n))) x y = Apply (Var "ct-s/") [x, y, toScheme (n-1)]
-divDbl _ x y = Apply (Var "ct/") [x, y]
+divDbl (Just Float32) x y = Apply (Var "ct-f/") [x, y]
+divDbl _ x y = Apply (Var "ct-d/") [x, y]
 
 -- Check necessary arguments are in canonical form before applying the
 -- operator, otherwise return the blocked form
@@ -144,6 +130,16 @@ wrap (Unsigned 16) = bits16
 wrap (Unsigned 32) = bits32
 wrap (Unsigned 64) = bits64
 wrap _ = integer
+
+float32 : SchemeObj Write -> SchemeObj Write
+float32 obj = Vector (-110) [obj]
+
+float64 : SchemeObj Write -> SchemeObj Write
+float64 obj = Vector (-111) [obj]
+
+wrapFloat : FloatKind -> SchemeObj Write -> SchemeObj Write
+wrapFloat Float32 = float32
+wrapFloat Float64 = float64
 
 -- Result has to be wrapped in Int, which is Vector (-100)
 boolOp : SchemeObj Write -> String ->
@@ -263,6 +259,11 @@ applyOp blk (LTE StringType) [x, y] = boolOp blk "string<=?" x y
 applyOp blk (EQ StringType) [x, y] = boolOp blk "string=?" x y
 applyOp blk (GTE StringType) [x, y] = boolOp blk "string>=?" x y
 applyOp blk (GT StringType) [x, y] = boolOp blk "string>?" x y
+applyOp blk (LT FloatType) [x, y] = boolOp blk "<" x y
+applyOp blk (LTE FloatType) [x, y] = boolOp blk "<=" x y
+applyOp blk (EQ FloatType) [x, y] = boolOp blk "=" x y
+applyOp blk (GTE FloatType) [x, y] = boolOp blk ">=" x y
+applyOp blk (GT FloatType) [x, y] = boolOp blk ">" x y
 applyOp blk (LT DoubleType) [x, y] = boolOp blk "<" x y
 applyOp blk (LTE DoubleType) [x, y] = boolOp blk "<=" x y
 applyOp blk (EQ DoubleType) [x, y] = boolOp blk "=" x y

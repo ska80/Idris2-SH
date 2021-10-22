@@ -265,6 +265,10 @@ mutual
       = quoteOrInvalid x $ \ x' => pure $ PrimVal emptyFC (B32 x')
   quoteVector svs (-109) [_, x]
       = quoteOrInvalid x $ \ x' => pure $ PrimVal emptyFC (B64 x')
+  quoteVector svs (-110) [_, x]
+      = quoteOrInvalid x $ \ x' => pure $ PrimVal emptyFC (Fl x')
+  quoteVector svs (-111) [_, x]
+      = quoteOrInvalid x $ \ x' => pure $ PrimVal emptyFC (Db x')
   quoteVector svs tag (_ :: cname_in :: fc_in :: args_in) -- DataCon
       = if tag >= 0
            then quoteOrInvalid cname_in $ \ cname =>  do
@@ -496,6 +500,10 @@ mutual
       = quoteOrInvalidS x $ \ x' => pure $ SPrimVal emptyFC (B32 x')
   snfVector svs (-109) [_, x]
       = quoteOrInvalidS x $ \ x' => pure $ SPrimVal emptyFC (B64 x')
+  snfVector svs (-110) [_, x]
+      = quoteOrInvalidS x $ \ x' => pure $ SPrimVal emptyFC (Fl x')
+  snfVector svs (-111) [_, x]
+      = quoteOrInvalidS x $ \ x' => pure $ SPrimVal emptyFC (Db x')
 
   snfVector svs tag (_ :: cname_in :: fc_in :: args_in) -- DataCon
       = if tag >= 0
