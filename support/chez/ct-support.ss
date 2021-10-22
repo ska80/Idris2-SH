@@ -133,6 +133,48 @@
           (yval (vector-ref y 1))]
           (vector tag (quotient xval yval)))))
 
+(define ct-f+ (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (+ xval yval)))))
+(define ct-f- (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (- xval yval)))))
+(define ct-f* (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (* xval yval)))))
+(define ct-f/ (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (/ xval yval)))))
+
+(define ct-d+ (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (+ xval yval)))))
+(define ct-d- (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (- xval yval)))))
+(define ct-d* (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (* xval yval)))))
+(define ct-d/ (lambda (x y)
+    (let [(tag (vector-ref x 0))
+          (xval (vector-ref x 1))
+          (yval (vector-ref y 1))]
+          (vector tag (/ xval yval)))))
+
 (define ct-mod (lambda (x y)
     (let [(tag (vector-ref x 0))
           (xval (vector-ref x 1))

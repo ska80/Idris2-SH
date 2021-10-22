@@ -294,6 +294,14 @@ mutual
       = do let Just x' = fromScheme (decodeObj x)
                  | Nothing => invalid
            pure $ PrimVal emptyFC (B64 x')
+  quoteVector svs (-110) [_, x]
+      = do let Just x' = fromScheme (decodeObj x)
+                 | Nothing => invalid
+           pure $ PrimVal emptyFC (Fl x')
+  quoteVector svs (-111) [_, x]
+      = do let Just x' = fromScheme (decodeObj x)
+                 | Nothing => invalid
+           pure $ PrimVal emptyFC (Db x')
   quoteVector svs tag (_ :: cname_in :: fc_in :: args_in) -- DataCon
       = if tag >= 0
            then do
@@ -589,6 +597,14 @@ mutual
       = do let Just x' = fromScheme (decodeObj x)
                  | Nothing => invalidS
            pure $ SPrimVal emptyFC (B64 x')
+  snfVector svs (-110) [_, x]
+      = do let Just x' = fromScheme (decodeObj x)
+                 | Nothing => invalidS
+           pure $ SPrimVal emptyFC (Fl x')
+  snfVector svs (-111) [_, x]
+      = do let Just x' = fromScheme (decodeObj x)
+                 | Nothing => invalidS
+           pure $ SPrimVal emptyFC (Db x')
 
   snfVector svs tag (_ :: cname_in :: fc_in :: args_in) -- DataCon
       = if tag >= 0
