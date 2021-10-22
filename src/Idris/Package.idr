@@ -779,7 +779,25 @@ partitionOpts opts = foldr pOptUpdate (MkPFR [] [] False) opts
       pOptUpdate opt | PErr    = record {hasError = True}
 
 errorMsg : String
-errorMsg = """
+errorMsg = unlines
+  [ "Not all command line options can be used to override package options.\n"
+  , "Overridable options are:"
+  , "    --quiet"
+  , "    --verbose"
+  , "    --timing"
+  , "    --log <log level>"
+  , "    --dumpcases <file>"
+  , "    --dumplifted <file>"
+  , "    --dumpvmcode <file>"
+  , "    --debug-elab-check"
+  , "    --codegen <cg>"
+  , "    --directive <directive>"
+  , "    --build-dir <dir>"
+  , "    --output-dir <dir>"
+  ]
+
+errorMsg2 : String
+errorMsg2 = """
   Not all command line options can be used to override package options.
 
   Overridable options are:
