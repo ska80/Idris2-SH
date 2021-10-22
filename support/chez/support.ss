@@ -529,6 +529,9 @@
 (define (blodwen-is-float obj)
   (if (flonum? obj) 1 0))
 
+(define (blodwen-is-double obj)
+  (if (flonum? obj) 1 0))
+
 (define (blodwen-is-char obj)
   (if (char? obj) 1 0))
 

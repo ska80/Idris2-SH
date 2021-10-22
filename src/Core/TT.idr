@@ -354,19 +354,14 @@ precision : IntKind -> Precision
 precision (Signed p)   = p
 precision (Unsigned p) = P p
 
-||| Precision of floating point types
 public export
-data FloatKind = FSigned Precision
+data FloatKind = Float32 | Float64
 
 public export
-floatKind : Constant -> Maybe Floatkind
-floatkind FloatType  = Just . FSigned $ P 32
-floatkind DoubleType = Just . FSigned $ P 64
-floatkind _          = Nothing
-
-public export
-floatPrecision : FloatKind -> Precision
-floatPrecision (FSigned p) = p
+floatKind : Constant -> Maybe FloatKind
+floatKind FloatType  = Just Float32
+floatKind DoubleType = Just Float64
+floatKind _          = Nothing
 
 -- All the internal operators, parameterised by their arity
 public export

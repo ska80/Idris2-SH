@@ -24,6 +24,9 @@ prim_isInteger : ForeignObj -> Int
 %foreign "scheme:blodwen-is-float"
 prim_isFloat : ForeignObj -> Int
 
+%foreign "scheme:blodwen-is-double"
+prim_isDouble : ForeignObj -> Int
+
 %foreign "scheme:blodwen-is-char"
 prim_isChar : ForeignObj -> Int
 
@@ -104,7 +107,11 @@ unsafeGetString : ForeignObj -> String
 
 %foreign "scheme:blodwen-id"
 export
-unsafeGetFloat : ForeignObj -> Double
+unsafeGetFloat : ForeignObj -> Float
+
+%foreign "scheme:blodwen-id"
+export
+unsafeGetDouble : ForeignObj -> Double
 
 %foreign "scheme:blodwen-id"
 export
@@ -170,7 +177,8 @@ data SchemeObj : Direction -> Type where
      Null : SchemeObj t
      Cons : SchemeObj t -> SchemeObj t -> SchemeObj t
      IntegerVal : Integer -> SchemeObj t
-     FloatVal : Double -> SchemeObj t
+     FloatVal : Float -> SchemeObj t
+     DoubleVal : Double -> SchemeObj t
      StringVal : String -> SchemeObj t
      CharVal : Char -> SchemeObj t
      Symbol : String -> SchemeObj t
@@ -212,6 +220,7 @@ evalSchemeObj obj
     toString (Cons x y) = "(cons " ++ toString x ++ " " ++ toString y ++ ")"
     toString (IntegerVal x) = show x
     toString (FloatVal x) = show x
+    toString (DoubleVal x) = show x
     toString (StringVal x) = show x
     toString (CharVal x)
        = if (the Int (cast x) >= 32 && the Int (cast x) < 127)
@@ -264,6 +273,7 @@ decodeObj obj
       else if isPair obj then Cons (decodeObj (unsafeFst obj))
                                    (decodeObj (unsafeSnd obj))
       else if isFloat obj then FloatVal (unsafeGetFloat obj)
+      else if isDouble obj then DoubleVal (unsafeGetDouble obj)
       else if isString obj then StringVal (unsafeGetString obj)
       else if isChar obj then CharVal (unsafeGetChar obj)
       else if isSymbol obj then Symbol (unsafeReadSymbol obj)
@@ -370,16 +380,16 @@ Scheme String where
 
 export
 Scheme Float where
-  toScheme x = FloatVal (cast x)
+  toScheme x = FloatVal x
 
-  fromScheme (FloatVal x) = Just (cast x)
+  fromScheme (FloatVal x) = Just x
   fromScheme _ = Nothing
 
 export
 Scheme Double where
-  toScheme x = FloatVal x
+  toScheme x = DoubleVal x
 
-  fromScheme (FloatVal x) = Just x
+  fromScheme (DoubleVal x) = Just x
   fromScheme _ = Nothing
 
 export
