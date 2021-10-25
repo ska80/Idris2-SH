@@ -213,7 +213,7 @@ TTC Char where
   fromBuf b
       = do i <- fromBuf b
            pure (cast {from=Int} i)
-{-FIXME_Float
+
 export
 TTC Float where
   toBuf b val
@@ -234,7 +234,7 @@ TTC Float where
                  put Bin (incLoc 4 chunk)
                  pure val
               else throw (TTCError (EndOfBuffer "Float"))
--}
+
 export
 TTC Double where
   toBuf b val
