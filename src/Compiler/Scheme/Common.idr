@@ -185,6 +185,7 @@ schOp DoubleSqrt [x] = pure $ op "flsqrt" [x]
 schOp DoubleFloor [x] = pure $ op "flfloor" [x]
 schOp DoubleCeiling [x] = pure $ op "flceiling" [x]
 
+schOp (Cast FloatType StringType)   [x] = pure $ op "number->string" [x]
 schOp (Cast DoubleType StringType)  [x] = pure $ op "number->string" [x]
 schOp (Cast CharType StringType)    [x] = pure $ op "string" [x]
 schOp (Cast StringType FloatType)   [x] = pure $ op "cast-string-float" [x]
