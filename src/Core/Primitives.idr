@@ -757,6 +757,8 @@ allPrimitives =
     , t2 <- primTypes
     , t1 /= t2                         &&
       (t1,t2) /= (StringType,CharType) &&
+      (t1,t2) /= (FloatType,CharType)  &&
       (t1,t2) /= (DoubleType,CharType) &&
+      (t1,t2) /= (CharType,FloatType)  &&
       (t1,t2) /= (CharType,DoubleType)
     ]
