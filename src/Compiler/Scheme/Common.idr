@@ -187,6 +187,7 @@ schOp DoubleCeiling [x] = pure $ op "flceiling" [x]
 
 schOp (Cast DoubleType StringType)  [x] = pure $ op "number->string" [x]
 schOp (Cast CharType StringType)    [x] = pure $ op "string" [x]
+schOp (Cast StringType FloatType)   [x] = pure $ op "cast-string-float" [x]
 schOp (Cast StringType DoubleType)  [x] = pure $ op "cast-string-double" [x]
 
 schOp (Cast from to)                [x] = castInt constPrimitives from to x
@@ -265,6 +266,7 @@ schConstant _ (Ch x)
    = if (the Int (cast x) >= 32 && the Int (cast x) < 127)
         then "#\\" ++ cast x
         else "(integer->char " ++ show (the Int (cast x)) ++ ")"
+schConstant _ (Fl x) = show x
 schConstant _ (Db x) = show x
 schConstant _ WorldVal = "#f"
 schConstant _ IntType = "#t"
@@ -279,6 +281,7 @@ schConstant _ Bits32Type = "#t"
 schConstant _ Bits64Type = "#t"
 schConstant _ StringType = "#t"
 schConstant _ CharType = "#t"
+schConstant _ FloatType = "#t"
 schConstant _ DoubleType = "#t"
 schConstant _ WorldType = "#t"
 

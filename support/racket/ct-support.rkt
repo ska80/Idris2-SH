@@ -241,6 +241,10 @@
       ((equal? (string-ref x 0) #\#) "")
       (else x))))
 
+(define ct-cast-string-float
+  (lambda (x)
+    (cast-num (string->number (destroy-prefix x)))))
+
 (define ct-cast-string-double
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
@@ -300,6 +304,11 @@
 (define ct-exact-truncate-boundedUInt
   (lambda (x y)
     (ct-toUnsignedInt (exact-truncate x) y)))
+
+(define ct-int-float
+  (lambda (xin)
+    (let [(x (vector-ref xin 1))]
+      (exact->inexact x))))
 
 (define ct-int-double
   (lambda (xin)

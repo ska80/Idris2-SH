@@ -145,7 +145,11 @@ Cast () JSON where
 public export
 Cast Bool JSON where
   cast = JBoolean
-
+{-
+public export
+Cast Float JSON where
+  cast = JNumber
+-}
 public export
 Cast Double JSON where
   cast = JNumber

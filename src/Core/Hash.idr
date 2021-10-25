@@ -102,11 +102,11 @@ Hashable a => Hashable b => Hashable (a, b) where
 export
 Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
-
+{-FIXME_Float
 export
 Hashable Float where
   hash = cast
-
+-}
 export
 Hashable Double where
   hash = hash . show
