@@ -133,6 +133,12 @@
 (define cast-string-double
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
+
+(define (cast-float-double x)
+  x)
+(define (cast-double-float x)
+  x)
+
 (define (string-concat xs) (apply string-append xs))
 (define (string-unpack s) (string->list s))
 (define (string-pack xs) (list->string xs))
