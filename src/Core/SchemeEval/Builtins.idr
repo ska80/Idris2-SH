@@ -191,6 +191,7 @@ applyCast blk StringType to x
     = canonical blk [x] $
         case intKind to of
            Nothing => case to of
+                           FloatType => Apply (Var "ct-cast-string-float") [x]
                            DoubleType => Apply (Var "ct-cast-string-double") [x]
                            _ => blk
            Just (Signed Unlimited) => integer $ Apply (Var "ct-cast-string-int") [x]
@@ -200,9 +201,19 @@ applyCast blk from StringType x
     = canonical blk [x] $
         case intKind from of
            Nothing => case from of
+                           FloatType => Apply (Var "number->string") [x]
                            DoubleType => Apply (Var "number->string") [x]
                            _ => blk
            Just k => Apply (Var "ct-cast-number-string") [x]
+applyCast blk FloatType to x
+    = canonical blk [x] $
+        case intKind to of
+           Nothing => case to of
+                           StringType => Apply (Var "number->string") [x]
+                           _ => blk
+           Just (Signed Unlimited) => integer $ Apply (Var "ct-exact-truncate") [x]
+           Just k@(Signed (P n)) => wrap k $ Apply (Var "ct-exact-truncate-boundedInt") [x, toScheme (n - 1)]
+           Just k@(Unsigned n) => wrap k $ Apply (Var "ct-exact-truncate-boundedUInt") [x, toScheme n]
 applyCast blk DoubleType to x
     = canonical blk [x] $
         case intKind to of
@@ -212,6 +223,13 @@ applyCast blk DoubleType to x
            Just (Signed Unlimited) => integer $ Apply (Var "ct-exact-truncate") [x]
            Just k@(Signed (P n)) => wrap k $ Apply (Var "ct-exact-truncate-boundedInt") [x, toScheme (n - 1)]
            Just k@(Unsigned n) => wrap k $ Apply (Var "ct-exact-truncate-boundedUInt") [x, toScheme n]
+applyCast blk from FloatType x
+    = canonical blk [x] $
+        case intKind from of
+           Nothing => case from of
+                           StringType => Apply (Var "ct-cast-string-float") [x]
+                           _ => blk
+           Just k => Apply (Var "ct-int-float") [x]
 applyCast blk from DoubleType x
     = canonical blk [x] $
         case intKind from of

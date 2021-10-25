@@ -377,14 +377,14 @@ Scheme String where
 
   fromScheme (StringVal x) = Just x
   fromScheme _ = Nothing
-
+{-FIXME_Float
 export
 Scheme Float where
   toScheme x = FloatVal x
 
   fromScheme (FloatVal x) = Just x
   fromScheme _ = Nothing
-
+-}
 export
 Scheme Double where
   toScheme x = DoubleVal x

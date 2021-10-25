@@ -89,7 +89,7 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch  Char
-    | Fl  Float
+    | Fl  Double --FIXME_Float
     | Db  Double
     | PrT PrimType
     | WorldVal

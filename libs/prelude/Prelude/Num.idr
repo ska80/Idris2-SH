@@ -345,7 +345,29 @@ Integral Bits64 where
   mod x y
       = case y == 0 of
              False => prim__mod_Bits64 x y
+{-FIXME_Float
+-- Float
 
+public export
+Num Float where
+  (+) = prim__add_Float
+  (*) = prim__mul_Float
+  fromInteger = prim__cast_IntegerFloat
+
+%inline
+public export
+Neg Float where
+  negate x = prim__negate_Float x
+  (-) = prim__sub_Float
+
+public export
+Abs Float where
+  abs x = if x < 0 then -x else x
+
+public export
+Fractional Float where
+  (/) = prim__div_Float
+-}
 -- Double
 
 public export

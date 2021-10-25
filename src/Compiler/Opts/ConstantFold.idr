@@ -104,8 +104,9 @@ constFold rho (COp {arity} fc fn xs) =
           fromNF nf
   where
     toNF : CExp vars' -> Maybe (NF vars')
-    -- Don't fold `Int` and `Double` because they have varying widths
+    -- Don't fold `Int`, `Float` and `Double` because they have varying widths
     toNF (CPrimVal fc (I _)) = Nothing
+    toNF (CPrimVal fc (Fl _)) = Nothing
     toNF (CPrimVal fc (Db _)) = Nothing
     -- Fold the rest
     toNF (CPrimVal fc c) = Just $ NPrimVal fc c
@@ -116,6 +117,7 @@ constFold rho (COp {arity} fc fn xs) =
     fromNF _ = Nothing
 
     commutative : PrimType -> Bool
+    commutative FloatType = False
     commutative DoubleType = False
     commutative _ = True
 

@@ -324,7 +324,8 @@ jsConstant (B32 i)  = show i
 jsConstant (B64 i)  = show i ++ "n"
 jsConstant (Str s)  = jsString s
 jsConstant (Ch c)   = jsString $ singleton c
-jsConstant (Db f)   = show f
+jsConstant (Fl f)   = show f
+jsConstant (Db d)   = show d
 jsConstant (PrT t)  = jsPrimType t
 jsConstant WorldVal = esName "idrisworld"
 
