@@ -314,6 +314,7 @@ jsConstant (I64 i)  = show i ++ "n"
 jsConstant (BI i)   = show i ++ "n"
 jsConstant (Str s)  = jsString s
 jsConstant (Ch c)   = jsString $ singleton c
+jsConstant (Fl f)   = show f
 jsConstant (Db f)   = show f
 jsConstant WorldVal = esName "idrisworld"
 jsConstant (B8 i)   = show i
@@ -332,6 +333,7 @@ jsConstant Bits32Type = "#t"
 jsConstant Bits64Type = "#t"
 jsConstant StringType = "#t"
 jsConstant CharType = "#t"
+jsConstant FloatType = "#t"
 jsConstant DoubleType = "#t"
 jsConstant WorldType = "#t"
 

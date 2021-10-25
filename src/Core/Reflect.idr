@@ -192,7 +192,7 @@ Reify Char where
 export
 Reflect Char where
   reflect fc defs lhs env x = pure (PrimVal fc (Ch x))
-
+{-FIXME_Float
 export
 Reify Float where
   reify defs (NPrimVal _ (Fl v)) = pure v
@@ -201,7 +201,7 @@ Reify Float where
 export
 Reflect Float where
   reflect fc defs lhs env x = pure (PrimVal fc (Fl x))
-
+-}
 export
 Reify Double where
   reify defs (NPrimVal _ (Db v)) = pure v
@@ -597,6 +597,9 @@ Reflect Constant where
   reflect fc defs lhs env (Ch x)
       = do x' <- reflect fc defs lhs env x
            appCon fc defs (reflectiontt "Ch") [x']
+  reflect fc defs lhs env (Fl x)
+      = do x' <- reflect fc defs lhs env x
+           appCon fc defs (reflectiontt "Fl") [x']
   reflect fc defs lhs env (Db x)
       = do x' <- reflect fc defs lhs env x
            appCon fc defs (reflectiontt "Db") [x']

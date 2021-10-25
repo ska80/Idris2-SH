@@ -120,6 +120,7 @@ cConstant (I16 x) = "(Value*)makeInt16(INT16_C("++ show x ++"))"
 cConstant (I32 x) = "(Value*)makeInt32(INT32_C("++ show x ++"))"
 cConstant (I64 x) = "(Value*)makeInt64("++ showInt64Min x ++")"
 cConstant (BI x) = "(Value*)makeIntegerLiteral(\""++ show x ++"\")"
+cConstant (Fl x) = "(Value*)makeFloat("++ show x ++")"
 cConstant (Db x) = "(Value*)makeDouble("++ show x ++")"
 cConstant (Ch x) = "(Value*)makeChar("++ escapeChar x ++")"
 cConstant (Str x) = "(Value*)makeString("++ cStringQuoted x ++")"
@@ -132,6 +133,7 @@ cConstant Int64Type = "Int64"
 cConstant IntegerType = "Integer"
 cConstant StringType = "string"
 cConstant CharType = "char"
+cConstant FloatType = "float"
 cConstant DoubleType = "double"
 cConstant WorldType = "f32"
 cConstant (B8 x)   = "(Value*)makeBits8(UINT8_C("++ show x ++"))"
@@ -150,6 +152,7 @@ extractConstant (I16 x) = show x
 extractConstant (I32 x) = show x
 extractConstant (I64 x) = show x
 extractConstant (BI x) = show x
+extractConstant (Fl x) = show x
 extractConstant (Db x) = show x
 extractConstant (Ch x) = show x
 extractConstant (Str x) = cStringQuoted x
@@ -590,12 +593,17 @@ mutual
                 let constantArray = "constantArray_" ++ show c
                 emit EmptyFC $ "char **" ++ constantArray ++ " = (char**)malloc(sizeof(char*) * " ++ show (1+(length alts)) ++");"
                 makeNonIntSwitchStatementConst ((MkAConstAlt constant caseBody) :: alts) 1 constantArray "multiStringCompare"
+            (Fl f) => do
+                c <- getNextCounter
+                let constantArray = "constantArray_" ++ show c
+                emit EmptyFC $ "float *" ++ constantArray ++ " = (float*)malloc(sizeof(float) * " ++ show (1+(length alts)) ++");"
+                makeNonIntSwitchStatementConst ((MkAConstAlt constant caseBody) :: alts) 1 constantArray "multiFloatCompare"
             (Db d) => do
                 c <- getNextCounter
                 let constantArray = "constantArray_" ++ show c
                 emit EmptyFC $ "double *" ++ constantArray ++ " = (double*)malloc(sizeof(double) * " ++ show (1+(length alts)) ++");"
                 makeNonIntSwitchStatementConst ((MkAConstAlt constant caseBody) :: alts) 1 constantArray "multiDoubleCompare"
-            _ => pure ("ERROR_NOT_DOUBLE_OR_STRING", "ERROR_NOT_DOUBLE_OR_STRING")
+            _ => pure ("ERROR_NOT_FLOAT_OR_DOUBLE_OR_STRING", "ERROR_NOT_FLOAT_OR_DOUBLE_OR_STRING")
     makeNonIntSwitchStatementConst ((MkAConstAlt constant caseBody) :: alts) k constantArray compareFct = do
         emit EmptyFC $ constantArray ++ "[" ++ show (k-1) ++ "] = " ++ extractConstant constant ++ ";"
         makeNonIntSwitchStatementConst alts (k+1) constantArray compareFct

@@ -108,6 +108,12 @@
     (blodwen-toUnsignedInt (cast-string-int x) y)))
 
 ;; TODO Convert to macro
+(define (cast-string-float x)
+  (define (cast-num x)
+    (if (number? x) x 0))
+  (define (destroy-prefix x)
+    (if (or (string=? x "") (char=? (string-ref x 0) #\#)) "" x))
+  (cast-num (string->number (destroy-prefix x))))
 (define (cast-string-double x)
   (define (cast-num x)
     (if (number? x) x 0))
