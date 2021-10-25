@@ -78,6 +78,7 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch Char
+    | Fl Float
     | Db Double
     | WorldVal
 
@@ -93,6 +94,7 @@ data Constant
     | Bits64Type
     | StringType
     | CharType
+    | FloatType
     | DoubleType
     | WorldType
 
