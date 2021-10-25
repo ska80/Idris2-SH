@@ -281,7 +281,6 @@
       ((equal? (string-ref x 0) #\#) "")
       (else x))))
 
-;; FIXME_Float
 (define ct-cast-string-float
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
@@ -346,7 +345,6 @@
   (lambda (x y)
     (ct-toUnsignedInt (exact-truncate x) y)))
 
-;; FIXME_Float
 (define ct-int-float
   (lambda (xin)
     (let [(x (vector-ref xin 1))]
