@@ -188,8 +188,7 @@ schOp (Cast StringType FloatType)  [x] = pure $ op "cast-string-float" [x]
 schOp (Cast StringType DoubleType) [x] = pure $ op "cast-string-double" [x]
 schOp (Cast FloatType DoubleType)  [x] = pure $ op "cast-float-double" [x]
 schOp (Cast DoubleType FloatType)  [x] = pure $ op "cast-double-float" [x]
-
-schOp (Cast from to)                [x] = castInt constPrimitives from to x
+schOp (Cast from to)               [x] = castInt constPrimitives from to x
 
 schOp BelieveMe [_,_,x] = pure x
 schOp Crash [_,msg] = pure $ "(blodwen-error-quit (string-append \"ERROR: \" " ++ msg ++ "))"
