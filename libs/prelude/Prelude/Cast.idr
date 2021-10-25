@@ -249,6 +249,10 @@ Cast Int64 Char where
 -- To Float
 
 export
+Cast Double Float where
+  cast = prim__cast_DoubleFloat
+
+export
 Cast Int Float where
   cast = prim__cast_IntFloat
 
@@ -298,6 +302,10 @@ Cast Int64 Float where
 
 
 -- To Double
+
+export
+Cast Float Double where
+  cast = prim__cast_FloatDouble
 
 export
 Cast Int Double where
