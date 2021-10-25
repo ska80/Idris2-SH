@@ -77,6 +77,10 @@ Eq Int64 where
   x == y = intToBool (prim__eq_Int64 x y)
 
 public export
+Eq Float where
+  x == y = intToBool (prim__eq_Float x y)
+
+public export
 Eq Double where
   x == y = intToBool (prim__eq_Double x y)
 
@@ -234,6 +238,13 @@ Ord Int64 where
   (<=) x y = intToBool (prim__lte_Int64 x y)
   (>) x y = intToBool (prim__gt_Int64 x y)
   (>=) x y = intToBool (prim__gte_Int64 x y)
+
+public export
+Ord Float where
+  (<) x y = intToBool (prim__lt_Float x y)
+  (<=) x y = intToBool (prim__lte_Float x y)
+  (>) x y = intToBool (prim__gt_Float x y)
+  (>=) x y = intToBool (prim__gte_Float x y)
 
 public export
 Ord Double where
