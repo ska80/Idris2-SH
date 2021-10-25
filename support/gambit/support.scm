@@ -134,6 +134,11 @@
     (if (or (string=? x "") (char=? (string-ref x 0) #\#)) "" x))
   (cast-num (string->number (destroy-prefix x))))
 
+(define (cast-float-double x)
+  x)
+(define (cast-double-float x)
+  x)
+
 (define-macro (cast-string-int x)
   `(exact-truncate (cast-string-double ,x)))
 
