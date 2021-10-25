@@ -247,6 +247,11 @@ Cast Int64 Char where
 
 -- To Float
 
+%inline
+public export
+FromDouble Float where
+  fromDouble = prim__cast_DoubleFloat
+
 export
 Cast Double Float where
   cast = prim__cast_DoubleFloat
