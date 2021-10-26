@@ -100,7 +100,7 @@ constPrimitives = MkConstantPrimitives {
   , intToChar    = \_,x   => pure $ op "cast-int-char" [x]
   , stringToInt  = \k     => pure . strTo k
   , intToString  = \_,x   => pure $ op "number->string" [x]
-  , doubleToInt  = \k     => pure . dblTo k
+  , doubleToInt  = \k     => pure . fltTo k
   , intToDouble  = \_,x   => pure $ op "exact->inexact" [x]
   , intToInt     = \k1,k2 => pure . intTo k1 k2
   }
@@ -114,10 +114,10 @@ constPrimitives = MkConstantPrimitives {
         strTo (Signed $ P n)     x = op "cast-string-boundedInt" [x, show (n-1)]
         strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x,show n]
 
-        dblTo : IntKind -> String -> String
-        dblTo (Signed Unlimited) x = op "exact-truncate" [x]
-        dblTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, show (n-1)]
-        dblTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
+        fltTo : IntKind -> String -> String
+        fltTo (Signed Unlimited) x = op "exact-truncate" [x]
+        fltTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, show (n-1)]
+        fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
 
         intTo : IntKind -> IntKind -> String -> String
         intTo _ (Signed Unlimited) x = x

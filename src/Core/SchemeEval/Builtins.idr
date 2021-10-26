@@ -42,19 +42,19 @@ shr _ x y = Apply (Var "ct-shr") [x, y]
 
 -- Floats are wrapped, so unwrap then wrap again
 addFlt : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-addFlt (Just Float32) x y = Apply (Var "ct-f+") [x, y]
+addFlt (Just SingleFloat) x y = Apply (Var "ct-f+") [x, y]
 addFlt _ x y = Apply (Var "ct-d+") [x, y]
 
 subFlt : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-subFlt (Just Float32) x y = Apply (Var "ct-f-") [x, y]
+subFlt (Just SingleFloat) x y = Apply (Var "ct-f-") [x, y]
 subFlt _ x y = Apply (Var "ct-d-") [x, y]
 
 mulFlt : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-mulFlt (Just Float32) x y = Apply (Var "ct-f*") [x, y]
+mulFlt (Just SingleFloat) x y = Apply (Var "ct-f*") [x, y]
 mulFlt _ x y = Apply (Var "ct-d*") [x, y]
 
 divFlt : Maybe FloatKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-divFlt (Just Float32) x y = Apply (Var "ct-f/") [x, y]
+divFlt (Just SingleFloat) x y = Apply (Var "ct-f/") [x, y]
 divFlt _ x y = Apply (Var "ct-d/") [x, y]
 
 -- Check necessary arguments are in canonical form before applying the
@@ -131,15 +131,15 @@ wrap (Unsigned 32) = bits32
 wrap (Unsigned 64) = bits64
 wrap _ = integer
 
-float32 : SchemeObj Write -> SchemeObj Write
-float32 obj = Vector (-110) [obj]
+singleFloat : SchemeObj Write -> SchemeObj Write
+singleFloat obj = Vector (-110) [obj]
 
-float64 : SchemeObj Write -> SchemeObj Write
-float64 obj = Vector (-111) [obj]
+doubleFloat : SchemeObj Write -> SchemeObj Write
+doubleFloat obj = Vector (-111) [obj]
 
 wrapFloat : FloatKind -> SchemeObj Write -> SchemeObj Write
-wrapFloat Float32 = float32
-wrapFloat Float64 = float64
+wrapFloat SingleFloat = singleFloat
+wrapFloat DoubleFloat = doubleFloat
 
 -- Result has to be wrapped in Int, which is Vector (-100)
 boolOp : SchemeObj Write -> String ->
