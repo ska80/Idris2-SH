@@ -129,6 +129,14 @@
 (define (cast-double-float x)
   x)
 
+(define cast-integer-float
+  (lambda (x)
+    (exact->inexact x)))
+
+(define cast-integer-double
+  (lambda (x)
+    (exact->inexact x)))
+
 (define (string-concat xs) (apply string-append xs))
 (define (string-unpack s) (string->list s))
 (define (string-pack xs) (list->string xs))
