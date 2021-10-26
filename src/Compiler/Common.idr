@@ -524,13 +524,13 @@ castInt :  ConstantPrimitives
         -> Core String
 castInt p from to x =
   case ((from, intKind from), (to, intKind to)) of
-       ((CharType, _)  , (_, Just k)) => p.charToInt k x
-       ((StringType, _), (_, Just k)) => p.stringToInt k x
-       ((FloatType, _), (_, Just k))  => p.floatToInt (floatKind FloatType) k x
-       ((DoubleType, _), (_, Just k)) => p.floatToInt (floatKind DoubleType) k x
-       ((_, Just k), (CharType, _))   => p.intToChar k x
-       ((_, Just k), (StringType, _)) => p.intToString k x
-       ((_, Just k), (FloatType, _))  => p.intToFloat (floatKind FloatType) k x
-       ((_, Just k), (DoubleType, _)) => p.intToFloat (floatKind DoubleType) k x
-       ((_, Just k1), (_, Just k2))   => p.intToInt k1 k2 x
+       ((CharType, _),   (_, Just k))     => p.charToInt k x
+       ((StringType, _), (_, Just k))     => p.stringToInt k x
+       ((FloatType, _),  (_, Just k))     => p.floatToInt SingleFloat k x
+       ((DoubleType, _), (_, Just k))     => p.floatToInt DoubleFloat k x
+       ((_, Just k),     (CharType, _))   => p.intToChar k x
+       ((_, Just k),     (StringType, _)) => p.intToString k x
+       ((_, Just k),     (FloatType, _))  => p.intToFloat SingleFloat k x
+       ((_, Just k),     (DoubleType, _)) => p.intToFloat DoubleFloat k x
+       ((_, Just k1),    (_, Just k2))    => p.intToInt k1 k2 x
        _ => throw $ InternalError $ "invalid cast: " ++ show from ++ " -> " ++ show to
