@@ -92,13 +92,13 @@ shl _                     x y = op "blodwen-shl" [x, y]
 
 constPrimitives : ConstantPrimitives
 constPrimitives = MkConstantPrimitives {
-    charToInt   = \k        => pure . charTo k
-  , intToChar   = \_, x     => pure $ op "cast-int-char" [x]
-  , stringToInt = \k        => pure . strTo k
-  , intToString = \_, x     => pure $ op "number->string" [x]
-  , floatToInt  = \_, _, k  => pure . fltTo k
-  , intToFloat  = \fk, _, x => pure . intToFlt fk x
-  , intToInt    = \k1, k2   => pure . intTo k1 k2
+    charToInt   = \k      => pure . charTo k
+  , intToChar   = \_, x   => pure $ op "cast-int-char" [x]
+  , stringToInt = \k      => pure . strTo k
+  , intToString = \_, x   => pure $ op "number->string" [x]
+  , floatToInt  = \_, k   => pure . fltTo k
+  , intToFloat  = \fk, _  => pure . intToFlt fk
+  , intToInt    = \k1, k2 => pure . intTo k1 k2
   }
   where charTo : IntKind -> String -> String
         charTo (Signed Unlimited) x = op "char->integer" [x]
