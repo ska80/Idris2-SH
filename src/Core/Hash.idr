@@ -102,7 +102,7 @@ Hashable String where
 
 export
 Hashable Float where
-  hash = cast
+  hash = hash . show
 
 export
 Hashable Double where

@@ -754,15 +754,17 @@ allPrimitives =
      MkPrim DoubleFloor doubleTy isTotal,
      MkPrim DoubleCeiling doubleTy isTotal] ++
 
-    -- support all combinations of primitive casts with the following
-    -- exceptions: String -> Char, Double -> Char, Char -> Double
+    -- support all combinations of primitive casts with the following exceptions:
+    --   String -> Char,
+    --   Float -> Char, Char -> Float,
+    --   Double -> Char, Char -> Double
     [ MkPrim (Cast t1 t2) (predTy t1 t2) isTotal
     | t1 <- primTypes
     , t2 <- primTypes
     , t1 /= t2                         &&
-      (t1,t2) /= (StringType,CharType) &&
-      (t1,t2) /= (FloatType,CharType)  &&
-      (t1,t2) /= (DoubleType,CharType) &&
-      (t1,t2) /= (CharType,FloatType)  &&
-      (t1,t2) /= (CharType,DoubleType)
+      (t1,t2) /= (StringType, CharType) &&
+      (t1,t2) /= (FloatType, CharType)  &&
+      (t1,t2) /= (DoubleType, CharType) &&
+      (t1,t2) /= (CharType, FloatType)  &&
+      (t1,t2) /= (CharType, DoubleType)
     ]
