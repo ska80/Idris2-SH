@@ -481,6 +481,49 @@ gt (Fl x) (Fl y) = pure $ toInt (x > y)
 gt (Db x) (Db y) = pure $ toInt (x > y)
 gt _ _ = Nothing
 
+floatOp : (Float -> Float) -> Vect 1 (NF vars) -> Maybe (NF vars)
+floatOp f [NPrimVal fc (Fl x)] = Just (NPrimVal fc (Fl (f x)))
+floatOp f _ = Nothing
+
+floatExp : Vect 1 (NF vars) -> Maybe (NF vars)
+floatExp = floatOp exp
+
+floatLog : Vect 1 (NF vars) -> Maybe (NF vars)
+floatLog = floatOp log
+
+floatPow : {vars : _ } -> Vect 2 (NF vars) -> Maybe (NF vars)
+floatPow = binOp pow'
+    where pow' : Constant -> Constant -> Maybe Constant
+          pow' (Fl x) (Fl y) = pure $ Fl (pow x y)
+          pow' _ _ = Nothing
+
+floatSin : Vect 1 (NF vars) -> Maybe (NF vars)
+floatSin = floatOp sin
+
+floatCos : Vect 1 (NF vars) -> Maybe (NF vars)
+floatCos = floatOp cos
+
+floatTan : Vect 1 (NF vars) -> Maybe (NF vars)
+floatTan = floatOp tan
+
+floatASin : Vect 1 (NF vars) -> Maybe (NF vars)
+floatASin = floatOp asin
+
+floatACos : Vect 1 (NF vars) -> Maybe (NF vars)
+floatACos = floatOp acos
+
+floatATan : Vect 1 (NF vars) -> Maybe (NF vars)
+floatATan = floatOp atan
+
+floatSqrt : Vect 1 (NF vars) -> Maybe (NF vars)
+floatSqrt = floatOp sqrt
+
+floatFloor : Vect 1 (NF vars) -> Maybe (NF vars)
+floatFloor = floatOp floor
+
+floatCeiling : Vect 1 (NF vars) -> Maybe (NF vars)
+floatCeiling = floatOp ceiling
+
 doubleOp : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
 doubleOp f [NPrimVal fc (Db x)] = Just (NPrimVal fc (Db (f x)))
 doubleOp f _ = Nothing
@@ -557,6 +600,9 @@ arithTy t = constTy t t t
 cmpTy : PrimType -> ClosedTerm
 cmpTy t = constTy t t IntType
 
+floatTy : ClosedTerm
+floatTy = predTy FloatType FloatType
+
 doubleTy : ClosedTerm
 doubleTy = predTy DoubleType DoubleType
 
@@ -625,6 +671,18 @@ getOp StrAppend = strAppend
 getOp StrReverse = strReverse
 getOp StrSubstr = strSubstr
 
+getOp FloatExp = floatExp
+getOp FloatLog = floatLog
+getOp FloatPow = floatPow
+getOp FloatSin = floatSin
+getOp FloatCos = floatCos
+getOp FloatTan = floatTan
+getOp FloatASin = floatASin
+getOp FloatACos = floatACos
+getOp FloatATan = floatATan
+getOp FloatSqrt = floatSqrt
+getOp FloatFloor = floatFloor
+getOp FloatCeiling = floatCeiling
 getOp DoubleExp = doubleExp
 getOp DoubleLog = doubleLog
 getOp DoublePow = doublePow
@@ -672,6 +730,18 @@ opName StrCons = prim "strCons"
 opName StrAppend = prim "strAppend"
 opName StrReverse = prim "strReverse"
 opName StrSubstr = prim "strSubstr"
+opName FloatExp = prim "floatExp"
+opName FloatLog = prim "floatLog"
+opName FloatPow = prim "floatPow"
+opName FloatSin = prim "floatSin"
+opName FloatCos = prim "floatCos"
+opName FloatTan = prim "floatTan"
+opName FloatASin = prim "floatASin"
+opName FloatACos = prim "floatACos"
+opName FloatATan = prim "floatATan"
+opName FloatSqrt = prim "floatSqrt"
+opName FloatFloor = prim "floatFloor"
+opName FloatCeiling = prim "floatCeiling"
 opName DoubleExp = prim "doubleExp"
 opName DoubleLog = prim "doubleLog"
 opName DoublePow = prim "doublePow"
@@ -741,6 +811,18 @@ allPrimitives =
      MkPrim BelieveMe believeMeTy isTotal,
      MkPrim Crash crashTy notCovering] ++
 
+    [MkPrim FloatExp floatTy isTotal,
+     MkPrim FloatLog floatTy isTotal,
+     MkPrim FloatPow (arithTy FloatType) isTotal,
+     MkPrim FloatSin floatTy isTotal,
+     MkPrim FloatCos floatTy isTotal,
+     MkPrim FloatTan floatTy isTotal,
+     MkPrim FloatASin floatTy isTotal,
+     MkPrim FloatACos floatTy isTotal,
+     MkPrim FloatATan floatTy isTotal,
+     MkPrim FloatSqrt floatTy isTotal,
+     MkPrim FloatFloor floatTy isTotal,
+     MkPrim FloatCeiling floatTy isTotal] ++
     [MkPrim DoubleExp doubleTy isTotal,
      MkPrim DoubleLog doubleTy isTotal,
      MkPrim DoublePow (arithTy DoubleType) isTotal,

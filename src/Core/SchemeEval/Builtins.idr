@@ -315,6 +315,18 @@ applyOp blk StrReverse [x]
 applyOp blk StrSubstr [x, y, z]
     = canonical blk [x, y, z] $ Apply (Var "ct-string-substr") [x]
 
+applyOp blk FloatExp [x] = unaryOp blk "flexp" x
+applyOp blk FloatLog [x] = unaryOp blk "fllog" x
+applyOp blk FloatPow [x, y] = binOp blk "expt" x y
+applyOp blk FloatSin [x] = unaryOp blk "flsin" x
+applyOp blk FloatCos [x] = unaryOp blk "flcos" x
+applyOp blk FloatTan [x] = unaryOp blk "fltan" x
+applyOp blk FloatASin [x] = unaryOp blk "flasin" x
+applyOp blk FloatACos [x] = unaryOp blk "flacos" x
+applyOp blk FloatATan [x] = unaryOp blk "flatan" x
+applyOp blk FloatSqrt [x] = unaryOp blk "flsqrt" x
+applyOp blk FloatFloor [x] = unaryOp blk "flfloor" x
+applyOp blk FloatCeiling [x] = unaryOp blk "flceiling" x
 applyOp blk DoubleExp [x] = unaryOp blk "flexp" x
 applyOp blk DoubleLog [x] = unaryOp blk "fllog" x
 applyOp blk DoublePow [x, y] = binOp blk "expt" x y
