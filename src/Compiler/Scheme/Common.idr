@@ -92,13 +92,13 @@ shl _                     x y = op "blodwen-shl" [x, y]
 
 constPrimitives : ConstantPrimitives
 constPrimitives = MkConstantPrimitives {
-    charToInt    = \k     => pure . charTo k
-  , intToChar    = \_,x   => pure $ op "cast-int-char" [x]
-  , stringToInt  = \k     => pure . strTo k
-  , intToString  = \_,x   => pure $ op "number->string" [x]
-  , doubleToInt  = \k     => pure . fltTo k
-  , intToDouble  = \_,x   => pure $ op "exact->inexact" [x]
-  , intToInt     = \k1,k2 => pure . intTo k1 k2
+    charToInt   = \k        => pure . charTo k
+  , intToChar   = \_, x     => pure $ op "cast-int-char" [x]
+  , stringToInt = \k        => pure . strTo k
+  , intToString = \_, x     => pure $ op "number->string" [x]
+  , floatToInt  = \_, _, k  => pure . fltTo k
+  , intToFloat  = \fk, _, x => pure . intToFlt fk x
+  , intToInt    = \k1, k2   => pure . intTo k1 k2
   }
   where charTo : IntKind -> String -> String
         charTo (Signed Unlimited) x = op "char->integer" [x]
@@ -114,6 +114,10 @@ constPrimitives = MkConstantPrimitives {
         fltTo (Signed Unlimited) x = op "exact-truncate" [x]
         fltTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, show (n-1)]
         fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
+
+        intToFlt : FloatKind -> String -> String
+        intToFlt SingleFloat x = op "integer-float" [x]
+        intToFlt DoubleFloat x = op "integer-double" [x]
 
         intTo : IntKind -> IntKind -> String -> String
         intTo _ (Signed Unlimited) x = x

@@ -86,6 +86,14 @@
   (lambda (x y)
     (blodwen-toUnsignedInt (exact-truncate x) y)))
 
+(define integer-float
+  (lambda (x)
+    (exact->inexact x)))
+
+(define integer-double
+  (lambda (x)
+    (exact->inexact x)))
+
 (define cast-char-boundedInt
   (lambda (x y)
     (blodwen-toSignedInt (char->integer x) y)))
