@@ -1,5 +1,6 @@
 module Prelude.Float
 
+import Builtin
 import Prelude.Num
 
 %default total
