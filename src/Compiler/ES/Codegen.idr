@@ -360,13 +360,15 @@ jsIntKind x       = intKind x
 castInt : Constant -> Constant -> Doc -> Core Doc
 castInt from to x =
   case ((from, jsIntKind from), (to, jsIntKind to)) of
-    ((CharType,_),  (_,Just k)) => truncInt (useBigInt k) k $ jsIntOfChar k x
-    ((StringType,_),(_,Just k)) => truncInt (useBigInt k) k (jsIntOfString k x)
-    ((DoubleType,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfDouble k x
-    ((_,Just k),(CharType,_))   => pure $ jsCharOfInt k x
-    ((_,Just k),(StringType,_)) => pure $ jsAnyToString x
-    ((_,Just k),(DoubleType,_)) => pure $ fromInt k x
-    ((_,Just k1),(_,Just k2))   => intImpl k1 k2
+    ((CharType, _),   (_, Just k))     => truncInt (useBigInt k) k $ jsIntOfChar k x
+    ((StringType, _), (_, Just k))     => truncInt (useBigInt k) k (jsIntOfString k x)
+    ((FloatType, _),  (_, Just k))     => truncInt (useBigInt k) k $ jsIntOfDouble k x
+    ((DoubleType, _), (_, Just k))     => truncInt (useBigInt k) k $ jsIntOfDouble k x
+    ((_, Just k),     (CharType, _))   => pure $ jsCharOfInt k x
+    ((_, Just k),     (StringType, _)) => pure $ jsAnyToString x
+    ((_, Just k),     (FloatType, _))  => pure $ fromInt k x
+    ((_, Just k),     (DoubleType, _)) => pure $ fromInt k x
+    ((_, Just k1),    (_, Just k2))    => intImpl k1 k2
     _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
   where
     truncInt : (isBigInt : Bool) -> IntKind -> Doc -> Core Doc
@@ -457,6 +459,7 @@ jsOp DoubleSqrt [x]    = pure $ callFun1 "Math.sqrt" x
 jsOp DoubleFloor [x]   = pure $ callFun1 "Math.floor" x
 jsOp DoubleCeiling [x] = pure $ callFun1 "Math.ceil" x
 
+jsOp (Cast StringType FloatType) [x] = pure $ jsNumberOfString x
 jsOp (Cast StringType DoubleType) [x] = pure $ jsNumberOfString x
 jsOp (Cast ty StringType) [x] = pure $ jsAnyToString x
 jsOp (Cast ty ty2) [x]        = castInt ty ty2 x
