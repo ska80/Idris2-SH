@@ -7,13 +7,13 @@ Types and Functions
 Primitive Types
 ===============
 
-Idris defines several primitive types: ``Int``, ``Integer`` and
+Idris defines several primitive types: ``Int``, ``Integer``, ``Float`` and
 ``Double`` for numeric operations, ``Char`` and ``String`` for text
-manipulation, and ``Ptr`` which represents foreign pointers. There are
-also several data types declared in the library, including ``Bool``,
-with values ``True`` and ``False``. We can declare some constants with
-these types. Enter the following into a file ``Prims.idr`` and load it
-into the Idris interactive environment by typing ``idris2 Prims.idr``:
+manipulation, and ``Ptr`` which represents foreign pointers. There are also
+several data types declared in the library, including ``Bool``, with values
+``True`` and ``False``. We can declare some constants with these types. Enter
+the following into a file ``Prims.idr`` and load it into the Idris interactive
+environment by typing ``idris2 Prims.idr``:
 
 .. code-block:: idris
 

@@ -141,10 +141,12 @@ Idris has the following primitive types:
 
 - ``Int``
 - ``Integer`` (arbitrary precision)
-- ``Bits(8/16/32/64)``
+- ``Int(8/16/32/64)`` (signed integers)
+- ``Bits(8/16/32/64)`` (unsigned integers)
 - ``Char``
 - ``String``
-- ``Double``
+- ``Float`` (single-precision floating-point numbers)
+- ``Double`` (double-precision floating-point numbers)
 - ``WorldVal`` (token for IO computations)
 
 And as Idris allows pattern matching on types all the primitive types have
@@ -152,9 +154,11 @@ their primitive counterpart for describing a type:
 
 - ``IntType``
 - ``IntegerType``
+- ``Int(8/16/32/64)Type``
 - ``Bits(8/16/32/64)Type``
 - ``StringType``
 - ``CharType``
+- ``FloatType``
 - ``DoubleType``
 - ``WorldType``
 
@@ -587,6 +591,7 @@ The foreign types are:
 - ``CFInt``
 - ``CFUnsigned(8/16/32/64)``
 - ``CFString``
+- ``CFFloat``
 - ``CFDouble``
 - ``CFChar``
 - ``CFFun`` of type  ``CFType -> CFType -> CFType``
