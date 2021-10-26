@@ -347,12 +347,17 @@
   (lambda (x y)
     (ct-toUnsignedInt (exact-truncate x) y)))
 
-(define ct-int-float
+(define (ct-cast-float-double x)
+  x)
+(define (ct-cast-double-float x)
+  x)
+
+(define ct-cast-integer-float
   (lambda (xin)
     (let [(x (vector-ref xin 1))]
       (exact->inexact x))))
 
-(define ct-int-double
+(define ct-cast-integer-double
   (lambda (xin)
     (let [(x (vector-ref xin 1))]
       (exact->inexact x))))
