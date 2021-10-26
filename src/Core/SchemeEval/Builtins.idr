@@ -209,6 +209,7 @@ applyCast blk FloatType to x
     = canonical blk [x] $
         case intKind to of
            Nothing => case to of
+                           DoubleType => Apply (Var "ct-cast-float-double") [x]
                            StringType => Apply (Var "number->string") [x]
                            _ => blk
            Just (Signed Unlimited) => integer $ Apply (Var "ct-exact-truncate") [x]
@@ -218,6 +219,7 @@ applyCast blk DoubleType to x
     = canonical blk [x] $
         case intKind to of
            Nothing => case to of
+                           FloatType => Apply (Var "ct-cast-double-float") [x]
                            StringType => Apply (Var "number->string") [x]
                            _ => blk
            Just (Signed Unlimited) => integer $ Apply (Var "ct-exact-truncate") [x]
@@ -229,14 +231,14 @@ applyCast blk from FloatType x
            Nothing => case from of
                            StringType => Apply (Var "ct-cast-string-float") [x]
                            _ => blk
-           Just k => Apply (Var "ct-int-float") [x]
+           Just k => Apply (Var "ct-cast-integer-float") [x]
 applyCast blk from DoubleType x
     = canonical blk [x] $
         case intKind from of
            Nothing => case from of
                            StringType => Apply (Var "ct-cast-string-double") [x]
                            _ => blk
-           Just k => Apply (Var "ct-int-double") [x]
+           Just k => Apply (Var "ct-cast-integer-double") [x]
 applyCast blk from to x
     = canonical blk [x] $
         case (intKind from, intKind to) of
