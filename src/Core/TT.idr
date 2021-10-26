@@ -394,6 +394,18 @@ data PrimFn : Nat -> Type where
      StrReverse : PrimFn 1
      StrSubstr : PrimFn 3
 
+     FloatExp : PrimFn 1
+     FloatLog : PrimFn 1
+     FloatPow : PrimFn 2
+     FloatSin : PrimFn 1
+     FloatCos : PrimFn 1
+     FloatTan : PrimFn 1
+     FloatASin : PrimFn 1
+     FloatACos : PrimFn 1
+     FloatATan : PrimFn 1
+     FloatSqrt : PrimFn 1
+     FloatFloor : PrimFn 1
+     FloatCeiling : PrimFn 1
      DoubleExp : PrimFn 1
      DoubleLog : PrimFn 1
      DoublePow : PrimFn 2
@@ -437,6 +449,18 @@ Show (PrimFn arity) where
   show StrAppend = "++"
   show StrReverse = "op_strrev"
   show StrSubstr = "op_strsubstr"
+  show FloatExp = "op_floatExp"
+  show FloatLog = "op_floatLog"
+  show FloatPow = "op_floatPow"
+  show FloatSin = "op_floatSin"
+  show FloatCos = "op_floatCos"
+  show FloatTan = "op_floatTan"
+  show FloatASin = "op_floatASin"
+  show FloatACos = "op_floatACos"
+  show FloatATan = "op_floatATan"
+  show FloatSqrt = "op_floatSqrt"
+  show FloatFloor = "op_floatFloor"
+  show FloatCeiling = "op_floatCeiling"
   show DoubleExp = "op_doubleExp"
   show DoubleLog = "op_doubleLog"
   show DoublePow = "op_doublePow"
