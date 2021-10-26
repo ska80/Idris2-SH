@@ -139,6 +139,14 @@
 (define (cast-double-float x)
   x)
 
+(define cast-integer-float
+  (lambda (x)
+    (exact->inexact x)))
+
+(define cast-integer-double
+  (lambda (x)
+    (exact->inexact x)))
+
 (define-macro (cast-string-int x)
   `(exact-truncate (cast-string-double ,x)))
 
