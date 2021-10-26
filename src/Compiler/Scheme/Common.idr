@@ -176,6 +176,20 @@ schOp StrReverse [x] = pure $ op "string-reverse" [x]
 schOp StrSubstr [x, y, z] = pure $ op "string-substr" [x, y, z]
 
 -- `e` is Euler's number, which approximates to: 2.718281828459045
+schOp FloatExp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
+schOp FloatLog [x] = pure $ op "fllog" [x] -- Base is `e`.
+schOp FloatPow [x, y] = pure $ op "expt" [x, y]
+schOp FloatSin [x] = pure $ op "flsin" [x]
+schOp FloatCos [x] = pure $ op "flcos" [x]
+schOp FloatTan [x] = pure $ op "fltan" [x]
+schOp FloatASin [x] = pure $ op "flasin" [x]
+schOp FloatACos [x] = pure $ op "flacos" [x]
+schOp FloatATan [x] = pure $ op "flatan" [x]
+schOp FloatSqrt [x] = pure $ op "flsqrt" [x]
+schOp FloatFloor [x] = pure $ op "flfloor" [x]
+schOp FloatCeiling [x] = pure $ op "flceiling" [x]
+
+-- `e` is Euler's number, which approximates to: 2.718281828459045
 schOp DoubleExp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
 schOp DoubleLog [x] = pure $ op "fllog" [x] -- Base is `e`.
 schOp DoublePow [x, y] = pure $ op "expt" [x, y]

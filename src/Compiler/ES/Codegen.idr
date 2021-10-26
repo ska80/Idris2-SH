@@ -435,6 +435,19 @@ jsOp StrAppend [x, y] = pure $ binOp "+" x y
 jsOp StrReverse [x] = pure $ callFun1 (esName "strReverse") x
 jsOp StrSubstr [offset, len, str] =
   pure $ callFun (esName "substr") [offset,len,str]
+
+jsOp FloatExp [x]      = pure $ callFun1 "Math.exp" x
+jsOp FloatLog [x]      = pure $ callFun1 "Math.log" x
+jsOp FloatPow [x, y]   = pure $ callFun "Math.pow" [x, y]
+jsOp FloatSin [x]      = pure $ callFun1 "Math.sin" x
+jsOp FloatCos [x]      = pure $ callFun1 "Math.cos" x
+jsOp FloatTan [x]      = pure $ callFun1 "Math.tan" x
+jsOp FloatASin [x]     = pure $ callFun1 "Math.asin" x
+jsOp FloatACos [x]     = pure $ callFun1 "Math.acos" x
+jsOp FloatATan [x]     = pure $ callFun1 "Math.atan" x
+jsOp FloatSqrt [x]     = pure $ callFun1 "Math.sqrt" x
+jsOp FloatFloor [x]    = pure $ callFun1 "Math.floor" x
+jsOp FloatCeiling [x]  = pure $ callFun1 "Math.ceil" x
 jsOp DoubleExp [x]     = pure $ callFun1 "Math.exp" x
 jsOp DoubleLog [x]     = pure $ callFun1 "Math.log" x
 jsOp DoublePow [x, y]  = pure $ callFun "Math.pow" [x, y]
