@@ -355,12 +355,12 @@ precision (Signed p)   = p
 precision (Unsigned p) = P p
 
 public export
-data FloatKind = Float32 | Float64
+data FloatKind = SingleFloat | DoubleFloat
 
 public export
 floatKind : Constant -> Maybe FloatKind
-floatKind FloatType  = Just Float32
-floatKind DoubleType = Just Float64
+floatKind FloatType  = Just SingleFloat
+floatKind DoubleType = Just DoubleFloat
 floatKind _          = Nothing
 
 -- All the internal operators, parameterised by their arity
