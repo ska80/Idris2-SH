@@ -16,6 +16,7 @@ Main> data Prelude.Nat : Type
     Cast Nat Integer
     Cast Nat Int
     Cast Nat Char
+    Cast Nat Float
     Cast Nat Double
     Cast Nat Bits8
     Cast Nat Bits16
@@ -26,6 +27,7 @@ Main> data Prelude.Nat : Type
     Cast Nat Int32
     Cast Nat Int64
     Cast String Nat
+    Cast Float Nat
     Cast Double Nat
     Cast Char Nat
     Cast Int Nat
@@ -96,6 +98,7 @@ Main> interface Prelude.Show : Type -> Type
     Show Int16
     Show Int32
     Show Int64
+    Show Float
     Show Double
     Show Char
     Show String
@@ -140,6 +143,7 @@ Hints:
   Cast Int String
   Cast Integer String
   Cast Char String
+  Cast Float String
   Cast Double String
   Cast Nat String
   Cast Int8 String
@@ -152,6 +156,7 @@ Hints:
   Cast Bits64 String
   Cast String Integer
   Cast String Int
+  Cast String Float
   Cast String Double
   Cast String Bits8
   Cast String Bits16
@@ -176,6 +181,7 @@ Hints:
   Cast Integer String
   Cast Int Integer
   Cast Char Integer
+  Cast Float Integer
   Cast Double Integer
   Cast String Integer
   Cast Nat Integer
@@ -189,6 +195,7 @@ Hints:
   Cast Int64 Integer
   Cast Integer Int
   Cast Integer Char
+  Cast Integer Float
   Cast Integer Double
   Cast Integer Bits8
   Cast Integer Bits16
@@ -213,6 +220,7 @@ Hints:
   Cast Bits16 Integer
   Cast Bits16 Int
   Cast Bits16 Char
+  Cast Bits16 Float
   Cast Bits16 Double
   Cast Bits16 Bits8
   Cast Int Bits16
@@ -221,6 +229,7 @@ Hints:
   Cast Bits32 Bits16
   Cast Bits64 Bits16
   Cast String Bits16
+  Cast Float Bits16
   Cast Double Bits16
   Cast Char Bits16
   Cast Nat Bits16
