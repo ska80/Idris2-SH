@@ -116,8 +116,8 @@ constPrimitives = MkConstantPrimitives {
         fltTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x,show n]
 
         intToFlt : FloatKind -> String -> String
-        intToFlt SingleFloat x = op "integer-float" [x]
-        intToFlt DoubleFloat x = op "integer-double" [x]
+        intToFlt SingleFloat x = op "cast-integer-float" [x]
+        intToFlt DoubleFloat x = op "cast-integer-double" [x]
 
         intTo : IntKind -> IntKind -> String -> String
         intTo _ (Signed Unlimited) x = x
