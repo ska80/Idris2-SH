@@ -397,38 +397,61 @@ Hashable (PrimFn arity) where
     StrSubstr =>
       h `hashWithSalt` 23
 
-    DoubleExp =>
+    FloatExp =>
       h `hashWithSalt` 24
-    DoubleLog =>
+    FloatLog =>
       h `hashWithSalt` 25
-    DoubleSin =>
+    FloatPow =>
       h `hashWithSalt` 26
-    DoubleCos =>
+    FloatSin =>
       h `hashWithSalt` 27
-    DoubleTan =>
+    FloatCos =>
       h `hashWithSalt` 28
-    DoubleASin =>
+    FloatTan =>
       h `hashWithSalt` 29
-    DoubleACos =>
+    FloatASin =>
       h `hashWithSalt` 30
-    DoubleATan =>
+    FloatACos =>
       h `hashWithSalt` 31
-    DoubleSqrt =>
+    FloatATan =>
       h `hashWithSalt` 32
-    DoubleFloor =>
+    FloatSqrt =>
       h `hashWithSalt` 33
-    DoubleCeiling =>
+    FloatFloor =>
       h `hashWithSalt` 34
-
-    Cast f t =>
-      h `hashWithSalt` 35 `hashWithSalt` f `hashWithSalt` t
-    BelieveMe =>
+    FloatCeiling =>
+      h `hashWithSalt` 35
+    DoubleExp =>
       h `hashWithSalt` 36
-    Crash =>
+    DoubleLog =>
       h `hashWithSalt` 37
-
     DoublePow =>
       h `hashWithSalt` 38
+    DoubleSin =>
+      h `hashWithSalt` 39
+    DoubleCos =>
+      h `hashWithSalt` 40
+    DoubleTan =>
+      h `hashWithSalt` 41
+    DoubleASin =>
+      h `hashWithSalt` 42
+    DoubleACos =>
+      h `hashWithSalt` 43
+    DoubleATan =>
+      h `hashWithSalt` 44
+    DoubleSqrt =>
+      h `hashWithSalt` 45
+    DoubleFloor =>
+      h `hashWithSalt` 46
+    DoubleCeiling =>
+      h `hashWithSalt` 47
+
+    Cast f t =>
+      h `hashWithSalt` 48 `hashWithSalt` f `hashWithSalt` t
+    BelieveMe =>
+      h `hashWithSalt` 49
+    Crash =>
+      h `hashWithSalt` 50
 
 export
 Hashable ConInfo where
