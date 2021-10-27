@@ -4,8 +4,8 @@ Main.sameSig : Char -> String
   
 Data.String.singleton : Char -> String
   Totality: total
-Prelude.Show.show : Char -> String
 Prelude.Cast.cast : Char -> String
+Prelude.Show.show : Char -> String
 Main> Prelude.const : a -> b -> a
   Constant function. Ignores its second argument.
   Totality: total
