@@ -2,6 +2,7 @@ module Prelude.Float
 
 import Builtin
 import Prelude.Num
+import Prelude.Cast
 
 %default total
 
@@ -109,13 +110,13 @@ pi : Double
 pi = 3.14159265358979323846
 
 public export
+fpi : Float
+fpi = 3.14159265358979323846
+
+public export
 euler : Double
 euler = 2.7182818284590452354
 
 public export
-fpi : Float
-fpi = pi
-
-public export
 feuler : Float
-feuler = euler
+feuler = 2.7182818284590452354
