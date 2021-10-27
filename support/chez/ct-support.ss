@@ -286,10 +286,23 @@
 (define ct-cast-string-float
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
-
 (define ct-cast-string-double
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
+
+(define ct-cast-float-double
+  (lambda (x) x))
+(define ct-cast-double-float
+  (lambda (x) x))
+
+(define ct-cast-integer-float
+  (lambda (xin)
+    (let [(x (vector-ref xin 1))]
+      (exact->inexact x))))
+(define ct-cast-integer-double
+  (lambda (xin)
+    (let [(x (vector-ref xin 1))]
+      (exact->inexact x))))
 
 (define ct-cast-char-boundedInt
   (lambda (x y)
@@ -346,18 +359,3 @@
 (define ct-exact-truncate-boundedUInt
   (lambda (x y)
     (ct-toUnsignedInt (exact-truncate x) y)))
-
-(define (ct-cast-float-double x)
-  x)
-(define (ct-cast-double-float x)
-  x)
-
-(define ct-cast-integer-float
-  (lambda (xin)
-    (let [(x (vector-ref xin 1))]
-      (exact->inexact x))))
-
-(define ct-cast-integer-double
-  (lambda (xin)
-    (let [(x (vector-ref xin 1))]
-      (exact->inexact x))))
