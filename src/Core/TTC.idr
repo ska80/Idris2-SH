@@ -644,15 +644,15 @@ export
                  34 => pure FloatCeiling
                  40 => pure DoubleExp
                  41 => pure DoubleLog
-                 42 => pure DoubleSin
-                 43 => pure DoubleCos
-                 44 => pure DoubleTan
-                 45 => pure DoubleASin
-                 46 => pure DoubleACos
-                 47 => pure DoubleATan
-                 48 => pure DoubleSqrt
-                 49 => pure DoubleFloor
-                 50 => pure DoubleCeiling
+                 43 => pure DoubleSin
+                 44 => pure DoubleCos
+                 45 => pure DoubleTan
+                 46 => pure DoubleASin
+                 47 => pure DoubleACos
+                 48 => pure DoubleATan
+                 49 => pure DoubleSqrt
+                 50 => pure DoubleFloor
+                 51 => pure DoubleCeiling
 
                  99 => do x <- fromBuf b; y <- fromBuf b; pure (Cast x y)
                  _ => corrupt "PrimFn 1"
