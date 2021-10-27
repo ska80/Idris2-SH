@@ -142,11 +142,11 @@ Show Int32 where
 export
 Show Int64 where
   showPrec = primNumShow prim__cast_Int64String
-
+{-FIXME_Float
 export
 Show Float where
   showPrec = primNumShow prim__cast_FloatString
-
+-}
 export
 Show Double where
   showPrec = primNumShow prim__cast_DoubleString

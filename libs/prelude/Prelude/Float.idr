@@ -48,7 +48,7 @@ interface Num fp => Neg fp => Fractional fp => FloatingPointPrimitives fp where
 
   ceiling : fp -> fp
 
-
+{-FIXME_Float
 -- Float
 
 public export
@@ -74,7 +74,7 @@ FloatingPointPrimitives Float where
   floor x = prim__floatFloor x
 
   ceiling x = prim__floatCeiling x
-
+-}
 
 -- Double
 
@@ -108,15 +108,16 @@ FloatingPointPrimitives Double where
 public export
 pi : Double
 pi = 3.14159265358979323846
-
+{-FIXME_Float
 public export
 fpi : Float
 fpi = 3.14159265358979323846
-
+-}
 public export
 euler : Double
 euler = 2.7182818284590452354
-
+{-FIXME_Float
 public export
 feuler : Float
 feuler = 2.7182818284590452354
+-}

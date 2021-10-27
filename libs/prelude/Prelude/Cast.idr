@@ -39,11 +39,11 @@ Cast Integer String where
 export
 Cast Char String where
   cast = prim__cast_CharString
-
+{-FIXME_Float
 export
 Cast Float String where
   cast = prim__cast_FloatString
-
+-}
 export
 Cast Double String where
   cast = prim__cast_DoubleString
@@ -93,11 +93,11 @@ Cast Int Integer where
 export
 Cast Char Integer where
   cast = prim__cast_CharInteger
-
+{-FIXME_Float
 export
 Cast Float Integer where
   cast = prim__cast_FloatInteger
-
+-}
 export
 Cast Double Integer where
   cast = prim__cast_DoubleInteger
@@ -151,11 +151,11 @@ Cast Integer Int where
 export
 Cast Char Int where
   cast = prim__cast_CharInt
-
+{-FIXME_Float
 export
 Cast Float Int where
   cast = prim__cast_FloatInt
-
+-}
 export
 Cast Double Int where
   cast = prim__cast_DoubleInt
@@ -246,7 +246,7 @@ export
 Cast Int64 Char where
   cast = prim__cast_Int64Char
 
-
+{-FIXME_Float
 -- To Float
 
 %inline
@@ -305,14 +305,14 @@ Cast Int32 Float where
 export
 Cast Int64 Float where
   cast = prim__cast_Int64Float
-
+-}
 
 -- To Double
-
+{-FIXME_Float
 export
 Cast Float Double where
   cast = prim__cast_FloatDouble
-
+-}
 export
 Cast Int Double where
   cast = prim__cast_IntDouble
@@ -387,11 +387,11 @@ Cast Bits64 Bits8 where
 export
 Cast String Bits8 where
   cast = prim__cast_StringBits8
-
+{-FIXME_Float
 export
 Cast Float Bits8 where
   cast = prim__cast_FloatBits8
-
+-}
 export
 Cast Double Bits8 where
   cast = prim__cast_DoubleBits8
@@ -446,11 +446,11 @@ Cast Bits64 Bits16 where
 export
 Cast String Bits16 where
   cast = prim__cast_StringBits16
-
+{-FIXME_Float
 export
 Cast Float Bits16 where
   cast = prim__cast_FloatBits16
-
+-}
 export
 Cast Double Bits16 where
   cast = prim__cast_DoubleBits16
@@ -505,11 +505,11 @@ Cast Bits64 Bits32 where
 export
 Cast String Bits32 where
   cast = prim__cast_StringBits32
-
+{-FIXME_Float
 export
 Cast Float Bits32 where
   cast = prim__cast_FloatBits32
-
+-}
 export
 Cast Double Bits32 where
   cast = prim__cast_DoubleBits32
@@ -563,11 +563,11 @@ Cast Bits32 Bits64 where
 export
 Cast String Bits64 where
   cast = prim__cast_StringBits64
-
+{-FIXME_Float
 export
 Cast Float Bits64 where
   cast = prim__cast_FloatBits64
-
+-}
 export
 Cast Double Bits64 where
   cast = prim__cast_DoubleBits64
@@ -601,11 +601,11 @@ Cast Int64 Bits64 where
 export
 Cast String Int8 where
   cast = prim__cast_StringInt8
-
+{-FIXME_Float
 export
 Cast Float Int8 where
   cast = prim__cast_FloatInt8
-
+-}
 export
 Cast Double Int8 where
   cast = prim__cast_DoubleInt8
@@ -659,11 +659,11 @@ Cast Int64 Int8 where
 export
 Cast String Int16 where
   cast = prim__cast_StringInt16
-
+{-FIXME_Float
 export
 Cast Float Int16 where
   cast = prim__cast_FloatInt16
-
+-}
 export
 Cast Double Int16 where
   cast = prim__cast_DoubleInt16
@@ -717,11 +717,11 @@ Cast Int64 Int16 where
 export
 Cast String Int32 where
   cast = prim__cast_StringInt32
-
+{-FIXME_Float
 export
 Cast Float Int32 where
   cast = prim__cast_FloatInt32
-
+-}
 export
 Cast Double Int32 where
   cast = prim__cast_DoubleInt32
@@ -775,11 +775,11 @@ Cast Int64 Int32 where
 export
 Cast String Int64 where
   cast = prim__cast_StringInt64
-
+{-FIXME_Float
 export
 Cast Float Int64 where
   cast = prim__cast_FloatInt64
-
+-}
 export
 Cast Double Int64 where
   cast = prim__cast_DoubleInt64
@@ -833,11 +833,11 @@ Cast Int32 Int64 where
 export
 Cast String Nat where
   cast = integerToNat . cast
-
+{-FIXME_Float
 export
 Cast Float Nat where
   cast = integerToNat . cast
-
+-}
 export
 Cast Double Nat where
   cast = integerToNat . cast
