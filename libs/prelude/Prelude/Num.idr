@@ -347,7 +347,7 @@ Integral Bits64 where
   mod x y
       = case y == 0 of
              False => prim__mod_Bits64 x y
-
+{-FIXME_Float
 -- Float
 
 public export
@@ -369,7 +369,7 @@ Abs Float where
 public export
 Fractional Float where
   (/) = prim__div_Float
-
+-}
 -- Double
 
 public export

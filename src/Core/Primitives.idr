@@ -480,7 +480,7 @@ gt (Ch x) (Ch y) = pure $ toInt (x > y)
 gt (Fl x) (Fl y) = pure $ toInt (x > y)
 gt (Db x) (Db y) = pure $ toInt (x > y)
 gt _ _ = Nothing
-
+{-FIXME_Float
 floatOp : (Float -> Float) -> Vect 1 (NF vars) -> Maybe (NF vars)
 floatOp f [NPrimVal fc (Fl x)] = Just (NPrimVal fc (Fl (f x)))
 floatOp f _ = Nothing
@@ -523,7 +523,7 @@ floatFloor = floatOp floor
 
 floatCeiling : Vect 1 (NF vars) -> Maybe (NF vars)
 floatCeiling = floatOp ceiling
-
+-}
 doubleOp : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
 doubleOp f [NPrimVal fc (Db x)] = Just (NPrimVal fc (Db (f x)))
 doubleOp f _ = Nothing
@@ -667,7 +667,7 @@ getOp StrCons = strCons
 getOp StrAppend = strAppend
 getOp StrReverse = strReverse
 getOp StrSubstr = strSubstr
-
+{-FIXME_Float
 getOp FloatExp = floatExp
 getOp FloatLog = floatLog
 getOp FloatPow = floatPow
@@ -680,6 +680,7 @@ getOp FloatATan = floatATan
 getOp FloatSqrt = floatSqrt
 getOp FloatFloor = floatFloor
 getOp FloatCeiling = floatCeiling
+-}
 getOp DoubleExp = doubleExp
 getOp DoubleLog = doubleLog
 getOp DoublePow = doublePow
