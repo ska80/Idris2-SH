@@ -212,11 +212,15 @@ record OptDesc where
 optSeparator : OptDesc
 optSeparator = MkOpt [] [] [] Nothing
 
+optSeparatorTitle : String -> OptDesc
+optSeparatorTitle title = MkOpt [] [] [] (Just title)
+
 showDefault : Show a => a -> String
 showDefault x = "(default " ++ show x ++ ")"
 
 options : List OptDesc
-options = [MkOpt ["--check", "-c"] [] [CheckOnly]
+options = [optSeparatorTitle "Options controlling the compiler",
+           MkOpt ["--check", "-c"] [] [CheckOnly]
               (Just "Exit after checking source file"),
            MkOpt ["--output", "-o"] [Required "file"] (\f => [OutputFile f, Quiet])
               (Just "Specify output file"),
@@ -227,25 +231,27 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            MkOpt ["--codegen", "--cg"] [Required "backend"] (\f => [SetCG f])
               (Just $ "Set code generator " ++ showDefault (codegen defaultSession)),
            MkOpt ["--incremental-cg", "--inc"] [Required "backend"] (\f => [IncrementalCG f])
-             (Just "Incremental code generation on given backend"),
+              (Just "Incremental code generation on given backend"),
            MkOpt ["--whole-program", "--wp"] [] [WholeProgram]
-             (Just "Use whole program compilation (overrides --inc)"),
+              (Just "Use whole program compilation (overrides --inc)"),
+           MkOpt ["--total"] [] [Total]
+              (Just "Require functions to be total by default"),
+           MkOpt ["--profile"] [] [Profile]
+              (Just "Generate profile data when compiling, if supported"),
            MkOpt ["--directive"] [Required "directive"] (\d => [Directive d])
               (Just $ "Pass a directive to the current code generator"),
            MkOpt ["--package", "-p"] [Required "package"] (\f => [PkgPath f])
               (Just "Add a package as a dependency"),
+
+           optSeparatorTitle "Options controlling the compiler output",
            MkOpt ["--source-dir"] [Required "dir"] (\d => [SourceDir d])
               (Just $ "Set source directory"),
            MkOpt ["--build-dir"] [Required "dir"] (\d => [BuildDir d])
               (Just $ "Set build directory"),
            MkOpt ["--output-dir"] [Required "dir"] (\d => [OutputDir d])
               (Just $ "Set output directory"),
-           MkOpt ["--profile"] [] [Profile]
-              (Just "Generate profile data when compiling, if supported"),
 
-           optSeparator,
-           MkOpt ["--total"] [] [Total]
-              (Just "Require functions to be total by default"),
+           optSeparatorTitle "Miscellanious compiler options",
            MkOpt ["-Werror"] [] [WarningsAsErrors]
               (Just "Treat warnings as errors"),
            MkOpt ["-Wno-shadowing"] [] [IgnoreShadowingWarnings]
@@ -253,11 +259,11 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
 
            optSeparator,
            MkOpt ["-Xcheck-hashes"] [] [HashesInsteadOfModTime]
-             (Just "Use SHA256 hashes instead of modification time to determine if a source file needs rebuilding"),
+              (Just "Use SHA256 hashes instead of modification time to determine if a source file needs rebuilding"),
            MkOpt ["-Xcase-tree-opt"] [] [CaseTreeHeuristics]
               (Just "Apply experimental optimizations to case tree generation"),
 
-           optSeparator,
+           optSeparatorTitle "Options to display paths",
            MkOpt ["--prefix"] [] [Directory Prefix]
               (Just "Show installation prefix"),
            MkOpt ["--paths"] [] [Directory BlodwenPaths]
@@ -267,20 +273,19 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            MkOpt ["--list-packages"] [] [ListPackages]
               (Just "List installed packages"),
 
-           optSeparator,
+           optSeparatorTitle "Options controlling the package build",
            MkOpt ["--init"] [Optional "package file"]
               (\ f => [Package Init f])
               (Just "Interactively initialise a new project"),
-
            MkOpt ["--build"] [Optional "package file"]
-               (\f => [Package Build f])
+              (\f => [Package Build f])
               (Just "Build modules/executable for the given package"),
            MkOpt ["--install"] [Optional "package file"]
               (\f => [Package Install f])
               (Just "Install the given package"),
            MkOpt ["--install-with-src"] [Optional "package file"]
               (\f => [Package InstallWithSrc f])
-              (Just "Install the given package"),
+              (Just "Install the given package with source files"),
            MkOpt ["--mkdoc"] [Optional "package file"]
               (\f => [Package MkDoc f])
               (Just "Build documentation for the given package"),
@@ -296,37 +301,41 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            MkOpt ["--ignore-missing-ipkg"] [] [IgnoreMissingIPKG]
               (Just "Fail silently if a dependency is missing."),
 
-           optSeparator,
+           optSeparatorTitle "Options controlling the IDE integration",
            MkOpt ["--ide-mode"] [] [IdeMode]
               (Just "Run the REPL with machine-readable syntax"),
            MkOpt ["--ide-mode-socket"] [Optional "host:port"]
                  (\hp => [IdeModeSocket $ fromMaybe (formatSocketAddress (ideSocketModeAddress [])) hp])
               (Just $ "Run the ide socket mode on given host and port " ++
                       showDefault (formatSocketAddress (ideSocketModeAddress []))),
-
-           optSeparator,
            MkOpt ["--client"] [Required "REPL command"] (\f => [RunREPL f])
               (Just "Run a REPL command then quit immediately"),
+
+           optSeparatorTitle "Options controlling the logging and error output",
            MkOpt ["--timing"] [] [Timing]
               (Just "Display timing logs"),
+           MkOpt ["--log"] [RequiredLogLevel "log level"] (\l => [Logging l])
+              (Just "Global log level (0 by default)"),
+           MkOpt ["--alt-error-count"] [RequiredNat "alternative count"] (\c => [AltErrorCount c])
+              (Just "Outputs errors for the given number of alternative parsing attempts."),
 
-           optSeparator,
+           optSeparatorTitle "Options controlling the verbosity level",
            MkOpt ["--no-banner"] [] [NoBanner]
               (Just "Suppress the banner"),
            MkOpt ["--quiet", "-q"] [] [Quiet]
               (Just "Quiet mode; display fewer messages"),
+           MkOpt ["--verbose"] [] [Verbose]
+              (Just "Verbose mode (default)"),
+
+           optSeparatorTitle "Options controlling the terminal output",
            MkOpt ["--console-width"] [AutoNat "console width"] (\l => [ConsoleWidth l])
               (Just "Width for console output (0 for unbounded) (auto by default)"),
            MkOpt ["--color", "--colour"] [] ([Color True])
               (Just "Forces colored console output (enabled by default)"),
            MkOpt ["--no-color", "--no-colour"] [] ([Color False])
               (Just "Disables colored console output"),
-           MkOpt ["--verbose"] [] [Verbose]
-              (Just "Verbose mode (default)"),
-           MkOpt ["--log"] [RequiredLogLevel "log level"] (\l => [Logging l])
-              (Just "Global log level (0 by default)"),
 
-           optSeparator,
+           optSeparatorTitle "Options controlling the diagnostic output",
            MkOpt ["--version", "-v"] [] [Version]
               (Just "Display version string"),
            MkOpt ["--help", "-h", "-?"] [Optional "topic"] (\ tp => [Help (tp >>= recogniseHelpTopic)])
@@ -347,11 +356,8 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
               Nothing, -- dump VM Code to the given file
            MkOpt ["--debug-elab-check"] [] [DebugElabCheck]
               Nothing, -- do more elaborator checks (currently conversion in LinearCheck)
-           MkOpt ["--alt-error-count"] [RequiredNat "alternative count"] (\c => [AltErrorCount c])
-              (Just "Outputs errors for the given number of alternative parsing attempts."),
 
-           optSeparator,
-           -- bash completion
+           optSeparatorTitle "Options for Shell integration",
            MkOpt ["--bash-completion"]
                  [ Required "input"
                  , Required "previous input"]
@@ -364,7 +370,8 @@ options = [MkOpt ["--check", "-c"] [] [CheckOnly]
            ]
 
 optShow : OptDesc -> (String, Maybe String)
-optShow (MkOpt [] _ _ _) = ("", Just "")
+optShow (MkOpt [] _ _ Nothing) = ("", Just "")
+optShow (MkOpt [] _ _ (Just title)) = ("\n" ++ title ++ ":", Just "")
 optShow (MkOpt flags argdescs action help) = (showSep ", " flags ++ " " ++
                                               showSep " " (map show argdescs),
                                               help)
@@ -403,8 +410,7 @@ versionMsg = "Idris 2, version " ++ show version
 export
 usage : String
 usage = versionMsg ++ "\n" ++
-        "Usage: idris2 [options] [input file]\n\n" ++
-        "Available options:\n" ++
+        "Usage: idris2 [options] [input file]\n" ++
         optsUsage ++
         "\n" ++
         "Environment variables:\n" ++
