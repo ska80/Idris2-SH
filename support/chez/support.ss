@@ -133,15 +133,14 @@
   (lambda (x)
     (cast-num (string->number (destroy-prefix x)))))
 
-(define (cast-float-double x)
-  x)
-(define (cast-double-float x)
-  x)
+(define cast-float-double
+  (lambda (x) x))
+(define cast-double-float
+  (lambda (x) x))
 
 (define cast-integer-float
   (lambda (x)
     (exact->inexact x)))
-
 (define cast-integer-double
   (lambda (x)
     (exact->inexact x)))
