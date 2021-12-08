@@ -1,5 +1,7 @@
 module Prelude.Cast
 
+import Builtin
+
 import Prelude.Basics
 import Prelude.Num
 import Prelude.Types
