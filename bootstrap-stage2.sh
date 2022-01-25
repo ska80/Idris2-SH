@@ -15,9 +15,6 @@ fi
 
 IDRIS2_CG="${IDRIS2_CG-"chez"}"
 
-BOOT_PATH_BASE=$IDRIS_PREFIX/idris2-$IDRIS2_VERSION
-IDRIS2_BOOT_PATH="$BOOT_PATH_BASE/prelude$SEP	$BOOT_PATH_BASE/base$SEP	$BOOT_PATH_BASE/contrib$SEP	$BOOT_PATH_BASE/network	$BOOT_PATH_BASE/test"
-
 # BOOTSTRAP_PREFIX must be the "clean" build root, without cygpath -m
 # Otherwise, we get 'git: Bad address'
 echo "$BOOTSTRAP_PREFIX"
@@ -31,5 +28,5 @@ $MAKE install IDRIS2_CG="$IDRIS2_CG" LD_LIBRARY_PATH="$DYLIB_PATH" \
 # Now rebuild everything properly
 $MAKE clean-libs IDRIS2_BOOT="$BOOTSTRAP_PREFIX/bin/idris2"
 $MAKE all IDRIS2_BOOT="$BOOTSTRAP_PREFIX/bin/idris2" IDRIS2_CG="$IDRIS2_CG" \
-    IDRIS2_PATH="$IDRIS2_BOOT_PATH" LD_LIBRARY_PATH="$DYLIB_PATH" \
+    LD_LIBRARY_PATH="$DYLIB_PATH" \
     SCHEME="$SCHEME"
