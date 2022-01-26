@@ -49,9 +49,10 @@ TEST_PREFIX ?= ${IDRIS2_CURDIR}/build/env
 IDRIS2_BOOT_PREFIX := ${IDRIS2_CURDIR}/bootstrap-build
 
 # These are the library path in the build dir to be used during build
-IDRIS2_LIBRARIES = prelude base contrib network test linear
-$(foreach library,$(IDRIS2_LIBRARIES),$(eval IDRIS2_BOOT_PATH := $(IDRIS2_BOOT_PATH)$(IDRIS2_CURDIR)/libs/$(library)/build/ttc$(SEP)))
-export IDRIS2_BOOT_PATH
+#IDRIS2_LIBRARIES = prelude base contrib network test linear
+#$(foreach library,$(IDRIS2_LIBRARIES),$(eval IDRIS2_BOOT_PATH := $(IDRIS2_BOOT_PATH)$(IDRIS2_CURDIR)/libs/$(library)/build/ttc$(SEP)))
+#export IDRIS2_BOOT_PATH
+export IDRIS2_BOOT_PATH := "${IDRIS2_CURDIR}/libs/prelude/build/ttc${SEP}${IDRIS2_CURDIR}/libs/base/build/ttc${SEP}${IDRIS2_CURDIR}/libs/contrib/build/ttc${SEP}${IDRIS2_CURDIR}/libs/network/build/ttc${SEP}${IDRIS2_CURDIR}/libs/test/build/ttc${SEP}${IDRIS2_CURDIR}/libs/linear/build/ttc${SEP}"
 
 export SCHEME
 
