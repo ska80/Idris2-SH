@@ -53,7 +53,7 @@ IDRIS2_LIBRARIES = prelude base contrib network test linear
 
 IDRIS2_BOOT_PATH =
 $(foreach library,$(IDRIS2_LIBRARIES),$(eval IDRIS2_BOOT_PATH := $(IDRIS2_BOOT_PATH)$(IDRIS2_CURDIR)/libs/$(library)/build/ttc$(SEP)))
-export IDRIS2_BOOT_PATH="$(IDRIS2_BOOT_PATH)"
+export IDRIS2_BOOT_PATH := "$(IDRIS2_BOOT_PATH)"
 
 export SCHEME
 
