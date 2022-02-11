@@ -555,7 +555,7 @@ jsPrim nm docs = case (dropAllNS nm, docs) of
     case searchForeign tys ["node"] of
       Right _ => do
         addToPreamble "prim__os" $
-          "const _sysos = ((o => o === 'linux'?'unix':o==='win32'?'windows':o)" ++
+          "const _sysos = ((o => o === 'linux' ? 'unix' : o === 'win32' ? 'windows' : o)" ++
           "(require('os').platform()));"
         pure $ Text $ esName "sysos"
       Left  _ =>
@@ -759,7 +759,7 @@ compileToES : Ref Ctxt Defs -> (cg : CG) -> ClosedTerm -> List String -> Core St
 compileToES c cg tm ccTypes = do
   _ <- initNoMangle "javascript" validJSName
 
-  cdata      <- getCompileData False Cases tm
+  cdata <- getCompileData False Cases tm
 
   -- read a derive the codegen mode to use from
   -- user defined directives for the
@@ -793,9 +793,15 @@ compileToES c cg tm ccTypes = do
   mainName <- compact . var !(get NoMangleMap) <$> getOrRegisterRef mainExpr
 
   -- main function and list of all declarations
-  let main =  "try{"
-           ++ mainName
-           ++ "()}catch(e){if(e instanceof IdrisError){console.log('ERROR: ' + e.message)}else{throw e} }"
+  let main = """
+    try {
+     \{ mainName }();
+    } catch(e) {
+     if (e instanceof IdrisError) {
+      console.log('ERROR: ' + e.message);
+     } else { throw e; }
+    }
+    """
 
       allDecls = fastUnlines $ foreigns ++ defDecls
 
@@ -808,4 +814,4 @@ compileToES c cg tm ccTypes = do
   -- support files (if any)
   let pre = showSep "\n" $ static_preamble :: (values $ preamble st)
 
-  pure $ fastUnlines [pre,allDecls,main]
+  pure $ fastUnlines [pre, allDecls, main]
