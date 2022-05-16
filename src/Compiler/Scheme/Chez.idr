@@ -94,7 +94,7 @@ schHeader chez libs whole
       [(i3nt ti3nt a6nt ta6nt) (load-shared-object "msvcrt.dll")]
       [else (load-shared-object "libc.so")])
 
-    \{ showSep "\n" (map (\x => "(load-shared-object \"" ++ escapeStringChez x ++ "\")") libs) }
+    \{ showSep "\n" (map (\x => "(blodwen-load-shared-library \"" ++ escapeStringChez x ++ "\")") libs) }
 
     \{ ifThenElse whole
                   "(let ()"
@@ -208,9 +208,9 @@ loadLib : {auto c : Ref Ctxt Defs} ->
 loadLib appdir clib
     = do (fname, fullname) <- locate clib
          copyLib (appdir </> fname, fullname)
-         pure $ "(load-shared-object \""
-                                    ++ escapeStringChez fname
-                                    ++ "\")\n"
+         pure $ "(blodwen-load-shared-library \""
+                ++ escapeStringChez fname
+                ++ "\")\n"
 
 loadSO : {auto c : Ref Ctxt Defs} ->
          String -> String -> Core String

@@ -29,10 +29,10 @@ environment variables. If neither is set, it uses ``cc``.
 
 This code generator does not yet support `:exec`, just `:c`.
 
-Also note that, if you link with any dynamic libraries for interfacing with
-C, you will need to arrange for them to be accessible via ``LD_LIBRARY_PATH``
-when running the executable. The default Idris 2 support libraries are
-statically linked.
+Also note that, if you link with any dynamic libraries for interfacing with C,
+you will need to arrange for them to be accessible via ``LD_LIBRARY_PATH`` or
+``DYLD_LIBRARY_PATH`` if on `macOS` when running the executable. The default
+Idris 2 support libraries are statically linked.
 
 Extending RefC
 ==============
