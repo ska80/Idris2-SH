@@ -168,8 +168,9 @@ TTC PrimType where
   toBuf b Bits64Type  = tag 9
   toBuf b StringType  = tag 10
   toBuf b CharType    = tag 11
-  toBuf b DoubleType  = tag 12
-  toBuf b WorldType   = tag 13
+  toBuf b Float32Type = tag 12
+  toBuf b Float64Type = tag 13
+  toBuf b WorldType   = tag 14
 
   fromBuf b = case !getTag of
     0  => pure IntType
@@ -184,8 +185,9 @@ TTC PrimType where
     9  => pure Bits64Type
     10 => pure StringType
     11 => pure CharType
-    12 => pure DoubleType
-    13 => pure WorldType
+    12 => pure Float32Type
+    13 => pure Float64Type
+    14 => pure WorldType
     _  => corrupt "PrimType"
 
 export
@@ -202,9 +204,10 @@ TTC Constant where
   toBuf b (B64 x)  = do tag 9;  toBuf b x
   toBuf b (Str x)  = do tag 10; toBuf b x
   toBuf b (Ch x)   = do tag 11; toBuf b x
-  toBuf b (Db x)   = do tag 12; toBuf b x
-  toBuf b (PrT x)  = do tag 13; toBuf b x
-  toBuf b WorldVal = tag 14
+  toBuf b (F32 x)  = do tag 12; toBuf b x
+  toBuf b (F64 x)  = do tag 13; toBuf b x
+  toBuf b (PrT x)  = do tag 14; toBuf b x
+  toBuf b WorldVal = tag 15
 
   fromBuf b
       = case !getTag of
@@ -220,9 +223,10 @@ TTC Constant where
              9  => do x <- fromBuf b; pure (B64 x)
              10 => do x <- fromBuf b; pure (Str x)
              11 => do x <- fromBuf b; pure (Ch x)
-             12 => do x <- fromBuf b; pure (Db x)
-             13 => do x <- fromBuf b; pure (PrT x)
-             14 => pure WorldVal
+             12 => do x <- fromBuf b; pure (F32 x)
+             13 => do x <- fromBuf b; pure (F64 x)
+             14 => do x <- fromBuf b; pure (PrT x)
+             15 => pure WorldVal
              _ => corrupt "Constant"
 
 export
@@ -595,18 +599,31 @@ export
   toBuf b StrReverse = tag 17
   toBuf b StrSubstr = tag 18
 
-  toBuf b DoubleExp = tag 19
-  toBuf b DoubleLog = tag 20
-  toBuf b DoublePow = tag 21
-  toBuf b DoubleSin = tag 22
-  toBuf b DoubleCos = tag 23
-  toBuf b DoubleTan = tag 24
-  toBuf b DoubleASin = tag 25
-  toBuf b DoubleACos = tag 26
-  toBuf b DoubleATan = tag 27
-  toBuf b DoubleSqrt = tag 32
-  toBuf b DoubleFloor = tag 33
-  toBuf b DoubleCeiling = tag 34
+  toBuf b Float32Exp = tag 19
+  toBuf b Float32Log = tag 20
+  toBuf b Float32Pow = tag 21
+  toBuf b Float32Sin = tag 22
+  toBuf b Float32Cos = tag 23
+  toBuf b Float32Tan = tag 24
+  toBuf b Float32ASin = tag 25
+  toBuf b Float32ACos = tag 26
+  toBuf b Float32ATan = tag 27
+  toBuf b Float32Sqrt = tag 32
+  toBuf b Float32Floor = tag 33
+  toBuf b Float32Ceiling = tag 34
+
+  toBuf b Float64Exp = tag 40
+  toBuf b Float64Log = tag 41
+  toBuf b Float64Pow = tag 42
+  toBuf b Float64Sin = tag 43
+  toBuf b Float64Cos = tag 44
+  toBuf b Float64Tan = tag 45
+  toBuf b Float64ASin = tag 46
+  toBuf b Float64ACos = tag 47
+  toBuf b Float64ATan = tag 48
+  toBuf b Float64Sqrt = tag 49
+  toBuf b Float64Floor = tag 50
+  toBuf b Float64Ceiling = tag 51
 
   toBuf b (Cast x y) = do tag 99; toBuf b x; toBuf b y
   toBuf b BelieveMe = tag 100
@@ -627,17 +644,30 @@ export
                  12 => pure StrHead
                  13 => pure StrTail
                  17 => pure StrReverse
-                 19 => pure DoubleExp
-                 20 => pure DoubleLog
-                 22 => pure DoubleSin
-                 23 => pure DoubleCos
-                 24 => pure DoubleTan
-                 25 => pure DoubleASin
-                 26 => pure DoubleACos
-                 27 => pure DoubleATan
-                 32 => pure DoubleSqrt
-                 33 => pure DoubleFloor
-                 34 => pure DoubleCeiling
+
+                 19 => pure Float32Exp
+                 20 => pure Float32Log
+                 22 => pure Float32Sin
+                 23 => pure Float32Cos
+                 24 => pure Float32Tan
+                 25 => pure Float32ASin
+                 26 => pure Float32ACos
+                 27 => pure Float32ATan
+                 32 => pure Float32Sqrt
+                 33 => pure Float32Floor
+                 34 => pure Float32Ceiling
+
+                 40 => pure Float64Exp
+                 41 => pure Float64Log
+                 43 => pure Float64Sin
+                 44 => pure Float64Cos
+                 45 => pure Float64Tan
+                 46 => pure Float64ASin
+                 47 => pure Float64ACos
+                 48 => pure Float64ATan
+                 49 => pure Float64Sqrt
+                 50 => pure Float64Floor
+                 51 => pure Float64Ceiling
 
                  99 => do x <- fromBuf b; y <- fromBuf b; pure (Cast x y)
                  _ => corrupt "PrimFn 1"
@@ -658,7 +688,8 @@ export
                  14 => pure StrIndex
                  15 => pure StrCons
                  16 => pure StrAppend
-                 21 => pure DoublePow
+                 21 => pure Float32Pow
+                 42 => pure Float64Pow
                  35 => do ty <- fromBuf b; pure (ShiftL ty)
                  36 => do ty <- fromBuf b; pure (ShiftR ty)
                  37 => do ty <- fromBuf b; pure (BAnd ty)
@@ -800,22 +831,23 @@ TTC CFType where
   toBuf b CFUnsigned32 = tag 4
   toBuf b CFUnsigned64 = tag 5
   toBuf b CFString = tag 6
-  toBuf b CFDouble = tag 7
-  toBuf b CFChar = tag 8
-  toBuf b CFPtr = tag 9
-  toBuf b CFWorld = tag 10
-  toBuf b (CFFun s t) = do tag 11; toBuf b s; toBuf b t
-  toBuf b (CFIORes t) = do tag 12; toBuf b t
-  toBuf b (CFStruct n a) = do tag 13; toBuf b n; toBuf b a
-  toBuf b (CFUser n a) = do tag 14; toBuf b n; toBuf b a
-  toBuf b CFGCPtr = tag 15
-  toBuf b CFBuffer = tag 16
-  toBuf b CFInt8 = tag 17
-  toBuf b CFInt16 = tag 18
-  toBuf b CFInt32 = tag 19
-  toBuf b CFInt64 = tag 20
-  toBuf b CFForeignObj = tag 21
-  toBuf b CFInteger = tag 22
+  toBuf b CFFloat32 = tag 7
+  toBuf b CFFloat64 = tag 8
+  toBuf b CFChar = tag 9
+  toBuf b CFPtr = tag 10
+  toBuf b CFWorld = tag 11
+  toBuf b (CFFun s t) = do tag 12; toBuf b s; toBuf b t
+  toBuf b (CFIORes t) = do tag 13; toBuf b t
+  toBuf b (CFStruct n a) = do tag 14; toBuf b n; toBuf b a
+  toBuf b (CFUser n a) = do tag 15; toBuf b n; toBuf b a
+  toBuf b CFGCPtr = tag 16
+  toBuf b CFBuffer = tag 17
+  toBuf b CFInt8 = tag 18
+  toBuf b CFInt16 = tag 19
+  toBuf b CFInt32 = tag 20
+  toBuf b CFInt64 = tag 21
+  toBuf b CFForeignObj = tag 22
+  toBuf b CFInteger = tag 23
 
   fromBuf b
       = case !getTag of
@@ -826,22 +858,23 @@ TTC CFType where
              4 => pure CFUnsigned32
              5 => pure CFUnsigned64
              6 => pure CFString
-             7 => pure CFDouble
-             8 => pure CFChar
-             9 => pure CFPtr
-             10 => pure CFWorld
-             11 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
-             12 => do t <- fromBuf b; pure (CFIORes t)
-             13 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
-             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
-             15 => pure CFGCPtr
-             16 => pure CFBuffer
-             17 => pure CFInt8
-             18 => pure CFInt16
-             19 => pure CFInt32
-             20 => pure CFInt64
-             21 => pure CFForeignObj
-             22 => pure CFInteger
+             7 => pure CFFloat32
+             8 => pure CFFloat64
+             9 => pure CFChar
+             10 => pure CFPtr
+             11 => pure CFWorld
+             12 => do s <- fromBuf b; t <- fromBuf b; pure (CFFun s t)
+             13 => do t <- fromBuf b; pure (CFIORes t)
+             14 => do n <- fromBuf b; a <- fromBuf b; pure (CFStruct n a)
+             15 => do n <- fromBuf b; a <- fromBuf b; pure (CFUser n a)
+             16 => pure CFGCPtr
+             17 => pure CFBuffer
+             18 => pure CFInt8
+             19 => pure CFInt16
+             20 => pure CFInt32
+             21 => pure CFInt64
+             22 => pure CFForeignObj
+             23 => pure CFInteger
              _ => corrupt "CFType"
 
 export
@@ -917,7 +950,7 @@ TTC PrimNames where
       = do toBuf b (fromIntegerName l)
            toBuf b (fromStringName l)
            toBuf b (fromCharName l)
-           toBuf b (fromDoubleName l)
+           toBuf b (fromFloatName l)
            toBuf b (fromTTImpName l)
            toBuf b (fromNameName l)
            toBuf b (fromDeclsName l)
@@ -925,11 +958,11 @@ TTC PrimNames where
       = do i <- fromBuf b
            str <- fromBuf b
            c <- fromBuf b
-           d <- fromBuf b
+           f <- fromBuf b
            t <- fromBuf b
            n <- fromBuf b
            dl <- fromBuf b
-           pure (MkPrimNs i str c d t n dl)
+           pure (MkPrimNs i str c f t n dl)
 
 export
 TTC HoleInfo where

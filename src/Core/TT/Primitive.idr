@@ -29,7 +29,8 @@ data PrimType
     | Bits64Type
     | StringType
     | CharType
-    | DoubleType
+    | Float32Type
+    | Float64Type
     | WorldType
 
 %name PrimType pty
@@ -48,7 +49,8 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch  Char
-    | Db  Double
+    | F32 Float32
+    | F64 Float64
     | PrT PrimType
     | WorldVal
 
@@ -69,7 +71,8 @@ isConstantType (UN (Basic n)) = case n of
   "Bits64"  => Just Bits64Type
   "String"  => Just StringType
   "Char"    => Just CharType
-  "Double"  => Just DoubleType
+  "Float32" => Just Float32Type
+  "Float64" => Just Float64Type
   "%World"  => Just WorldType
   _ => Nothing
 isConstantType _ = Nothing
@@ -89,7 +92,8 @@ primTypeEq Int64Type Int64Type = Just Refl
 primTypeEq IntegerType IntegerType = Just Refl
 primTypeEq StringType StringType = Just Refl
 primTypeEq CharType CharType = Just Refl
-primTypeEq DoubleType DoubleType = Just Refl
+primTypeEq Float32Type Float32Type = Just Refl
+primTypeEq Float64Type Float64Type = Just Refl
 primTypeEq WorldType WorldType = Just Refl
 primTypeEq _ _ = Nothing
 
@@ -131,7 +135,8 @@ constantEq (Str x) (Str y) = case decEq x y of
 constantEq (Ch x) (Ch y) = case decEq x y of
                                 Yes Refl => Just Refl
                                 No contra => Nothing
-constantEq (Db x) (Db y) = Nothing -- no DecEq for Doubles!
+constantEq (F32 x) (F32 y) = Nothing -- no DecEq for Float32!
+constantEq (F64 x) (F64 y) = Nothing -- no DecEq for Float64!
 constantEq (PrT x) (PrT y) = (\xy => cong PrT xy) <$> primTypeEq x y
 constantEq WorldVal WorldVal = Just Refl
 
@@ -151,7 +156,8 @@ Show PrimType where
   show Bits64Type = "Bits64"
   show StringType = "String"
   show CharType = "Char"
-  show DoubleType = "Double"
+  show Float32Type = "Float32"
+  show Float64Type = "Float64"
   show WorldType = "%World"
 
 export
@@ -168,7 +174,8 @@ Show Constant where
   show (B64 x) = show x
   show (Str x) = show x
   show (Ch x) = show x
-  show (Db x) = show x
+  show (F32 x) = show x
+  show (F64 x) = show x
   show (PrT x) = show x
   show WorldVal = "%MkWorld"
 
@@ -186,7 +193,8 @@ Pretty IdrisSyntax PrimType where
     Bits64Type => "Bits64"
     StringType => "String"
     CharType => "Char"
-    DoubleType => "Double"
+    Float32Type => "Float32"
+    Float64Type => "Float64"
     WorldType => "%World"
 
 export
@@ -209,7 +217,8 @@ Eq PrimType where
   Bits64Type == Bits64Type = True
   StringType == StringType = True
   CharType == CharType = True
-  DoubleType == DoubleType = True
+  Float32Type == Float32Type = True
+  Float64Type == Float64Type = True
   WorldType == WorldType = True
   _ == _ = False
 
@@ -227,7 +236,8 @@ Eq Constant where
   (B64 x) == (B64 y) = x == y
   (Str x) == (Str y) = x == y
   (Ch x) == (Ch y) = x == y
-  (Db x) == (Db y) = x == y
+  (F32 x) == (F32 y) = x == y
+  (F64 x) == (F64 y) = x == y
   (PrT x) == (PrT y) = x == y
   WorldVal == WorldVal = True
   _ == _ = False
@@ -249,8 +259,9 @@ Ord PrimType where
       tag Bits64Type  = 10
       tag StringType  = 11
       tag CharType    = 12
-      tag DoubleType  = 13
-      tag WorldType   = 14
+      tag Float32Type = 13
+      tag Float64Type = 14
+      tag WorldType   = 15
 
 export
 Ord Constant where
@@ -266,7 +277,8 @@ Ord Constant where
     B64 x `compare` B64 y = compare x y
     Str x `compare` Str y = compare x y
     Ch x `compare` Ch y = compare x y
-    Db x `compare` Db y = compare x y
+    F32 x `compare` F32 y = compare x y
+    F64 x `compare` F64 y = compare x y
     PrT x `compare` PrT y = compare x y
     compare x y = compare (tag x) (tag y)
       where
@@ -283,9 +295,10 @@ Ord Constant where
         tag (B64 _) = 9
         tag (Str _) = 10
         tag (Ch _) = 11
-        tag (Db _) = 12
-        tag (PrT _) = 13
-        tag WorldVal = 14
+        tag (F32 _) = 12
+        tag (F64 _) = 13
+        tag (PrT _) = 14
+        tag WorldVal = 15
 
 -- for typecase
 export
@@ -299,12 +312,13 @@ primTypeTag Bits32Type = 7
 primTypeTag Bits64Type = 8
 primTypeTag StringType = 9
 primTypeTag CharType = 10
-primTypeTag DoubleType = 11
-primTypeTag WorldType = 12
-primTypeTag Int8Type = 13
-primTypeTag Int16Type = 14
-primTypeTag Int32Type = 15
-primTypeTag Int64Type = 16
+primTypeTag Float32Type = 11
+primTypeTag Float64Type = 12
+primTypeTag WorldType = 13
+primTypeTag Int8Type = 14
+primTypeTag Int16Type = 15
+primTypeTag Int32Type = 16
+primTypeTag Int64Type = 17
 
 ||| Precision of integral types.
 public export
@@ -380,18 +394,31 @@ data PrimFn : Nat -> Type where
      StrReverse : PrimFn 1
      StrSubstr : PrimFn 3
 
-     DoubleExp : PrimFn 1
-     DoubleLog : PrimFn 1
-     DoublePow : PrimFn 2
-     DoubleSin : PrimFn 1
-     DoubleCos : PrimFn 1
-     DoubleTan : PrimFn 1
-     DoubleASin : PrimFn 1
-     DoubleACos : PrimFn 1
-     DoubleATan : PrimFn 1
-     DoubleSqrt : PrimFn 1
-     DoubleFloor : PrimFn 1
-     DoubleCeiling : PrimFn 1
+     Float32Exp : PrimFn 1
+     Float32Log : PrimFn 1
+     Float32Pow : PrimFn 2
+     Float32Sin : PrimFn 1
+     Float32Cos : PrimFn 1
+     Float32Tan : PrimFn 1
+     Float32ASin : PrimFn 1
+     Float32ACos : PrimFn 1
+     Float32ATan : PrimFn 1
+     Float32Sqrt : PrimFn 1
+     Float32Floor : PrimFn 1
+     Float32Ceiling : PrimFn 1
+
+     Float64Exp : PrimFn 1
+     Float64Log : PrimFn 1
+     Float64Pow : PrimFn 2
+     Float64Sin : PrimFn 1
+     Float64Cos : PrimFn 1
+     Float64Tan : PrimFn 1
+     Float64ASin : PrimFn 1
+     Float64ACos : PrimFn 1
+     Float64ATan : PrimFn 1
+     Float64Sqrt : PrimFn 1
+     Float64Floor : PrimFn 1
+     Float64Ceiling : PrimFn 1
 
      Cast : PrimType -> PrimType -> PrimFn 1
      BelieveMe : PrimFn 3
@@ -425,18 +452,33 @@ Show (PrimFn arity) where
   show StrAppend = "++"
   show StrReverse = "op_strrev"
   show StrSubstr = "op_strsubstr"
-  show DoubleExp = "op_doubleExp"
-  show DoubleLog = "op_doubleLog"
-  show DoublePow = "op_doublePow"
-  show DoubleSin = "op_doubleSin"
-  show DoubleCos = "op_doubleCos"
-  show DoubleTan = "op_doubleTan"
-  show DoubleASin = "op_doubleASin"
-  show DoubleACos = "op_doubleACos"
-  show DoubleATan = "op_doubleATan"
-  show DoubleSqrt = "op_doubleSqrt"
-  show DoubleFloor = "op_doubleFloor"
-  show DoubleCeiling = "op_doubleCeiling"
+
+  show Float32Exp = "op_float32Exp"
+  show Float32Log = "op_float32Log"
+  show Float32Pow = "op_float32Pow"
+  show Float32Sin = "op_float32Sin"
+  show Float32Cos = "op_float32Cos"
+  show Float32Tan = "op_float32Tan"
+  show Float32ASin = "op_float32ASin"
+  show Float32ACos = "op_float32ACos"
+  show Float32ATan = "op_float32ATan"
+  show Float32Sqrt = "op_float32Sqrt"
+  show Float32Floor = "op_float32Floor"
+  show Float32Ceiling = "op_float32Ceiling"
+
+  show Float64Exp = "op_float64Exp"
+  show Float64Log = "op_float64Log"
+  show Float64Pow = "op_float64Pow"
+  show Float64Sin = "op_float64Sin"
+  show Float64Cos = "op_float64Cos"
+  show Float64Tan = "op_float64Tan"
+  show Float64ASin = "op_float64ASin"
+  show Float64ACos = "op_float64ACos"
+  show Float64ATan = "op_float64ATan"
+  show Float64Sqrt = "op_float64Sqrt"
+  show Float64Floor = "op_float64Floor"
+  show Float64Ceiling = "op_float64Ceiling"
+
   show (Cast x y) = "cast-" ++ show x ++ "-" ++ show y
   show BelieveMe = "believe_me"
   show Crash = "crash"
@@ -467,18 +509,33 @@ prettyOp op@StrCons [v1,v2] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "::"
 prettyOp op@StrAppend [v1,v2] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "++" <++> v2
 prettyOp op@StrReverse [v] = annotate (Fun $ UN $ Basic $ show op) "reverse" <++> v
 prettyOp op@StrSubstr [v1,v2,v3] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "[" <+> v2 <+> annotate (Fun $ UN $ Basic $ show op) "," <++> v3 <+> annotate (Fun $ UN $ Basic $ show op) "]"
-prettyOp op@DoubleExp [v] = annotate (Fun $ UN $ Basic $ show op) "exp" <++> v
-prettyOp op@DoubleLog [v] = annotate (Fun $ UN $ Basic $ show op) "log" <++> v
-prettyOp op@DoublePow [v1,v2] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "`pow`" <++> v2
-prettyOp op@DoubleSin [v] = annotate (Fun $ UN $ Basic $ show op) "sin" <++> v
-prettyOp op@DoubleCos [v] = annotate (Fun $ UN $ Basic $ show op) "cos" <++> v
-prettyOp op@DoubleTan [v] = annotate (Fun $ UN $ Basic $ show op) "tan" <++> v
-prettyOp op@DoubleASin [v] = annotate (Fun $ UN $ Basic $ show op) "asin" <++> v
-prettyOp op@DoubleACos [v] = annotate (Fun $ UN $ Basic $ show op) "acos" <++> v
-prettyOp op@DoubleATan [v] = annotate (Fun $ UN $ Basic $ show op) "atan" <++> v
-prettyOp op@DoubleSqrt [v] = annotate (Fun $ UN $ Basic $ show op) "sqrt" <++> v
-prettyOp op@DoubleFloor [v] = annotate (Fun $ UN $ Basic $ show op) "floor" <++> v
-prettyOp op@DoubleCeiling [v] = annotate (Fun $ UN $ Basic $ show op) "ceiling" <++> v
+
+prettyOp op@Float32Exp [v] = annotate (Fun $ UN $ Basic $ show op) "exp" <++> v
+prettyOp op@Float32Log [v] = annotate (Fun $ UN $ Basic $ show op) "log" <++> v
+prettyOp op@Float32Pow [v1,v2] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "`pow`" <++> v2
+prettyOp op@Float32Sin [v] = annotate (Fun $ UN $ Basic $ show op) "sin" <++> v
+prettyOp op@Float32Cos [v] = annotate (Fun $ UN $ Basic $ show op) "cos" <++> v
+prettyOp op@Float32Tan [v] = annotate (Fun $ UN $ Basic $ show op) "tan" <++> v
+prettyOp op@Float32ASin [v] = annotate (Fun $ UN $ Basic $ show op) "asin" <++> v
+prettyOp op@Float32ACos [v] = annotate (Fun $ UN $ Basic $ show op) "acos" <++> v
+prettyOp op@Float32ATan [v] = annotate (Fun $ UN $ Basic $ show op) "atan" <++> v
+prettyOp op@Float32Sqrt [v] = annotate (Fun $ UN $ Basic $ show op) "sqrt" <++> v
+prettyOp op@Float32Floor [v] = annotate (Fun $ UN $ Basic $ show op) "floor" <++> v
+prettyOp op@Float32Ceiling [v] = annotate (Fun $ UN $ Basic $ show op) "ceiling" <++> v
+
+prettyOp op@Float64Exp [v] = annotate (Fun $ UN $ Basic $ show op) "exp" <++> v
+prettyOp op@Float64Log [v] = annotate (Fun $ UN $ Basic $ show op) "log" <++> v
+prettyOp op@Float64Pow [v1,v2] = v1 <++> annotate (Fun $ UN $ Basic $ show op) "`pow`" <++> v2
+prettyOp op@Float64Sin [v] = annotate (Fun $ UN $ Basic $ show op) "sin" <++> v
+prettyOp op@Float64Cos [v] = annotate (Fun $ UN $ Basic $ show op) "cos" <++> v
+prettyOp op@Float64Tan [v] = annotate (Fun $ UN $ Basic $ show op) "tan" <++> v
+prettyOp op@Float64ASin [v] = annotate (Fun $ UN $ Basic $ show op) "asin" <++> v
+prettyOp op@Float64ACos [v] = annotate (Fun $ UN $ Basic $ show op) "acos" <++> v
+prettyOp op@Float64ATan [v] = annotate (Fun $ UN $ Basic $ show op) "atan" <++> v
+prettyOp op@Float64Sqrt [v] = annotate (Fun $ UN $ Basic $ show op) "sqrt" <++> v
+prettyOp op@Float64Floor [v] = annotate (Fun $ UN $ Basic $ show op) "floor" <++> v
+prettyOp op@Float64Ceiling [v] = annotate (Fun $ UN $ Basic $ show op) "ceiling" <++> v
+
 prettyOp op@(Cast x y) [v] = annotate (Fun $ UN $ Basic $ show op) "[" <+> pretty x <++> annotate (Fun $ UN $ Basic $ show op) "->" <++> pretty y <+> annotate (Fun $ UN $ Basic $ show op) "]" <++> v
 prettyOp op@BelieveMe [v1,v2,v3] = annotate (Fun $ UN $ Basic $ show op) "believe_me" <++> v1 <++> v2 <++> v3
 prettyOp op@Crash [v1,v2] = annotate (Fun $ UN $ Basic $ show op) "crash" <++> v1 <++> v2
@@ -509,18 +566,33 @@ primFnEq StrCons StrCons = Just Refl
 primFnEq StrAppend StrAppend = Just Refl
 primFnEq StrReverse StrReverse = Just Refl
 primFnEq StrSubstr StrSubstr = Just Refl
-primFnEq DoubleExp DoubleExp = Just Refl
-primFnEq DoubleLog DoubleLog = Just Refl
-primFnEq DoublePow DoublePow = Just Refl
-primFnEq DoubleSin DoubleSin = Just Refl
-primFnEq DoubleCos DoubleCos = Just Refl
-primFnEq DoubleTan DoubleTan = Just Refl
-primFnEq DoubleASin DoubleASin = Just Refl
-primFnEq DoubleACos DoubleACos = Just Refl
-primFnEq DoubleATan DoubleATan = Just Refl
-primFnEq DoubleSqrt DoubleSqrt = Just Refl
-primFnEq DoubleFloor DoubleFloor = Just Refl
-primFnEq DoubleCeiling DoubleCeiling = Just Refl
+
+primFnEq Float32Exp Float32Exp = Just Refl
+primFnEq Float32Log Float32Log = Just Refl
+primFnEq Float32Pow Float32Pow = Just Refl
+primFnEq Float32Sin Float32Sin = Just Refl
+primFnEq Float32Cos Float32Cos = Just Refl
+primFnEq Float32Tan Float32Tan = Just Refl
+primFnEq Float32ASin Float32ASin = Just Refl
+primFnEq Float32ACos Float32ACos = Just Refl
+primFnEq Float32ATan Float32ATan = Just Refl
+primFnEq Float32Sqrt Float32Sqrt = Just Refl
+primFnEq Float32Floor Float32Floor = Just Refl
+primFnEq Float32Ceiling Float32Ceiling = Just Refl
+
+primFnEq Float64Exp Float64Exp = Just Refl
+primFnEq Float64Log Float64Log = Just Refl
+primFnEq Float64Pow Float64Pow = Just Refl
+primFnEq Float64Sin Float64Sin = Just Refl
+primFnEq Float64Cos Float64Cos = Just Refl
+primFnEq Float64Tan Float64Tan = Just Refl
+primFnEq Float64ASin Float64ASin = Just Refl
+primFnEq Float64ACos Float64ACos = Just Refl
+primFnEq Float64ATan Float64ATan = Just Refl
+primFnEq Float64Sqrt Float64Sqrt = Just Refl
+primFnEq Float64Floor Float64Floor = Just Refl
+primFnEq Float64Ceiling Float64Ceiling = Just Refl
+
 primFnEq (Cast f1 t1) (Cast f2 t2) = if f1 == f2 && t1 == t2 then Just Refl else Nothing
 primFnEq BelieveMe BelieveMe = Just Refl
 primFnEq Crash Crash = Just Refl
@@ -572,18 +644,33 @@ primFnCmp f1 f2 = compare (tag f1) (tag f2)
     tag StrAppend = 21
     tag StrReverse = 22
     tag StrSubstr = 23
-    tag DoubleExp = 24
-    tag DoubleLog = 25
-    tag DoublePow = 26
-    tag DoubleSin = 27
-    tag DoubleCos = 28
-    tag DoubleTan = 29
-    tag DoubleASin = 30
-    tag DoubleACos = 31
-    tag DoubleATan = 32
-    tag DoubleSqrt = 33
-    tag DoubleFloor = 34
-    tag DoubleCeiling = 35
-    tag (Cast _ _) = 36
-    tag BelieveMe = 37
-    tag Crash = 38
+
+    tag Float32Exp = 24
+    tag Float32Log = 25
+    tag Float32Pow = 26
+    tag Float32Sin = 27
+    tag Float32Cos = 28
+    tag Float32Tan = 29
+    tag Float32ASin = 30
+    tag Float32ACos = 31
+    tag Float32ATan = 32
+    tag Float32Sqrt = 33
+    tag Float32Floor = 34
+    tag Float32Ceiling = 35
+
+    tag Float64Exp = 36
+    tag Float64Log = 37
+    tag Float64Pow = 38
+    tag Float64Sin = 39
+    tag Float64Cos = 40
+    tag Float64Tan = 41
+    tag Float64ASin = 42
+    tag Float64ACos = 43
+    tag Float64ATan = 44
+    tag Float64Sqrt = 45
+    tag Float64Floor = 46
+    tag Float64Ceiling = 47
+
+    tag (Cast _ _) = 48
+    tag BelieveMe = 49
+    tag Crash = 50
