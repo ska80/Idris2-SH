@@ -77,8 +77,12 @@ Eq Int64 where
   x == y = intToBool (prim__eq_Int64 x y)
 
 public export
-Eq Double where
-  x == y = intToBool (prim__eq_Double x y)
+Eq Float32 where
+  x == y = intToBool (prim__eq_Float32 x y)
+
+public export
+Eq Float64 where
+  x == y = intToBool (prim__eq_Float64 x y)
 
 public export
 Eq Char where
@@ -240,11 +244,18 @@ Ord Int64 where
   (>=) x y = intToBool (prim__gte_Int64 x y)
 
 public export
-Ord Double where
-  (<) x y = intToBool (prim__lt_Double x y)
-  (<=) x y = intToBool (prim__lte_Double x y)
-  (>) x y = intToBool (prim__gt_Double x y)
-  (>=) x y = intToBool (prim__gte_Double x y)
+Ord Float32 where
+  (<) x y = intToBool (prim__lt_Float32 x y)
+  (<=) x y = intToBool (prim__lte_Float32 x y)
+  (>) x y = intToBool (prim__gt_Float32 x y)
+  (>=) x y = intToBool (prim__gte_Float32 x y)
+
+public export
+Ord Float64 where
+  (<) x y = intToBool (prim__lt_Float64 x y)
+  (<=) x y = intToBool (prim__lte_Float64 x y)
+  (>) x y = intToBool (prim__gt_Float64 x y)
+  (>=) x y = intToBool (prim__gte_Float64 x y)
 
 public export
 Ord String where

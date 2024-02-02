@@ -257,24 +257,24 @@ public export
 defaultChar : FromChar Char
 defaultChar = %search
 
-%doubleLit fromDouble
+%floatLit fromFloat64
 
-||| Interface for types that can be constructed from double literals.
+||| Interface for types that can be constructed from Float64 literals.
 public export
-interface FromDouble ty where
-  constructor MkFromDouble
-  ||| Conversion from Double.
-  fromDouble : Double -> ty
+interface FromFloat64 ty where
+  constructor MkFromFloat64
+  ||| Conversion from Float64.
+  fromFloat64 : Float64 -> ty
 
-%allow_overloads fromDouble
+%allow_overloads fromFloat64
 
 %inline
 public export
-FromDouble Double where
-  fromDouble s = s
+FromFloat64 Float64 where
+  fromFloat64 s = s
 
 %defaulthint
 %inline
 public export
-defaultDouble : FromDouble Double
-defaultDouble = %search
+defaultFloat : FromFloat64 Float64
+defaultFloat = %search

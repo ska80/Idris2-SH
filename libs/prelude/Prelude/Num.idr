@@ -356,24 +356,46 @@ Integral Bits64 where
       = case y == 0 of
              False => prim__mod_Bits64 x y
 
--- Double
+-- Float32
 
 public export
-Num Double where
-  (+) = prim__add_Double
-  (*) = prim__mul_Double
-  fromInteger = prim__cast_IntegerDouble
+Num Float32 where
+  (+) = prim__add_Float32
+  (*) = prim__mul_Float32
+  fromInteger = prim__cast_IntegerFloat32
 
 %inline
 public export
-Neg Double where
-  negate x = prim__negate_Double x
-  (-) = prim__sub_Double
+Neg Float32 where
+  negate x = prim__negate_Float32 x
+  (-) = prim__sub_Float32
 
 public export
-Abs Double where
+Abs Float32 where
   abs x = if x < 0 then -x else x
 
 public export
-Fractional Double where
-  (/) = prim__div_Double
+Fractional Float32 where
+  (/) = prim__div_Float32
+
+-- Float64
+
+public export
+Num Float64 where
+  (+) = prim__add_Float64
+  (*) = prim__mul_Float64
+  fromInteger = prim__cast_IntegerFloat64
+
+%inline
+public export
+Neg Float64 where
+  negate x = prim__negate_Float64 x
+  (-) = prim__sub_Float64
+
+public export
+Abs Float64 where
+  abs x = if x < 0 then -x else x
+
+public export
+Fractional Float64 where
+  (/) = prim__div_Float64
