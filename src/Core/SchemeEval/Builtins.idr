@@ -191,7 +191,7 @@ applyCast blk StringType to x
     = canonical blk [x] $
         case intKind to of
            Nothing => case to of
-                           DoubleType => Apply (Var "ct-cast-string-double") [x]
+                           Float64Type => Apply (Var "ct-cast-string-double") [x]
                            _ => blk
            Just (Signed Unlimited) => integer $ Apply (Var "ct-cast-string-int") [x]
            Just k@(Signed (P n)) => wrap k $ Apply (Var "ct-cast-string-boundedInt") [x, toScheme (n - 1)]
@@ -200,10 +200,10 @@ applyCast blk from StringType x
     = canonical blk [x] $
         case intKind from of
            Nothing => case from of
-                           DoubleType => Apply (Var "number->string") [x]
+                           Float64Type => Apply (Var "number->string") [x]
                            _ => blk
            Just k => Apply (Var "ct-cast-number-string") [x]
-applyCast blk DoubleType to x
+applyCast blk Float64Type to x
     = canonical blk [x] $
         case intKind to of
            Nothing => case to of
@@ -212,7 +212,7 @@ applyCast blk DoubleType to x
            Just (Signed Unlimited) => integer $ Apply (Var "ct-exact-truncate") [x]
            Just k@(Signed (P n)) => wrap k $ Apply (Var "ct-exact-truncate-boundedInt") [x, toScheme (n - 1)]
            Just k@(Unsigned n) => wrap k $ Apply (Var "ct-exact-truncate-boundedUInt") [x, toScheme n]
-applyCast blk from DoubleType x
+applyCast blk from Float64Type x
     = canonical blk [x] $
         case intKind from of
            Nothing => case from of
@@ -228,11 +228,18 @@ applyCast blk from to x
 applyOp : SchemeObj Write -> -- if we don't have arguments in canonical form
           PrimFn n -> Vect n (SchemeObj Write) ->
           SchemeObj Write
-applyOp blk (Add DoubleType) [x, y] = binOp blk "+" x y
-applyOp blk (Sub DoubleType) [x, y] = binOp blk "-" x y
-applyOp blk (Mul DoubleType) [x, y] = binOp blk "*" x y
-applyOp blk (Div DoubleType) [x, y] = binOp blk "/" x y
-applyOp blk (Neg DoubleType) [x] = unaryOp blk "-" x
+applyOp blk (Add Float32Type) [x, y] = binOp blk "+" x y
+applyOp blk (Sub Float32Type) [x, y] = binOp blk "-" x y
+applyOp blk (Mul Float32Type) [x, y] = binOp blk "*" x y
+applyOp blk (Div Float32Type) [x, y] = binOp blk "/" x y
+applyOp blk (Neg Float32Type) [x] = unaryOp blk "-" x
+
+applyOp blk (Add Float64Type) [x, y] = binOp blk "+" x y
+applyOp blk (Sub Float64Type) [x, y] = binOp blk "-" x y
+applyOp blk (Mul Float64Type) [x, y] = binOp blk "*" x y
+applyOp blk (Div Float64Type) [x, y] = binOp blk "/" x y
+applyOp blk (Neg Float64Type) [x] = unaryOp blk "-" x
+
 applyOp blk (Add ty) [x, y] = canonical blk [x, y] $ add (intKind ty) x y
 applyOp blk (Sub ty) [x, y] = canonical blk [x, y] $ sub (intKind ty) x y
 applyOp blk (Mul ty) [x, y] = canonical blk [x, y] $ mul (intKind ty) x y
@@ -254,11 +261,19 @@ applyOp blk (LTE StringType) [x, y] = boolOp blk "string<=?" x y
 applyOp blk (EQ StringType) [x, y] = boolOp blk "string=?" x y
 applyOp blk (GTE StringType) [x, y] = boolOp blk "string>=?" x y
 applyOp blk (GT StringType) [x, y] = boolOp blk "string>?" x y
-applyOp blk (LT DoubleType) [x, y] = boolOp blk "<" x y
-applyOp blk (LTE DoubleType) [x, y] = boolOp blk "<=" x y
-applyOp blk (EQ DoubleType) [x, y] = boolOp blk "=" x y
-applyOp blk (GTE DoubleType) [x, y] = boolOp blk ">=" x y
-applyOp blk (GT DoubleType) [x, y] = boolOp blk ">" x y
+
+applyOp blk (LT Float32Type) [x, y] = boolOp blk "<" x y
+applyOp blk (LTE Float32Type) [x, y] = boolOp blk "<=" x y
+applyOp blk (EQ Float32Type) [x, y] = boolOp blk "=" x y
+applyOp blk (GTE Float32Type) [x, y] = boolOp blk ">=" x y
+applyOp blk (GT Float32Type) [x, y] = boolOp blk ">" x y
+
+applyOp blk (LT Float64Type) [x, y] = boolOp blk "<" x y
+applyOp blk (LTE Float64Type) [x, y] = boolOp blk "<=" x y
+applyOp blk (EQ Float64Type) [x, y] = boolOp blk "=" x y
+applyOp blk (GTE Float64Type) [x, y] = boolOp blk ">=" x y
+applyOp blk (GT Float64Type) [x, y] = boolOp blk ">" x y
+
 applyOp blk (LT ty) [x, y] = boolOp blk "ct<" x y
 applyOp blk (LTE ty) [x, y] = boolOp blk "ct<=" x y
 applyOp blk (EQ ty) [x, y] = boolOp blk "ct=" x y
@@ -285,18 +300,31 @@ applyOp blk StrReverse [x]
 applyOp blk StrSubstr [x, y, z]
     = canonical blk [x, y, z] $ Apply (Var "ct-string-substr") [x]
 
-applyOp blk DoubleExp [x] = unaryOp blk "flexp" x
-applyOp blk DoubleLog [x] = unaryOp blk "fllog" x
-applyOp blk DoublePow [x, y] = binOp blk "expt" x y
-applyOp blk DoubleSin [x] = unaryOp blk "flsin" x
-applyOp blk DoubleCos [x] = unaryOp blk "flcos" x
-applyOp blk DoubleTan [x] = unaryOp blk "fltan" x
-applyOp blk DoubleASin [x] = unaryOp blk "flasin" x
-applyOp blk DoubleACos [x] = unaryOp blk "flacos" x
-applyOp blk DoubleATan [x] = unaryOp blk "flatan" x
-applyOp blk DoubleSqrt [x] = unaryOp blk "flsqrt" x
-applyOp blk DoubleFloor [x] = unaryOp blk "flfloor" x
-applyOp blk DoubleCeiling [x] = unaryOp blk "flceiling" x
+applyOp blk Float32Exp [x] = unaryOp blk "flexp" x
+applyOp blk Float32Log [x] = unaryOp blk "fllog" x
+applyOp blk Float32Pow [x, y] = binOp blk "expt" x y
+applyOp blk Float32Sin [x] = unaryOp blk "flsin" x
+applyOp blk Float32Cos [x] = unaryOp blk "flcos" x
+applyOp blk Float32Tan [x] = unaryOp blk "fltan" x
+applyOp blk Float32ASin [x] = unaryOp blk "flasin" x
+applyOp blk Float32ACos [x] = unaryOp blk "flacos" x
+applyOp blk Float32ATan [x] = unaryOp blk "flatan" x
+applyOp blk Float32Sqrt [x] = unaryOp blk "flsqrt" x
+applyOp blk Float32Floor [x] = unaryOp blk "flfloor" x
+applyOp blk Float32Ceiling [x] = unaryOp blk "flceiling" x
+
+applyOp blk Float64Exp [x] = unaryOp blk "flexp" x
+applyOp blk Float64Log [x] = unaryOp blk "fllog" x
+applyOp blk Float64Pow [x, y] = binOp blk "expt" x y
+applyOp blk Float64Sin [x] = unaryOp blk "flsin" x
+applyOp blk Float64Cos [x] = unaryOp blk "flcos" x
+applyOp blk Float64Tan [x] = unaryOp blk "fltan" x
+applyOp blk Float64ASin [x] = unaryOp blk "flasin" x
+applyOp blk Float64ACos [x] = unaryOp blk "flacos" x
+applyOp blk Float64ATan [x] = unaryOp blk "flatan" x
+applyOp blk Float64Sqrt [x] = unaryOp blk "flsqrt" x
+applyOp blk Float64Floor [x] = unaryOp blk "flfloor" x
+applyOp blk Float64Ceiling [x] = unaryOp blk "flceiling" x
 
 applyOp blk (Cast from to) [x] = applyCast blk from to x
 applyOp blk BelieveMe [_, _, x] = x
