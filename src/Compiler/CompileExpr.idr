@@ -622,7 +622,8 @@ nfToCFType _ _ (NPrimVal _ $ PrT Int64Type) = pure CFInt64
 nfToCFType _ False (NPrimVal _ $ PrT StringType) = pure CFString
 nfToCFType fc True (NPrimVal _ $ PrT StringType)
     = throw (GenericMsg fc "String not allowed in a foreign struct")
-nfToCFType _ _ (NPrimVal _ $ PrT DoubleType) = pure CFDouble
+nfToCFType _ _ (NPrimVal _ $ PrT Float32Type) = pure CFFloat32
+nfToCFType _ _ (NPrimVal _ $ PrT Float64Type) = pure CFFloat64
 nfToCFType _ _ (NPrimVal _ $ PrT CharType) = pure CFChar
 nfToCFType _ _ (NPrimVal _ $ PrT WorldType) = pure CFWorld
 nfToCFType _ False (NBind fc _ (Pi _ _ _ ty) sc)

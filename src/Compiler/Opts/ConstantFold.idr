@@ -125,7 +125,8 @@ constFold rho (COp {arity} fc fn xs) =
     fromNF _ = Nothing
 
     commutative : PrimType -> Bool
-    commutative DoubleType = False
+    commutative Float32Type = False
+    commutative Float64Type = False
     commutative _ = True
 
     constRight : {ar : _} -> FC -> PrimFn ar ->
