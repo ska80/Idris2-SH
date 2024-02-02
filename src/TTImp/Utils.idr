@@ -627,7 +627,8 @@ getArgName defs x bound allvars ty
             PrT Bits64Type => defaultPos
             PrT StringType => Just ["str"]
             PrT CharType => Just ["c","d"]
-            PrT DoubleType => Just ["dbl"]
+            PrT Float32Type => Just ["f32"]
+            PrT Float64Type => Just ["f64"]
             PrT WorldType => Just ["wrld", "w"]
             _ => Nothing -- impossible
     findNamesM ty = pure Nothing

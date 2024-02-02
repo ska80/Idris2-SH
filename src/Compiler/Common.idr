@@ -557,8 +557,8 @@ record ConstantPrimitives' str where
   intToChar    : IntKind -> str -> Core str
   stringToInt  : IntKind -> str -> Core str
   intToString  : IntKind -> str -> Core str
-  doubleToInt  : IntKind -> str -> Core str
-  intToDouble  : IntKind -> str -> Core str
+  floatToInt   : IntKind -> str -> Core str
+  intToFloat   : IntKind -> str -> Core str
   intToInt     : IntKind -> IntKind -> str -> Core str
 
 public export
@@ -575,11 +575,11 @@ castInt :  ConstantPrimitives' str
         -> Core str
 castInt p from to x =
   case ((from, intKind from), (to, intKind to)) of
-       ((CharType, _)  , (_, Just k)) => p.charToInt k x
-       ((StringType, _), (_, Just k)) => p.stringToInt k x
-       ((DoubleType, _), (_, Just k)) => p.doubleToInt k x
-       ((_, Just k), (CharType, _))   => p.intToChar k x
-       ((_, Just k), (StringType, _)) => p.intToString k x
-       ((_, Just k), (DoubleType, _)) => p.intToDouble k x
-       ((_, Just k1), (_, Just k2))   => p.intToInt k1 k2 x
+       ((CharType, _)  , (_, Just k))  => p.charToInt k x
+       ((StringType, _), (_, Just k))  => p.stringToInt k x
+       ((Float64Type, _), (_, Just k)) => p.floatToInt k x
+       ((_, Just k), (CharType, _))    => p.intToChar k x
+       ((_, Just k), (StringType, _))  => p.intToString k x
+       ((_, Just k), (Float64Type, _)) => p.intToFloat k x
+       ((_, Just k1), (_, Just k2))    => p.intToInt k1 k2 x
        _ => throw $ InternalError $ "invalid cast: + " ++ show from ++ " + ' -> ' + " ++ show to

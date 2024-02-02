@@ -264,8 +264,8 @@ jsIntOfChar : IntKind -> Doc -> Doc
 jsIntOfChar k s = toInt k $ s <+> ".codePointAt(0)"
 
 -- converts a floating point number to an integer.
-jsIntOfDouble : IntKind -> Doc -> Doc
-jsIntOfDouble k = toInt k . callFun1 "Math.trunc"
+jsIntOfFloat : IntKind -> Doc -> Doc
+jsIntOfFloat k = toInt k . callFun1 "Math.trunc"
 
 jsAnyToString : Doc -> Doc
 jsAnyToString s = "(''+" <+> s <+> ")"
@@ -378,10 +378,10 @@ castInt from to x =
   case ((from, jsIntKind from), (to, jsIntKind to)) of
     ((CharType,_),  (_,Just k)) => truncInt (useBigInt k) k $ jsIntOfChar k x
     ((StringType,_),(_,Just k)) => truncInt (useBigInt k) k (jsIntOfString k x)
-    ((DoubleType,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfDouble k x
+    ((Float64Type,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfFloat k x
     ((_,Just k),(CharType,_))   => pure $ jsCharOfInt k x
     ((_,Just k),(StringType,_)) => pure $ jsAnyToString x
-    ((_,Just k),(DoubleType,_)) => pure $ fromInt k x
+    ((_,Just k),(Float64Type,_)) => pure $ fromInt k x
     ((_,Just k1),(_,Just k2))   => intImpl k1 k2
     _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
   where
@@ -431,7 +431,8 @@ jsOp : {0 arity : Nat} ->
 jsOp (Add ty) [x, y] = pure $ arithOp (jsIntKind ty) "+" "add" x y
 jsOp (Sub ty) [x, y] = pure $ arithOp (jsIntKind ty) "-" "sub" x y
 jsOp (Mul ty) [x, y] = pure $ arithOp (jsIntKind ty) "*" "mul" x y
-jsOp (Div DoubleType) [x, y] = pure $ binOp "/" x y
+jsOp (Div Float32Type) [x, y] = pure $ binOp "/" x y
+jsOp (Div Float64Type) [x, y] = pure $ binOp "/" x y
 jsOp (Div ty) [x, y] = pure $ arithOp (jsIntKind ty) ""  "div" x y
 jsOp (Mod ty) [x, y] = pure $ jsMod ty x y
 jsOp (Neg ty) [x] = pure $ "(-(" <+> x <+> "))"
@@ -461,20 +462,34 @@ jsOp StrAppend [x, y] = pure $ binOp "+" x y
 jsOp StrReverse [x] = pure $ callFun1 (esName "strReverse") x
 jsOp StrSubstr [offset, len, str] =
   pure $ callFun (esName "substr") [offset,len,str]
-jsOp DoubleExp [x]     = pure $ callFun1 "Math.exp" x
-jsOp DoubleLog [x]     = pure $ callFun1 "Math.log" x
-jsOp DoublePow [x, y]  = pure $ callFun "Math.pow" [x, y]
-jsOp DoubleSin [x]     = pure $ callFun1 "Math.sin" x
-jsOp DoubleCos [x]     = pure $ callFun1 "Math.cos" x
-jsOp DoubleTan [x]     = pure $ callFun1 "Math.tan" x
-jsOp DoubleASin [x]    = pure $ callFun1 "Math.asin" x
-jsOp DoubleACos [x]    = pure $ callFun1 "Math.acos" x
-jsOp DoubleATan [x]    = pure $ callFun1 "Math.atan" x
-jsOp DoubleSqrt [x]    = pure $ callFun1 "Math.sqrt" x
-jsOp DoubleFloor [x]   = pure $ callFun1 "Math.floor" x
-jsOp DoubleCeiling [x] = pure $ callFun1 "Math.ceil" x
 
-jsOp (Cast StringType DoubleType) [x] = pure $ jsNumberOfString x
+jsOp Float32Exp [x]     = pure $ callFun1 "Math.exp" x
+jsOp Float32Log [x]     = pure $ callFun1 "Math.log" x
+jsOp Float32Pow [x, y]  = pure $ callFun "Math.pow" [x, y]
+jsOp Float32Sin [x]     = pure $ callFun1 "Math.sin" x
+jsOp Float32Cos [x]     = pure $ callFun1 "Math.cos" x
+jsOp Float32Tan [x]     = pure $ callFun1 "Math.tan" x
+jsOp Float32ASin [x]    = pure $ callFun1 "Math.asin" x
+jsOp Float32ACos [x]    = pure $ callFun1 "Math.acos" x
+jsOp Float32ATan [x]    = pure $ callFun1 "Math.atan" x
+jsOp Float32Sqrt [x]    = pure $ callFun1 "Math.sqrt" x
+jsOp Float32Floor [x]   = pure $ callFun1 "Math.floor" x
+jsOp Float32Ceiling [x] = pure $ callFun1 "Math.ceil" x
+
+jsOp Float64Exp [x]     = pure $ callFun1 "Math.exp" x
+jsOp Float64Log [x]     = pure $ callFun1 "Math.log" x
+jsOp Float64Pow [x, y]  = pure $ callFun "Math.pow" [x, y]
+jsOp Float64Sin [x]     = pure $ callFun1 "Math.sin" x
+jsOp Float64Cos [x]     = pure $ callFun1 "Math.cos" x
+jsOp Float64Tan [x]     = pure $ callFun1 "Math.tan" x
+jsOp Float64ASin [x]    = pure $ callFun1 "Math.asin" x
+jsOp Float64ACos [x]    = pure $ callFun1 "Math.acos" x
+jsOp Float64ATan [x]    = pure $ callFun1 "Math.atan" x
+jsOp Float64Sqrt [x]    = pure $ callFun1 "Math.sqrt" x
+jsOp Float64Floor [x]   = pure $ callFun1 "Math.floor" x
+jsOp Float64Ceiling [x] = pure $ callFun1 "Math.ceil" x
+
+jsOp (Cast StringType Float64Type) [x] = pure $ jsNumberOfString x
 jsOp (Cast ty StringType) [x] = pure $ jsAnyToString x
 jsOp (Cast ty ty2) [x]        = castInt ty ty2 x
 jsOp BelieveMe [_,_,x] = pure x

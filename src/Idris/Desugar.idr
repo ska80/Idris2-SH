@@ -345,15 +345,8 @@ mutual
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
-  desugarB side ps (PPrimVal fc (F32 x))
-      = case !fromFloat32Name of
-             Nothing =>
-                pure $ IPrimVal fc (F32 x)
-             Just f =>
-               let vfc = virtualiseFC fc in
-               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (F32 x))
   desugarB side ps (PPrimVal fc (F64 x))
-      = case !fromFloat64Name of
+      = case !fromFloatName of
              Nothing =>
                 pure $ IPrimVal fc (F64 x)
              Just f =>
