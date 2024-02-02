@@ -255,11 +255,8 @@ toInt k = if useBigInt k then toBigInt else id
 
 -- converts an integer to a `Number`
 -- based on the given precision (`IntKind`).
-fromIntToFloat32 : IntKind -> Doc -> Doc
-fromIntToFloat32 k = if useBigInt k then fromBigInt else id
-
-fromIntToFloat64 : IntKind -> Doc -> Doc
-fromIntToFloat64 k = if useBigInt k then fromBigInt else id
+fromInt : IntKind -> Doc -> Doc
+fromInt k = if useBigInt k then fromBigInt else id
 
 -- converts a character (in JS, a string of length 1)
 -- to an integer.
@@ -389,8 +386,8 @@ castInt from to x =
     ((Float64Type,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfFloat64 k x
     ((_,Just k),(CharType,_))    => pure $ jsCharOfInt k x
     ((_,Just k),(StringType,_))  => pure $ jsAnyToString x
-    ((_,Just k),(Float32Type,_)) => pure $ fromIntToFloat32 k x
-    ((_,Just k),(Float64Type,_)) => pure $ fromIntToFloat64 k x
+    ((_,Just k),(Float32Type,_)) => pure $ fromInt k x
+    ((_,Just k),(Float64Type,_)) => pure $ fromInt k x
     ((_,Just k1),(_,Just k2))    => intImpl k1 k2
     _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
   where
