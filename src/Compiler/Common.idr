@@ -586,4 +586,4 @@ castInt p from to x =
        ((_, Just k), (Float32Type, _)) => p.intToFloat32 k x
        ((_, Just k), (Float64Type, _)) => p.intToFloat64 k x
        ((_, Just k1), (_, Just k2))    => p.intToInt k1 k2 x
-       _ => throw $ InternalError $ "invalid cast: + " ++ show from ++ " + ' -> ' + " ++ show to
+       _ => throw $ InternalError $ "invalid cast: " ++ show from ++ " -> " ++ show to

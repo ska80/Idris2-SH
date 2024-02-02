@@ -389,7 +389,7 @@ castInt from to x =
     ((_,Just k),(Float32Type,_)) => pure $ fromInt k x
     ((_,Just k),(Float64Type,_)) => pure $ fromInt k x
     ((_,Just k1),(_,Just k2))    => intImpl k1 k2
-    _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
+    _ => errorConcat $ ["invalid cast: ", show from, " -> ", show to]
   where
     truncInt : (isBigInt : Bool) -> IntKind -> Doc -> Core Doc
     truncInt b (Signed Unlimited) = pure
