@@ -144,8 +144,12 @@ Show Int64 where
   showPrec = primNumShow prim__cast_Int64String
 
 export
-Show Double where
-  showPrec = primNumShow prim__cast_DoubleString
+Show Float32 where
+  showPrec = primNumShow prim__cast_Float32String
+
+export
+Show Float64 where
+  showPrec = primNumShow prim__cast_Float64String
 
 protectEsc : (Char -> Bool) -> String -> String -> String
 protectEsc p f s = f ++ (if firstCharIs p s then "\\&" else "") ++ s

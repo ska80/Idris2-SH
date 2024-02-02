@@ -91,7 +91,8 @@ data PrimType
     | Bits64Type
     | StringType
     | CharType
-    | DoubleType
+    | Float32Type
+    | Float64Type
     | WorldType
 
 %name PrimType pty
@@ -110,7 +111,8 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch Char
-    | Db Double
+    | F32 Float32
+    | F64 Float64
     | PrT PrimType
     | WorldVal
 
@@ -130,7 +132,8 @@ Show PrimType where
   show Bits64Type = "Bits64"
   show StringType = "String"
   show CharType = "Char"
-  show DoubleType = "Double"
+  show Float32Type = "Float32"
+  show Float64Type = "Float64"
   show WorldType = "%World"
 
 export
@@ -147,7 +150,8 @@ Show Constant where
   show (B64 x) = show x
   show (Str x) = show x
   show (Ch x) = show x
-  show (Db x) = show x
+  show (F32 x) = show x
+  show (F64 x) = show x
   show (PrT x) = show x
   show WorldVal = "%World"
 
@@ -359,7 +363,8 @@ Eq PrimType where
   Bits64Type  == Bits64Type  = True
   StringType  == StringType  = True
   CharType    == CharType    = True
-  DoubleType  == DoubleType  = True
+  Float32Type == Float32Type = True
+  Float64Type == Float64Type = True
   WorldType   == WorldType   = True
   _ == _ = False
 
@@ -377,7 +382,8 @@ Eq Constant where
   B64 c       == B64 c'      = c == c'
   Str c       == Str c'      = c == c'
   Ch c        == Ch c'       = c == c'
-  Db c        == Db c'       = c == c'
+  F32 c       == F32 c'      = c == c'
+  F64 c       == F64 c'      = c == c'
   PrT t       == PrT t'      = t == t'
   WorldVal    == WorldVal    = True
   _ == _ = False

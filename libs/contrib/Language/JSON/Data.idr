@@ -11,7 +11,7 @@ public export
 data JSON
    = JNull
    | JBoolean Bool
-   | JNumber Double
+   | JNumber Float64
    | JString String
    | JArray (List JSON)
    | JObject (List (String, JSON))
@@ -146,7 +146,7 @@ Cast Bool JSON where
   cast = JBoolean
 
 public export
-Cast Double JSON where
+Cast Float64 JSON where
   cast = JNumber
 
 public export

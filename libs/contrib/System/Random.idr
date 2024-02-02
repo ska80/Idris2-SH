@@ -36,20 +36,35 @@ Random Int32 where
     let range : Integer = (cast hi) - (cast lo) + 1
      in pure . cast $ !(liftIO . randomBits32 $ cast range) + cast lo
 
-%foreign "scheme:blodwen-random"
+%foreign "scheme:blodwen-random32"
          "javascript:lambda:()=>Math.random()"
-prim__randomDouble : PrimIO Double
+prim__randomFloat32 : PrimIO Float32
 
-randomDouble : IO Double
-randomDouble = fromPrim prim__randomDouble
+randomFloat32 : IO Float32
+randomFloat32 = fromPrim prim__randomFloat32
 
 public export
-Random Double where
+Random Float32 where
   -- Generate a random value within [0, 1].
-  randomIO = liftIO randomDouble
+  randomIO = liftIO randomFloat32
 
   -- Generate a random value within [lo, hi].
-  randomRIO (lo, hi) = map ((+ lo) . (* (hi - lo))) (liftIO randomDouble)
+  randomRIO (lo, hi) = map ((+ lo) . (* (hi - lo))) (liftIO randomFloat32)
+
+%foreign "scheme:blodwen-random64"
+         "javascript:lambda:()=>Math.random()"
+prim__randomFloat64 : PrimIO Float64
+
+randomFloat64 : IO Float64
+randomFloat64 = fromPrim prim__randomFloat64
+
+public export
+Random Float64 where
+  -- Generate a random value within [0, 1].
+  randomIO = liftIO randomFloat64
+
+  -- Generate a random value within [lo, hi].
+  randomRIO (lo, hi) = map ((+ lo) . (* (hi - lo))) (liftIO randomFloat64)
 
 %foreign "scheme:blodwen-random-seed"
 prim__srand : Bits64 -> PrimIO ()
@@ -79,4 +94,3 @@ rndSelect' xs = pure $ Vect.index !(rndFin k) xs
 public export
 rndSelect : HasIO io => (elems : List a) -> (0 _ : NonEmpty elems) => io a
 rndSelect (x :: xs) = rndSelect' $ fromList (x :: xs)
-

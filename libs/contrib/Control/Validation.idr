@@ -153,13 +153,21 @@ integral = fromMaybe mkError parseInteger
     mkError s = "'" <+> s <+> "' is not an integer."
 
 ||| Verify that a string represents a decimal fraction.
+-- FIXME: (floats)
+-- export
+-- float32 : Monad m => ValidatorT m String Float32
+-- float32 = fromMaybe mkError parseFloat32
+--     where
+--     mkError : String -> String
+--     mkError s = "'" <+> s <+> "is not a decimal."
+
+||| Verify that a string represents a decimal fraction.
 export
-double : Monad m => ValidatorT m String Double
-double = fromMaybe mkError parseDouble
+float64 : Monad m => ValidatorT m String Float64
+float64 = fromMaybe mkError parseFloat64
     where
     mkError : String -> String
     mkError s = "'" <+> s <+> "is not a decimal."
-
 
 ||| Verify whether a list has a desired length.
 export

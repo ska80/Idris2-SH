@@ -63,7 +63,7 @@ Eq JSONTokenKind where
 public export
 TokenKind JSONTokenKind where
   TokType JTBoolean = Bool
-  TokType JTNumber = Double
+  TokType JTNumber = Float64
   TokType JTString = Maybe String
   TokType JTNull = ()
   TokType (JTPunct _) = ()

@@ -305,41 +305,41 @@ parseInteger s = parseIntTrimmed (trim s)
               else Nothing
 
 
-||| Convert a number string to a Double.
+||| Convert a number string to a Float64.
 |||
 ||| ```idris example
-||| parseDouble "+123.123e-2"
+||| parseFloat64 "+123.123e-2"
 ||| ```
 ||| ```idris example
-||| parseDouble " -123.123E+2"
+||| parseFloat64 " -123.123E+2"
 ||| ```
 ||| ```idris example
-||| parseDouble " +123.123"
+||| parseFloat64 " +123.123"
 ||| ```
 export -- it's a bit too slow at compile time
 covering
-parseDouble : String -> Maybe Double
-parseDouble = mkDouble . wfe . trim
+parseFloat64 : String -> Maybe Float64
+parseFloat64 = mkFloat64 . wfe . trim
   where
-    intPow : Integer -> Integer -> Double
+    intPow : Integer -> Integer -> Float64
     intPow base exp = assert_total $ if exp > 0 then (num base exp) else 1 / (num base exp)
       where
-        num : Integer -> Integer -> Double
+        num : Integer -> Integer -> Float64
         num base 0 = 1
         num base e = if e < 0
                      then cast base * num base (e + 1)
                      else cast base * num base (e - 1)
 
-    natpow : Double -> Nat -> Double
+    natpow : Float64 -> Nat -> Float64
     natpow x Z = 1
     natpow x (S n) = x * (natpow x n)
 
-    mkDouble : Maybe (Double, Double, Integer) -> Maybe Double
-    mkDouble (Just (w, f, e)) = let ex = intPow 10 e in
+    mkFloat64 : Maybe (Float64, Float64, Integer) -> Maybe Float64
+    mkFloat64 (Just (w, f, e)) = let ex = intPow 10 e in
                                 Just $ (w * ex + f * ex)
-    mkDouble Nothing = Nothing
+    mkFloat64 Nothing = Nothing
 
-    wfe : String -> Maybe (Double, Double, Integer)
+    wfe : String -> Maybe (Float64, Float64, Integer)
     wfe cs = case split (== '.') cs of
                (wholeAndExp ::: []) =>
                  case split (\c => c == 'e' || c == 'E') wholeAndExp of
@@ -371,6 +371,23 @@ parseDouble = mkDouble . wfe . trim
                        pure (w, if w < 0 then (-f) else f, 0)
                    _ => Nothing
                _ => Nothing
+
+||| Convert a number string to a Float32.
+|||
+||| ```idris example
+||| parseFloat32 "+123.123e-2"
+||| ```
+||| ```idris example
+||| parseFloat32 " -123.123E+2"
+||| ```
+||| ```idris example
+||| parseFloat32 " +123.123"
+||| ```
+-- FIXME: (floats) CASTS!
+-- export -- it's a bit too slow at compile time
+-- covering
+-- parseFloat32 : String -> Maybe Float32
+-- parseFloat32 = cast . parseFloat64
 
 public export
 null : String -> Bool

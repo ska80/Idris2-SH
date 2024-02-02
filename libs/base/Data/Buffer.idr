@@ -252,27 +252,49 @@ getInt buf offset
     = primIO (prim__getInt buf offset)
 
 ------------------------------------------------------------------------
--- Double
+-- Float32
 
-%foreign "scheme:blodwen-buffer-setdouble"
+%foreign "scheme:blodwen-buffer-setfloat32"
+         "RefC:setBufferFloat"
+         "node:lambda:(buf,offset,value)=>buf.writeFloat32LE(value, offset)"
+prim__setFloat32 : Buffer -> (offset : Int) -> (val : Float32) -> PrimIO ()
+
+export %inline
+setFloat32 : HasIO io => Buffer -> (offset : Int) -> (val : Float32) -> io ()
+setFloat32 buf offset val
+    = primIO (prim__setFloat32 buf offset val)
+
+%foreign "scheme:blodwen-buffer-getfloat32"
+         "RefC:getBufferFloat"
+         "node:lambda:(buf,offset)=>buf.readFloat32LE(offset)"
+prim__getFloat32 : Buffer -> (offset : Int) -> PrimIO Float32
+
+export %inline
+getFloat32 : HasIO io => Buffer -> (offset : Int) -> io Float32
+getFloat32 buf offset
+    = primIO (prim__getFloat32 buf offset)
+
+-- Float64
+
+%foreign "scheme:blodwen-buffer-setfloat64"
          "RefC:setBufferDouble"
-         "node:lambda:(buf,offset,value)=>buf.writeDoubleLE(value, offset)"
-prim__setDouble : Buffer -> (offset : Int) -> (val : Double) -> PrimIO ()
+         "node:lambda:(buf,offset,value)=>buf.writeFloat64LE(value, offset)"
+prim__setFloat64 : Buffer -> (offset : Int) -> (val : Float64) -> PrimIO ()
 
 export %inline
-setDouble : HasIO io => Buffer -> (offset : Int) -> (val : Double) -> io ()
-setDouble buf offset val
-    = primIO (prim__setDouble buf offset val)
+setFloat64 : HasIO io => Buffer -> (offset : Int) -> (val : Float64) -> io ()
+setFloat64 buf offset val
+    = primIO (prim__setFloat64 buf offset val)
 
-%foreign "scheme:blodwen-buffer-getdouble"
+%foreign "scheme:blodwen-buffer-getfloat64"
          "RefC:getBufferDouble"
-         "node:lambda:(buf,offset)=>buf.readDoubleLE(offset)"
-prim__getDouble : Buffer -> (offset : Int) -> PrimIO Double
+         "node:lambda:(buf,offset)=>buf.readFloat64LE(offset)"
+prim__getFloat64 : Buffer -> (offset : Int) -> PrimIO Float64
 
 export %inline
-getDouble : HasIO io => Buffer -> (offset : Int) -> io Double
-getDouble buf offset
-    = primIO (prim__getDouble buf offset)
+getFloat64 : HasIO io => Buffer -> (offset : Int) -> io Float64
+getFloat64 buf offset
+    = primIO (prim__getFloat64 buf offset)
 
 ------------------------------------------------------------------------
 -- Bool

@@ -39,8 +39,12 @@ Cast Char String where
   cast = prim__cast_CharString
 
 export %inline
-Cast Double String where
-  cast = prim__cast_DoubleString
+Cast Float32 String where
+  cast = prim__cast_Float32String
+
+export %inline
+Cast Float64 String where
+  cast = prim__cast_Float64String
 
 export %inline
 Cast Nat String where
@@ -89,8 +93,12 @@ Cast Char Integer where
   cast = prim__cast_CharInteger
 
 export %inline
-Cast Double Integer where
-  cast = prim__cast_DoubleInteger
+Cast Float32 Integer where
+  cast = prim__cast_Float32Integer
+
+export %inline
+Cast Float64 Integer where
+  cast = prim__cast_Float64Integer
 
 export %inline
 Cast String Integer where
@@ -143,8 +151,12 @@ Cast Char Int where
   cast = prim__cast_CharInt
 
 export %inline
-Cast Double Int where
-  cast = prim__cast_DoubleInt
+Cast Float32 Int where
+  cast = prim__cast_Float32Int
+
+export %inline
+Cast Float64 Int where
+  cast = prim__cast_Float64Int
 
 export %inline
 Cast String Int where
@@ -232,56 +244,115 @@ export %inline
 Cast Int64 Char where
   cast = prim__cast_Int64Char
 
--- To Double
+-- To Float32
 
 export %inline
-Cast Int Double where
-  cast = prim__cast_IntDouble
+Cast Int Float32 where
+  cast = prim__cast_IntFloat32
 
 export %inline
-Cast Integer Double where
-  cast = prim__cast_IntegerDouble
+Cast Integer Float32 where
+  cast = prim__cast_IntegerFloat32
 
 export %inline
-Cast String Double where
-  cast = prim__cast_StringDouble
+Cast String Float32 where
+  cast = prim__cast_StringFloat32
 
 export %inline
-Cast Nat Double where
-  cast = prim__cast_IntegerDouble . natToInteger
+Cast Nat Float32 where
+  cast = prim__cast_IntegerFloat32 . natToInteger
 
 export %inline
-Cast Bits8 Double where
-  cast = prim__cast_Bits8Double
+Cast Bits8 Float32 where
+  cast = prim__cast_Bits8Float32
 
 export %inline
-Cast Bits16 Double where
-  cast = prim__cast_Bits16Double
+Cast Bits16 Float32 where
+  cast = prim__cast_Bits16Float32
 
 export %inline
-Cast Bits32 Double where
-  cast = prim__cast_Bits32Double
+Cast Bits32 Float32 where
+  cast = prim__cast_Bits32Float32
 
 export %inline
-Cast Bits64 Double where
-  cast = prim__cast_Bits64Double
+Cast Bits64 Float32 where
+  cast = prim__cast_Bits64Float32
 
 export %inline
-Cast Int8 Double where
-  cast = prim__cast_Int8Double
+Cast Int8 Float32 where
+  cast = prim__cast_Int8Float32
 
 export %inline
-Cast Int16 Double where
-  cast = prim__cast_Int16Double
+Cast Int16 Float32 where
+  cast = prim__cast_Int16Float32
 
 export %inline
-Cast Int32 Double where
-  cast = prim__cast_Int32Double
+Cast Int32 Float32 where
+  cast = prim__cast_Int32Float32
 
 export %inline
-Cast Int64 Double where
-  cast = prim__cast_Int64Double
+Cast Int64 Float32 where
+  cast = prim__cast_Int64Float32
 
+-- FIXME: (floats)
+-- export %inline
+-- Cast Float64 Float32 where
+--   cast = prim__cast_Float64Float32
+
+-- To Float64
+
+export %inline
+Cast Int Float64 where
+  cast = prim__cast_IntFloat64
+
+export %inline
+Cast Integer Float64 where
+  cast = prim__cast_IntegerFloat64
+
+export %inline
+Cast String Float64 where
+  cast = prim__cast_StringFloat64
+
+export %inline
+Cast Nat Float64 where
+  cast = prim__cast_IntegerFloat64 . natToInteger
+
+export %inline
+Cast Bits8 Float64 where
+  cast = prim__cast_Bits8Float64
+
+export %inline
+Cast Bits16 Float64 where
+  cast = prim__cast_Bits16Float64
+
+export %inline
+Cast Bits32 Float64 where
+  cast = prim__cast_Bits32Float64
+
+export %inline
+Cast Bits64 Float64 where
+  cast = prim__cast_Bits64Float64
+
+export %inline
+Cast Int8 Float64 where
+  cast = prim__cast_Int8Float64
+
+export %inline
+Cast Int16 Float64 where
+  cast = prim__cast_Int16Float64
+
+export %inline
+Cast Int32 Float64 where
+  cast = prim__cast_Int32Float64
+
+export %inline
+Cast Int64 Float64 where
+  cast = prim__cast_Int64Float64
+
+-- FIXME: (floats)
+-- export %inline
+-- Cast Float32 Float64 where
+--   cast = prim__cast_Float32Float64
 
 -- To Bits8
 
@@ -310,8 +381,12 @@ Cast String Bits8 where
   cast = prim__cast_StringBits8
 
 export %inline
-Cast Double Bits8 where
-  cast = prim__cast_DoubleBits8
+Cast Float32 Bits8 where
+  cast = prim__cast_Float32Bits8
+
+export %inline
+Cast Float64 Bits8 where
+  cast = prim__cast_Float64Bits8
 
 export %inline
 Cast Char Bits8 where
@@ -365,8 +440,12 @@ Cast String Bits16 where
   cast = prim__cast_StringBits16
 
 export %inline
-Cast Double Bits16 where
-  cast = prim__cast_DoubleBits16
+Cast Float32 Bits16 where
+  cast = prim__cast_Float32Bits16
+
+export %inline
+Cast Float64 Bits16 where
+  cast = prim__cast_Float64Bits16
 
 export %inline
 Cast Char Bits16 where
@@ -420,8 +499,12 @@ Cast String Bits32 where
   cast = prim__cast_StringBits32
 
 export %inline
-Cast Double Bits32 where
-  cast = prim__cast_DoubleBits32
+Cast Float32 Bits32 where
+  cast = prim__cast_Float32Bits32
+
+export %inline
+Cast Float64 Bits32 where
+  cast = prim__cast_Float64Bits32
 
 export %inline
 Cast Char Bits32 where
@@ -474,8 +557,12 @@ Cast String Bits64 where
   cast = prim__cast_StringBits64
 
 export %inline
-Cast Double Bits64 where
-  cast = prim__cast_DoubleBits64
+Cast Float32 Bits64 where
+  cast = prim__cast_Float32Bits64
+
+export %inline
+Cast Float64 Bits64 where
+  cast = prim__cast_Float64Bits64
 
 export %inline
 Cast Char Bits64 where
@@ -508,8 +595,12 @@ Cast String Int8 where
   cast = prim__cast_StringInt8
 
 export %inline
-Cast Double Int8 where
-  cast = prim__cast_DoubleInt8
+Cast Float32 Int8 where
+  cast = prim__cast_Float32Int8
+
+export %inline
+Cast Float64 Int8 where
+  cast = prim__cast_Float64Int8
 
 export %inline
 Cast Char Int8 where
@@ -562,8 +653,12 @@ Cast String Int16 where
   cast = prim__cast_StringInt16
 
 export %inline
-Cast Double Int16 where
-  cast = prim__cast_DoubleInt16
+Cast Float32 Int16 where
+  cast = prim__cast_Float32Int16
+
+export %inline
+Cast Float64 Int16 where
+  cast = prim__cast_Float64Int16
 
 export %inline
 Cast Char Int16 where
@@ -616,8 +711,12 @@ Cast String Int32 where
   cast = prim__cast_StringInt32
 
 export %inline
-Cast Double Int32 where
-  cast = prim__cast_DoubleInt32
+Cast Float32 Int32 where
+  cast = prim__cast_Float32Int32
+
+export %inline
+Cast Float64 Int32 where
+  cast = prim__cast_Float64Int32
 
 export %inline
 Cast Char Int32 where
@@ -670,8 +769,12 @@ Cast String Int64 where
   cast = prim__cast_StringInt64
 
 export %inline
-Cast Double Int64 where
-  cast = prim__cast_DoubleInt64
+Cast Float32 Int64 where
+  cast = prim__cast_Float32Int64
+
+export %inline
+Cast Float64 Int64 where
+  cast = prim__cast_Float64Int64
 
 export %inline
 Cast Char Int64 where
@@ -724,7 +827,11 @@ Cast String Nat where
   cast = integerToNat . cast
 
 export %inline
-Cast Double Nat where
+Cast Float32 Nat where
+  cast = integerToNat . cast
+
+export %inline
+Cast Float64 Nat where
   cast = integerToNat . cast
 
 export %inline
