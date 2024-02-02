@@ -270,12 +270,28 @@ bindableUsed (PatClause fc lhs rhs)
           Just (lhsns, filter (\x => x `elem` lhsns) rhsns)
 bindableUsed _ = Nothing
 
-propBindableUsed : List ImpClause -> Float64
+-- FIXME: (floats)
+-- propBindableUsed : List ImpClause -> Float64
+-- propBindableUsed def
+--     = let (b, u) = getProp def in
+--           if b == Z
+--              then 1.0
+--              else the Float64 (cast u) / the Float64 (cast b)
+--   where
+--     getProp : List ImpClause -> (Nat, Nat)
+--     getProp [] = (0, 0)
+--     getProp (c :: xs)
+--         = let (b, u) = getProp xs in
+--               case bindableUsed c of
+--                    Nothing => (b, u)
+--                    Just (b', u') => (b + length (nub b'), u + length (nub u'))
+
+propBindableUsed : List ImpClause -> Double
 propBindableUsed def
     = let (b, u) = getProp def in
           if b == Z
              then 1.0
-             else the Float64 (cast u) / the Float64 (cast b)
+             else the Double (cast u) / the Double (cast b)
   where
     getProp : List ImpClause -> (Nat, Nat)
     getProp [] = (0, 0)

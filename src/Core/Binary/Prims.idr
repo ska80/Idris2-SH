@@ -219,47 +219,68 @@ TTC Char where
       = do i <- fromBuf b
            pure (cast {from=Int} i)
 
-export
-TTC Float32 where
-  toBuf b val
-    = do chunk <- get Bin
-         if avail chunk >= 4
-            then
-              do coreLift $ setFloat32 (buf chunk) (cast $ loc chunk) val
-                 put Bin (appended 4 chunk)
-            else do chunk' <- extendBinary 4 chunk
-                    coreLift $ setFloat32 (buf chunk') (cast $ loc chunk') val
-                    put Bin (appended 4 chunk')
+-- export
+-- TTC Float32 where
+--   toBuf b val
+--     = do chunk <- get Bin
+--          if avail chunk >= 4
+--             then
+--               do coreLift $ setFloat32 (buf chunk) (cast $ loc chunk) val
+--                  put Bin (appended 4 chunk)
+--             else do chunk' <- extendBinary 4 chunk
+--                     coreLift $ setFloat32 (buf chunk') (cast $ loc chunk') val
+--                     put Bin (appended 4 chunk')
 
-  fromBuf b
-    = do chunk <- get Bin
-         if toRead chunk >= 4
-            then
-              do val <- coreLift $ getFloat32 (buf chunk) (cast $ loc chunk)
-                 put Bin (incLoc 4 chunk)
-                 pure val
-              else throw (TTCError (EndOfBuffer "Float32"))
+--   fromBuf b
+--     = do chunk <- get Bin
+--          if toRead chunk >= 4
+--             then
+--               do val <- coreLift $ getFloat32 (buf chunk) (cast $ loc chunk)
+--                  put Bin (incLoc 4 chunk)
+--                  pure val
+--               else throw (TTCError (EndOfBuffer "Float32"))
+
+-- export
+-- TTC Float64 where
+--   toBuf b val
+--     = do chunk <- get Bin
+--          if avail chunk >= 8
+--             then
+--               do coreLift $ setFloat64 (buf chunk) (cast $ loc chunk) val
+--                  put Bin (appended 8 chunk)
+--             else do chunk' <- extendBinary 8 chunk
+--                     coreLift $ setFloat64 (buf chunk') (cast $ loc chunk') val
+--                     put Bin (appended 8 chunk')
+
+--   fromBuf b
+--     = do chunk <- get Bin
+--          if toRead chunk >= 8
+--             then
+--               do val <- coreLift $ getFloat64 (buf chunk) (cast $ loc chunk)
+--                  put Bin (incLoc 8 chunk)
+--                  pure val
+--               else throw (TTCError (EndOfBuffer "Float64"))
 
 export
-TTC Float64 where
+TTC Double where
   toBuf b val
     = do chunk <- get Bin
          if avail chunk >= 8
             then
-              do coreLift $ setFloat64 (buf chunk) (cast $ loc chunk) val
+              do coreLift $ setDouble (buf chunk) (cast $ loc chunk) val
                  put Bin (appended 8 chunk)
             else do chunk' <- extendBinary 8 chunk
-                    coreLift $ setFloat64 (buf chunk') (cast $ loc chunk') val
+                    coreLift $ setDouble (buf chunk') (cast $ loc chunk') val
                     put Bin (appended 8 chunk')
 
   fromBuf b
     = do chunk <- get Bin
          if toRead chunk >= 8
             then
-              do val <- coreLift $ getFloat64 (buf chunk) (cast $ loc chunk)
+              do val <- coreLift $ getDouble (buf chunk) (cast $ loc chunk)
                  put Bin (incLoc 8 chunk)
                  pure val
-              else throw (TTCError (EndOfBuffer "Float64"))
+              else throw (TTCError (EndOfBuffer "Double"))
 
 export
 (TTC a, TTC b) => TTC (a, b) where

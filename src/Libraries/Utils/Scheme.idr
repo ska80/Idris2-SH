@@ -104,7 +104,8 @@ unsafeGetString : ForeignObj -> String
 
 %foreign "scheme:blodwen-id"
 export
-unsafeGetFloat : ForeignObj -> Float64
+-- FIXME: (floats) unsafeGetFloat : ForeignObj -> Float64
+unsafeGetFloat : ForeignObj -> Double
 
 %foreign "scheme:blodwen-id"
 export
