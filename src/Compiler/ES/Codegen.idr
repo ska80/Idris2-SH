@@ -255,17 +255,24 @@ toInt k = if useBigInt k then toBigInt else id
 
 -- converts an integer to a `Number`
 -- based on the given precision (`IntKind`).
-fromInt : IntKind -> Doc -> Doc
-fromInt k = if useBigInt k then fromBigInt else id
+fromIntToFloat32 : IntKind -> Doc -> Doc
+fromIntToFloat32 k = if useBigInt k then fromBigInt else id
+
+fromIntToFloat64 : IntKind -> Doc -> Doc
+fromIntToFloat64 k = if useBigInt k then fromBigInt else id
 
 -- converts a character (in JS, a string of length 1)
 -- to an integer.
 jsIntOfChar : IntKind -> Doc -> Doc
 jsIntOfChar k s = toInt k $ s <+> ".codePointAt(0)"
 
--- converts a floating point number to an integer.
-jsIntOfFloat : IntKind -> Doc -> Doc
-jsIntOfFloat k = toInt k . callFun1 "Math.trunc"
+-- converts a single-precision floating point number to an integer.
+jsIntOfFloat32 : IntKind -> Doc -> Doc
+jsIntOfFloat32 k = toInt k . callFun1 "Math.trunc"
+
+-- converts a double-precision floating point number to an integer.
+jsIntOfFloat64 : IntKind -> Doc -> Doc
+jsIntOfFloat64 k = toInt k . callFun1 "Math.trunc"
 
 jsAnyToString : Doc -> Doc
 jsAnyToString s = "(''+" <+> s <+> ")"
@@ -376,13 +383,15 @@ jsMod ty x y = case jsIntKind ty of
 castInt : PrimType -> PrimType -> Doc -> Core Doc
 castInt from to x =
   case ((from, jsIntKind from), (to, jsIntKind to)) of
-    ((CharType,_),  (_,Just k)) => truncInt (useBigInt k) k $ jsIntOfChar k x
-    ((StringType,_),(_,Just k)) => truncInt (useBigInt k) k (jsIntOfString k x)
-    ((Float64Type,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfFloat k x
-    ((_,Just k),(CharType,_))   => pure $ jsCharOfInt k x
-    ((_,Just k),(StringType,_)) => pure $ jsAnyToString x
-    ((_,Just k),(Float64Type,_)) => pure $ fromInt k x
-    ((_,Just k1),(_,Just k2))   => intImpl k1 k2
+    ((CharType,_),  (_,Just k))  => truncInt (useBigInt k) k $ jsIntOfChar k x
+    ((StringType,_),(_,Just k))  => truncInt (useBigInt k) k (jsIntOfString k x)
+    ((Float32Type,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfFloat32 k x
+    ((Float64Type,_),(_,Just k)) => truncInt (useBigInt k) k $ jsIntOfFloat64 k x
+    ((_,Just k),(CharType,_))    => pure $ jsCharOfInt k x
+    ((_,Just k),(StringType,_))  => pure $ jsAnyToString x
+    ((_,Just k),(Float32Type,_)) => pure $ fromIntToFloat32 k x
+    ((_,Just k),(Float64Type,_)) => pure $ fromIntToFloat64 k x
+    ((_,Just k1),(_,Just k2))    => intImpl k1 k2
     _ => errorConcat $ ["invalid cast: + ",show from," + ' -> ' + ",show to]
   where
     truncInt : (isBigInt : Bool) -> IntKind -> Doc -> Core Doc

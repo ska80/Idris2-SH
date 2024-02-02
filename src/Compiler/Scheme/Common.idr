@@ -104,8 +104,10 @@ constPrimitives = MkConstantPrimitives {
   , intToChar    = \_,x   => pure $ op "cast-int-char" [x]
   , stringToInt  = \k     => pure . strTo k
   , intToString  = \_,x   => pure $ op "number->string" [x]
-  , floatToInt   = \k     => pure . flTo k
-  , intToFloat   = \_,x   => pure $ op "exact->inexact" [x]
+  , float32ToInt = \k     => pure . fl32To k
+  , intToFloat32 = \_,x   => pure $ op "exact->inexact32" [x]
+  , float64ToInt = \k     => pure . fl64To k
+  , intToFloat64 = \_,x   => pure $ op "exact->inexact64" [x]
   , intToInt     = \k1,k2 => pure . intTo k1 k2
   }
   where charTo : IntKind -> Builder -> Builder
@@ -118,10 +120,15 @@ constPrimitives = MkConstantPrimitives {
         strTo (Signed $ P n)     x = op "cast-string-boundedInt" [x, showB (n-1)]
         strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x, showB n]
 
-        flTo : IntKind -> Builder -> Builder
-        flTo (Signed Unlimited) x = op "exact-truncate" [x]
-        flTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, showB (n-1)]
-        flTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x, showB n]
+        fl32To : IntKind -> Builder -> Builder
+        fl32To (Signed Unlimited) x = op "exact-truncate32" [x]
+        fl32To (Signed $ P n)     x = op "exact-truncate32-boundedInt" [x, showB (n-1)]
+        fl32To (Unsigned n)       x = op "exact-truncate32-boundedUInt" [x, showB n]
+
+        fl64To : IntKind -> Builder -> Builder
+        fl64To (Signed Unlimited) x = op "exact-truncate64" [x]
+        fl64To (Signed $ P n)     x = op "exact-truncate64-boundedInt" [x, showB (n-1)]
+        fl64To (Unsigned n)       x = op "exact-truncate64-boundedUInt" [x, showB n]
 
         intTo : IntKind -> IntKind -> Builder -> Builder
         intTo _ (Signed Unlimited) x = x

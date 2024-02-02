@@ -557,8 +557,10 @@ record ConstantPrimitives' str where
   intToChar    : IntKind -> str -> Core str
   stringToInt  : IntKind -> str -> Core str
   intToString  : IntKind -> str -> Core str
-  floatToInt   : IntKind -> str -> Core str
-  intToFloat   : IntKind -> str -> Core str
+  float32ToInt : IntKind -> str -> Core str
+  intToFloat32 : IntKind -> str -> Core str
+  float64ToInt : IntKind -> str -> Core str
+  intToFloat64 : IntKind -> str -> Core str
   intToInt     : IntKind -> IntKind -> str -> Core str
 
 public export
@@ -577,9 +579,11 @@ castInt p from to x =
   case ((from, intKind from), (to, intKind to)) of
        ((CharType, _)  , (_, Just k))  => p.charToInt k x
        ((StringType, _), (_, Just k))  => p.stringToInt k x
-       ((Float64Type, _), (_, Just k)) => p.floatToInt k x
+       ((Float32Type, _), (_, Just k)) => p.float32ToInt k x
+       ((Float64Type, _), (_, Just k)) => p.float64ToInt k x
        ((_, Just k), (CharType, _))    => p.intToChar k x
        ((_, Just k), (StringType, _))  => p.intToString k x
-       ((_, Just k), (Float64Type, _)) => p.intToFloat k x
+       ((_, Just k), (Float32Type, _)) => p.intToFloat32 k x
+       ((_, Just k), (Float64Type, _)) => p.intToFloat64 k x
        ((_, Just k1), (_, Just k2))    => p.intToInt k1 k2 x
        _ => throw $ InternalError $ "invalid cast: + " ++ show from ++ " + ' -> ' + " ++ show to
