@@ -147,11 +147,12 @@ cConstant (I16 x) = "(Value*)makeInt16(INT16_C("++ show x ++"))"
 cConstant (I32 x) = "(Value*)makeInt32(INT32_C("++ show x ++"))"
 cConstant (I64 x) = "(Value*)makeInt64("++ showInt64Min x ++")"
 cConstant (BI x) = "(Value*)makeIntegerLiteral(\""++ show x ++"\")"
-cConstant (B8 x)   = "(Value*)makeBits8(UINT8_C("++ show x ++"))"
-cConstant (B16 x)  = "(Value*)makeBits16(UINT16_C("++ show x ++"))"
-cConstant (B32 x)  = "(Value*)makeBits32(UINT32_C("++ show x ++"))"
-cConstant (B64 x)  = "(Value*)makeBits64(UINT64_C("++ show x ++"))"
-cConstant (Db x) = "(Value*)makeDouble("++ show x ++")"
+cConstant (B8 x)  = "(Value*)makeBits8(UINT8_C("++ show x ++"))"
+cConstant (B16 x) = "(Value*)makeBits16(UINT16_C("++ show x ++"))"
+cConstant (B32 x) = "(Value*)makeBits32(UINT32_C("++ show x ++"))"
+cConstant (B64 x) = "(Value*)makeBits64(UINT64_C("++ show x ++"))"
+cConstant (F32 x) = "(Value*)makeFloat("++ show x ++")"
+cConstant (F64 x) = "(Value*)makeDouble("++ show x ++")"
 cConstant (Ch x) = "(Value*)makeChar("++ escapeChar x ++")"
 cConstant (Str x) = "(Value*)makeString("++ cStringQuoted x ++")"
 cConstant (PrT t) = cPrimType t
@@ -164,7 +165,8 @@ extractConstant (I16 x) = show x
 extractConstant (I32 x) = show x
 extractConstant (I64 x) = show x
 extractConstant (BI x) = show x
-extractConstant (Db x) = show x
+extractConstant (F32 x) = show x
+extractConstant (F64 x) = show x
 extractConstant (Ch x) = show x
 extractConstant (Str x) = cStringQuoted x
 extractConstant (B8 x)  = show x
@@ -567,7 +569,8 @@ mutual
                 _ <- foldlC (\els, (MkAConstAlt c body) => do
                     case c of
                         Str x => emit emptyFC "\{els}if (! strcmp(\{cStringQuoted x}, ((Value_String *)\{sc'})->str)) {"
-                        Db  x => emit emptyFC "\{els}if (((Value_Double *)\{sc'})->d == \{show x}) {"
+                        F32 x => emit emptyFC "\{els}if (((Value_Float *)\{sc'})->f == \{show x}) {"
+                        F64 x => emit emptyFC "\{els}if (((Value_Double *)\{sc'})->d == \{show x}) {"
                         x => throw $ InternalError "[refc] AConstCase : unsupported type. \{show fc} \{show x}"
                     concaseBody switchReturnVar "" [] body tailPosition
                     pure "} else " ) "" alts

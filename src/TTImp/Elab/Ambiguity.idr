@@ -98,8 +98,10 @@ expandAmbigName mode nest env orig args (IVar fc x) exp
         = UniqueDefault (IPrimVal fc (Str x))
     uniqType (MkPrimNs _ _ (Just ci) _ _ _ _) n [(_, _, IPrimVal fc (Ch x))]
         = UniqueDefault (IPrimVal fc (Ch x))
-    uniqType (MkPrimNs _ _ _ (Just di) _ _ _) n [(_, _, IPrimVal fc (Db x))]
-        = UniqueDefault (IPrimVal fc (Db x))
+    uniqType (MkPrimNs _ _ _ (Just di) _ _ _) n [(_, _, IPrimVal fc (F32 x))]
+        = UniqueDefault (IPrimVal fc (F32 x))
+    uniqType (MkPrimNs _ _ _ (Just di) _ _ _) n [(_, _, IPrimVal fc (F64 x))]
+        = UniqueDefault (IPrimVal fc (F64 x))
     uniqType (MkPrimNs _ _ _ _ (Just dt) _ _) n [(_, _, IQuote fc tm)]
         = UniqueDefault (IQuote fc tm)
         {-

@@ -345,13 +345,20 @@ mutual
              Just f =>
                let vfc = virtualiseFC fc in
                pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Ch x))
-  desugarB side ps (PPrimVal fc (Db x))
-      = case !fromDoubleName of
+  desugarB side ps (PPrimVal fc (F32 x))
+      = case !fromFloat32Name of
              Nothing =>
-                pure $ IPrimVal fc (Db x)
+                pure $ IPrimVal fc (F32 x)
              Just f =>
                let vfc = virtualiseFC fc in
-               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (Db x))
+               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (F32 x))
+  desugarB side ps (PPrimVal fc (F64 x))
+      = case !fromFloat64Name of
+             Nothing =>
+                pure $ IPrimVal fc (F64 x)
+             Just f =>
+               let vfc = virtualiseFC fc in
+               pure $ IApp vfc (IVar vfc f) (IPrimVal fc (F64 x))
   desugarB side ps (PPrimVal fc x) = pure $ IPrimVal fc x
   desugarB side ps (PQuote fc tm)
       = do let q = IQuote fc !(desugarB side ps tm)
@@ -1198,7 +1205,7 @@ mutual
              PrimInteger n => pure [IPragma fc [] (\nest, env => setFromInteger n)]
              PrimString n => pure [IPragma fc [] (\nest, env => setFromString n)]
              PrimChar n => pure [IPragma fc [] (\nest, env => setFromChar n)]
-             PrimDouble n => pure [IPragma fc [] (\nest, env => setFromDouble n)]
+             PrimFloat n => pure [IPragma fc [] (\nest, env => setFromFloat n)]
              PrimTTImp n => pure [IPragma fc [] (\nest, env => setFromTTImp n)]
              PrimName n => pure [IPragma fc [] (\nest, env => setFromName n)]
              PrimDecls n => pure [IPragma fc [] (\nest, env => setFromDecls n)]

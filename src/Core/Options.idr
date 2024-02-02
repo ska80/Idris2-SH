@@ -106,7 +106,7 @@ record PrimNames where
   fromIntegerName : Maybe Name
   fromStringName : Maybe Name
   fromCharName : Maybe Name
-  fromDoubleName : Maybe Name
+  fromFloatName : Maybe Name
   fromTTImpName : Maybe Name
   fromNameName : Maybe Name
   fromDeclsName : Maybe Name
@@ -287,8 +287,8 @@ setFromChar : Name -> Options -> Options
 setFromChar n = { primnames->fromCharName := Just n }
 
 export
-setFromDouble : Name -> Options -> Options
-setFromDouble n = { primnames->fromDoubleName := Just n }
+setFromFloat : Name -> Options -> Options
+setFromFloat n = { primnames->fromFloatName := Just n }
 
 export
 setFromTTImp : Name -> Options -> Options

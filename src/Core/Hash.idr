@@ -101,7 +101,11 @@ Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
 
 export
-Hashable Double where
+Hashable Float32 where
+  hash = hash . show
+
+export
+Hashable Float64 where
   hash = hash . show
 
 export
@@ -236,38 +240,40 @@ Hashable CFType where
       h `hashWithSalt` 5
     CFString =>
       h `hashWithSalt` 6
-    CFDouble =>
+    CFFloat32 =>
       h `hashWithSalt` 7
-    CFChar =>
+    CFFloat64 =>
       h `hashWithSalt` 8
-    CFPtr =>
+    CFChar =>
       h `hashWithSalt` 9
-    CFGCPtr =>
+    CFPtr =>
       h `hashWithSalt` 10
-    CFBuffer =>
+    CFGCPtr =>
       h `hashWithSalt` 11
-    CFWorld =>
+    CFBuffer =>
       h `hashWithSalt` 12
+    CFWorld =>
+      h `hashWithSalt` 13
     CFFun a b =>
-      h `hashWithSalt` 13 `hashWithSalt` a `hashWithSalt` b
+      h `hashWithSalt` 14 `hashWithSalt` a `hashWithSalt` b
     CFIORes a =>
-      h `hashWithSalt` 14 `hashWithSalt` a
+      h `hashWithSalt` 15 `hashWithSalt` a
     CFStruct n fs =>
-      h `hashWithSalt` 15 `hashWithSalt` n `hashWithSalt` fs
+      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` fs
     CFUser n xs =>
-      h `hashWithSalt` 16 `hashWithSalt` n `hashWithSalt` xs
+      h `hashWithSalt` 17 `hashWithSalt` n `hashWithSalt` xs
     CFInt8 =>
-      h `hashWithSalt` 17
-    CFInt16 =>
       h `hashWithSalt` 18
-    CFInt32 =>
+    CFInt16 =>
       h `hashWithSalt` 19
-    CFInt64 =>
+    CFInt32 =>
       h `hashWithSalt` 20
-    CFForeignObj =>
+    CFInt64 =>
       h `hashWithSalt` 21
-    CFInteger =>
+    CFForeignObj =>
       h `hashWithSalt` 22
+    CFInteger =>
+      h `hashWithSalt` 23
 
 export
 Hashable PrimType where
@@ -284,8 +290,9 @@ Hashable PrimType where
     Bits64Type  => h `hashWithSalt` 10
     StringType  => h `hashWithSalt` 11
     CharType    => h `hashWithSalt` 12
-    DoubleType  => h `hashWithSalt` 13
-    WorldType   => h `hashWithSalt` 14
+    Float32Type => h `hashWithSalt` 13
+    Float64Type => h `hashWithSalt` 14
+    WorldType   => h `hashWithSalt` 15
 
 export
 Hashable Constant where
@@ -302,10 +309,11 @@ Hashable Constant where
     B64 x => h `hashWithSalt` 9  `hashWithSalt` x
     Str x => h `hashWithSalt` 10 `hashWithSalt` x
     Ch x  => h `hashWithSalt` 11 `hashWithSalt` x
-    Db x  => h `hashWithSalt` 12 `hashWithSalt` x
-    PrT x => h `hashWithSalt` 13 `hashWithSalt` x
+    F32 x => h `hashWithSalt` 12 `hashWithSalt` x
+    F64 x => h `hashWithSalt` 13 `hashWithSalt` x
+    PrT x => h `hashWithSalt` 14 `hashWithSalt` x
 
-    WorldVal => h `hashWithSalt` 14
+    WorldVal => h `hashWithSalt` 15
 
 export
 Hashable LazyReason where
@@ -369,38 +377,63 @@ Hashable (PrimFn arity) where
     StrSubstr =>
       h `hashWithSalt` 23
 
-    DoubleExp =>
+    Float32Exp =>
       h `hashWithSalt` 24
-    DoubleLog =>
+    Float32Log =>
       h `hashWithSalt` 25
-    DoubleSin =>
+    Float32Sin =>
       h `hashWithSalt` 26
-    DoubleCos =>
+    Float32Cos =>
       h `hashWithSalt` 27
-    DoubleTan =>
+    Float32Tan =>
       h `hashWithSalt` 28
-    DoubleASin =>
+    Float32ASin =>
       h `hashWithSalt` 29
-    DoubleACos =>
+    Float32ACos =>
       h `hashWithSalt` 30
-    DoubleATan =>
+    Float32ATan =>
       h `hashWithSalt` 31
-    DoubleSqrt =>
+    Float32Sqrt =>
       h `hashWithSalt` 32
-    DoubleFloor =>
+    Float32Floor =>
       h `hashWithSalt` 33
-    DoubleCeiling =>
+    Float32Ceiling =>
       h `hashWithSalt` 34
 
-    Cast f t =>
-      h `hashWithSalt` 35 `hashWithSalt` f `hashWithSalt` t
-    BelieveMe =>
+    Float64Exp =>
+      h `hashWithSalt` 35
+    Float64Log =>
       h `hashWithSalt` 36
-    Crash =>
+    Float64Sin =>
       h `hashWithSalt` 37
-
-    DoublePow =>
+    Float64Cos =>
       h `hashWithSalt` 38
+    Float64Tan =>
+      h `hashWithSalt` 39
+    Float64ASin =>
+      h `hashWithSalt` 40
+    Float64ACos =>
+      h `hashWithSalt` 41
+    Float64ATan =>
+      h `hashWithSalt` 42
+    Float64Sqrt =>
+      h `hashWithSalt` 43
+    Float64Floor =>
+      h `hashWithSalt` 44
+    Float64Ceiling =>
+      h `hashWithSalt` 45
+
+    Cast f t =>
+      h `hashWithSalt` 46 `hashWithSalt` f `hashWithSalt` t
+    BelieveMe =>
+      h `hashWithSalt` 47
+    Crash =>
+      h `hashWithSalt` 48
+
+    Float32Pow =>
+      h `hashWithSalt` 49
+    Float64Pow =>
+      h `hashWithSalt` 50
 
 export
 Hashable ConInfo where

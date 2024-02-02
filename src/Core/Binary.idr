@@ -383,7 +383,7 @@ updatePrimNames p
     = { fromIntegerName $= (p.fromIntegerName <+>),
         fromStringName  $= (p.fromStringName  <+>),
         fromCharName    $= (p.fromCharName    <+>),
-        fromDoubleName  $= (p.fromDoubleName  <+>),
+        fromFloatName   $= (p.fromFloatName   <+>),
         fromTTImpName   $= (p.fromTTImpName   <+>),
         fromNameName    $= (p.fromNameName    <+>),
         fromDeclsName   $= (p.fromDeclsName   <+>)

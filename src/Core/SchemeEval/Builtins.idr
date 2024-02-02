@@ -40,18 +40,32 @@ shl _ x y = Apply (Var "ct-shl") [x, y]
 shr : Maybe IntKind -> SchemeObj Write -> SchemeObj Write -> SchemeObj Write
 shr _ x y = Apply (Var "ct-shr") [x, y]
 
--- Doubles don't need wrapping, since there's only one double type
-addDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-addDbl x y = Apply (Var "+") [x, y]
+-- Floats don't need wrapping, since there's only one double type
+-- FIXME: single-precision floating-point operations
+addF32 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+addF32 x y = Apply (Var "+") [x, y]
 
-subDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-subDbl x y = Apply (Var "-") [x, y]
+subF32 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+subF32 x y = Apply (Var "-") [x, y]
 
-mulDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-mulDbl x y = Apply (Var "*") [x, y]
+mulF32 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+mulF32 x y = Apply (Var "*") [x, y]
 
-divDbl : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
-divDbl x y = Apply (Var "/") [x, y]
+divF32 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+divF32 x y = Apply (Var "/") [x, y]
+
+-- FIXME: double-precision floating-point operations
+addF64 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+addF64 x y = Apply (Var "+") [x, y]
+
+subF64 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+subF64 x y = Apply (Var "-") [x, y]
+
+mulF64 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+mulF64 x y = Apply (Var "*") [x, y]
+
+divF64 : SchemeObj Write -> SchemeObj Write -> SchemeObj Write
+divF64 x y = Apply (Var "/") [x, y]
 
 -- Check necessary arguments are in canonical form before applying the
 -- operator, otherwise return the blocked form

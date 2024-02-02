@@ -152,7 +152,8 @@ compileConstant fc (B32 x) = Vector (-108) [IntegerVal (cast x)]
 compileConstant fc (B64 x) = Vector (-109) [IntegerVal (cast x)]
 compileConstant fc (Str x) = StringVal x
 compileConstant fc (Ch x) = CharVal x
-compileConstant fc (Db x) = FloatVal x
+compileConstant fc (F32 x) = Float32Val x
+compileConstant fc (F64 x) = Float64Val x
 compileConstant fc (PrT t) -- Constant types get compiled as TyCon names, for matching purposes
     = Vector (-1) [IntegerVal (cast (primTypeTag t)),
                    StringVal (show t),

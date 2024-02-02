@@ -176,7 +176,8 @@ getDocsForPrimitive constant = do
   primTyDoc Bits64Type = "Primitive type of 64 bits unsigned integers"
   primTyDoc StringType = "Primitive type of strings"
   primTyDoc CharType = "Primitive type of characters"
-  primTyDoc DoubleType = "Primitive type of double-precision floating-points"
+  primTyDoc Float32Type = "Primitive type of single-precision floating-points"
+  primTyDoc Float64Type = "Primitive type of double-precision floating-points"
   primTyDoc WorldType = "Primitive type of tokens for IO actions"
 
   primDoc : Constant -> Doc IdrisDocAnn
@@ -191,8 +192,9 @@ getDocsForPrimitive constant = do
   primDoc (B32 i) = "Primitive unsigned 32 bits value"
   primDoc (B64 i) = "Primitive unsigned 64 bits value"
   primDoc (Str s) = "Primitive string value"
-  primDoc (Ch c) = "Primitive character value"
-  primDoc (Db d) = "Primitive double value"
+  primDoc (Ch c)  = "Primitive character value"
+  primDoc (F32 d) = "Primitive single-precision floating-point value"
+  primDoc (F64 d) = "Primitive double-precision floating-point value"
   primDoc (PrT t) = primTyDoc t
   primDoc WorldVal = "Primitive token for IO actions"
 

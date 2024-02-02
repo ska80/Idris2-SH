@@ -2318,9 +2318,9 @@ setFromChar : {auto c : Ref Ctxt Defs} ->
 setFromChar n = update Ctxt { options $= setFromChar n }
 
 export
-setFromDouble : {auto c : Ref Ctxt Defs} ->
+setFromFloat : {auto c : Ref Ctxt Defs} ->
               Name -> Core ()
-setFromDouble n = update Ctxt { options $= setFromDouble n }
+setFromFloat n = update Ctxt { options $= setFromFloat n }
 
 export
 setFromTTImp : {auto c : Ref Ctxt Defs} ->
@@ -2407,11 +2407,11 @@ fromCharName
          pure $ fromCharName (primnames (options defs))
 
 export
-fromDoubleName : {auto c : Ref Ctxt Defs} ->
+fromFloatName : {auto c : Ref Ctxt Defs} ->
                Core (Maybe Name)
-fromDoubleName
+fromFloatName
     = do defs <- get Ctxt
-         pure $ fromDoubleName (primnames (options defs))
+         pure $ fromFloatName (primnames (options defs))
 
 export
 fromTTImpName : {auto c : Ref Ctxt Defs} ->
@@ -2439,7 +2439,7 @@ getPrimNames : {auto c : Ref Ctxt Defs} -> Core PrimNames
 getPrimNames = [| MkPrimNs fromIntegerName
                            fromStringName
                            fromCharName
-                           fromDoubleName
+                           fromFloatName
                            fromTTImpName
                            fromNameName
                            fromDeclsName |]

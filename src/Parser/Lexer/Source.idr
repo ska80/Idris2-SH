@@ -42,7 +42,7 @@ public export
 data Token
   -- Literals
   = CharLit String
-  | DoubleLit Double
+  | FloatLit Float64
   | IntegerLit Integer
   -- String
   | StringBegin Nat IsMultiline -- The escape depth and whether is multiline string
@@ -80,7 +80,7 @@ export
 Show Token where
   -- Literals
   show (CharLit x) = "character " ++ show x
-  show (DoubleLit x) = "double " ++ show x
+  show (FloatLit x) = "double " ++ show x
   show (IntegerLit x) = "literal " ++ show x
   -- String
   show (StringBegin hashtag Single) = "string begin"
@@ -112,7 +112,7 @@ export
 Pretty Void Token where
   -- Literals
   pretty (CharLit x) = pretty "character" <++> squotes (pretty x)
-  pretty (DoubleLit x) = pretty "double" <++> pretty (show x)
+  pretty (FloatLit x) = pretty "double" <++> pretty (show x)
   pretty (IntegerLit x) = pretty "literal" <++> pretty (show x)
   -- String
   pretty (StringBegin hashtag Single) = reflow "string begin"
@@ -201,8 +201,8 @@ dotIdent = is '.' <+> identNormal
 pragma : Lexer
 pragma = is '%' <+> identNormal
 
-doubleLit : Lexer
-doubleLit
+floatLit : Lexer
+floatLit
     = digits <+> is '.' <+> digits <+> opt
            (is 'e' <+> opt (is '-' <|> is '+') <+> digits)
 
@@ -365,7 +365,7 @@ mutual
                   Symbol
       <|> match (choice $ (exact . fst) <$> debugInfo) (MagicDebugInfo . fromMaybe DebugLoc . flip lookup debugInfo)
       <|> match (choice $ exact <$> symbols) Symbol
-      <|> match doubleLit (DoubleLit . cast)
+      <|> match floatLit (FloatLit . cast)
       <|> match binUnderscoredLit (IntegerLit . fromBinLit . removeUnderscores)
       <|> match hexUnderscoredLit (IntegerLit . fromHexLit . removeUnderscores)
       <|> match octUnderscoredLit (IntegerLit . fromOctLit . removeUnderscores)

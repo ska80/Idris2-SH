@@ -169,15 +169,15 @@ extractInteger tm = case tm of
   _                 => Nothing
 
 ||| Attempt to extract a constant double
-extractDouble : IPTerm -> Maybe Double
-extractDouble tm = case tm of
+extractFloat64 : IPTerm -> Maybe Float64
+extractFloat64 tm = case tm of
   PApp _ (PRef _ (MkKindedName _ (NS ns (UN (Basic n))) rn)) k => case n of
-    "fromDouble" => extractDouble k
-    "negate"     => negate <$> extractDouble k
+    "fromFloat64" => extractFloat64 k
+    "negate"      => negate <$> extractFloat64 k
     _ => Nothing
-  PPrimVal _ (Db d) => pure d
-  PBracketed _ t    => extractDouble t
-  _                 => Nothing
+  PPrimVal _ (F64 f) => pure f
+  PBracketed _ t     => extractFloat64 t
+  _                  => Nothing
 
 mutual
 
@@ -222,8 +222,8 @@ mutual
           | Just k => pure $ PPrimVal (getPTermLoc tm) (BI (cast k))
         Nothing = extractInteger tm
           | Just k => pure $ PPrimVal (getPTermLoc tm) (BI k)
-        Nothing = extractDouble tm
-          | Just d => pure $ PPrimVal (getPTermLoc tm) (Db d)
+        Nothing = extractFloat64 tm
+          | Just d => pure $ PPrimVal (getPTermLoc tm) (F64 d)
     in case tm of
         PRef fc (MkKindedName nt (NS ns nm) rn) =>
           if builtinNS == ns

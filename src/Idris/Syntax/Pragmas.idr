@@ -17,7 +17,7 @@ data KwPragma
   | KwIntegerLit
   | KwStringLit
   | KwCharLit
-  | KwDoubleLit
+  | KwFloatLit
   | KwName
   | KwStart
   | KwAllowOverloads
@@ -87,7 +87,7 @@ pragmaArgs KwRewrite = [ARewriteArg]
 pragmaArgs KwIntegerLit = [AName "nm"]
 pragmaArgs KwStringLit = [AName "nm"]
 pragmaArgs KwCharLit = [AName "nm"]
-pragmaArgs KwDoubleLit = [AName "nm"]
+pragmaArgs KwFloatLit = [AName "nm"]
 pragmaArgs KwName = [ANameList]
 pragmaArgs KwStart = [AnExpr]
 pragmaArgs KwAllowOverloads = [AName "nm"]
@@ -112,7 +112,7 @@ Show KwPragma where
     KwIntegerLit => "%integerLit"
     KwStringLit => "%stringLit"
     KwCharLit => "%charLit"
-    KwDoubleLit => "%doubleLit"
+    KwFloatLit => "%floatLit"
     KwName => "%name"
     KwStart => "%start"
     KwAllowOverloads => "%allow_overloads"
@@ -137,7 +137,7 @@ allPragmas =
   , KwIntegerLit
   , KwStringLit
   , KwCharLit
-  , KwDoubleLit
+  , KwFloatLit
   , KwName
   , KwStart
   , KwAllowOverloads

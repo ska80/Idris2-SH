@@ -170,7 +170,8 @@ data SchemeObj : Direction -> Type where
      Null : SchemeObj t
      Cons : SchemeObj t -> SchemeObj t -> SchemeObj t
      IntegerVal : Integer -> SchemeObj t
-     FloatVal : Double -> SchemeObj t
+     Float32Val : Float32 -> SchemeObj t
+     Float64Val : Float64 -> SchemeObj t
      StringVal : String -> SchemeObj t
      CharVal : Char -> SchemeObj t
      Symbol : String -> SchemeObj t
@@ -211,7 +212,8 @@ evalSchemeObj obj
     toString Null = "'()"
     toString (Cons x y) = "(cons " ++ toString x ++ " " ++ toString y ++ ")"
     toString (IntegerVal x) = show x
-    toString (FloatVal x) = show x
+    toString (Float32Val x) = show x
+    toString (Float64Val x) = show x
     toString (StringVal x) = show x
     toString (CharVal x)
        = if (the Int (cast x) >= 32 && the Int (cast x) < 127)
@@ -263,7 +265,7 @@ decodeObj obj
                                        (readVector (unsafeVectorLength obj) 1 obj)
       else if isPair obj then Cons (decodeObj (unsafeFst obj))
                                    (decodeObj (unsafeSnd obj))
-      else if isFloat obj then FloatVal (unsafeGetFloat obj)
+      else if isFloat obj then Float64Val (unsafeGetFloat obj)
       else if isString obj then StringVal (unsafeGetString obj)
       else if isChar obj then CharVal (unsafeGetChar obj)
       else if isSymbol obj then Symbol (unsafeReadSymbol obj)
@@ -369,10 +371,17 @@ Scheme String where
   fromScheme _ = Nothing
 
 export
-Scheme Double where
-  toScheme x = FloatVal x
+Scheme Float32 where
+  toScheme x = Float32Val x
 
-  fromScheme (FloatVal x) = Just x
+  fromScheme (Float32Val x) = Just x
+  fromScheme _ = Nothing
+
+export
+Scheme Float64 where
+  toScheme x = Float64Val x
+
+  fromScheme (Float64Val x) = Just x
   fromScheme _ = Nothing
 
 export

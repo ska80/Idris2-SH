@@ -41,7 +41,8 @@ castString [NPrimVal fc (B16 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (B32 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (B64 i)] = Just (NPrimVal fc (Str (show i)))
 castString [NPrimVal fc (Ch i)] = Just (NPrimVal fc (Str (stripQuotes (show i))))
-castString [NPrimVal fc (Db i)] = Just (NPrimVal fc (Str (show i)))
+castString [NPrimVal fc (F32 i)] = Just (NPrimVal fc (Str (show i)))
+castString [NPrimVal fc (F64 i)] = Just (NPrimVal fc (Str (show i)))
 castString _ = Nothing
 
 castInteger : Vect 1 (NF vars) -> Maybe (NF vars)
@@ -55,7 +56,8 @@ castInteger [NPrimVal fc (B16 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (B32 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (B64 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (Ch i)] = Just (NPrimVal fc (BI (cast (cast {to=Int} i))))
-castInteger [NPrimVal fc (Db i)] = Just (NPrimVal fc (BI (cast i)))
+castInteger [NPrimVal fc (F32 i)] = Just (NPrimVal fc (BI (cast i)))
+castInteger [NPrimVal fc (F64 i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger [NPrimVal fc (Str i)] = Just (NPrimVal fc (BI (cast i)))
 castInteger _ = Nothing
 
@@ -69,7 +71,8 @@ castInt [NPrimVal fc (B8 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B16 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B32 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (B64 i)] = Just (NPrimVal fc (I (cast i)))
-castInt [NPrimVal fc (Db i)] = Just (NPrimVal fc (I (cast i)))
+castInt [NPrimVal fc (F32 i)] = Just (NPrimVal fc (I (cast i)))
+castInt [NPrimVal fc (F64 i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (Ch i)] = Just (NPrimVal fc (I (cast i)))
 castInt [NPrimVal fc (Str i)] = Just (NPrimVal fc (I (cast i)))
 castInt _ = Nothing
@@ -127,19 +130,33 @@ castInt64 [NPrimVal fc constant] =
     NPrimVal fc . I64 . cast <$> constantIntegerValue constant
 castInt64 _ = Nothing
 
-castDouble : Vect 1 (NF vars) -> Maybe (NF vars)
-castDouble [NPrimVal fc (I i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (I8 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (I16 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (I32 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (I64 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (B8 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (B16 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (B32 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (B64 i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (BI i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble [NPrimVal fc (Str i)] = Just (NPrimVal fc (Db (cast i)))
-castDouble _ = Nothing
+castFloat32 : Vect 1 (NF vars) -> Maybe (NF vars)
+castFloat32 [NPrimVal fc (I i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (I8 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (I16 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (I32 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (I64 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (B8 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (B16 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (B32 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (B64 i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (BI i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 [NPrimVal fc (Str i)] = Just (NPrimVal fc (F32 (cast i)))
+castFloat32 _ = Nothing
+
+castFloat64 : Vect 1 (NF vars) -> Maybe (NF vars)
+castFloat64 [NPrimVal fc (I i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (I8 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (I16 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (I64 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (I64 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (B8 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (B16 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (B64 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (B64 i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (BI i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 [NPrimVal fc (Str i)] = Just (NPrimVal fc (F64 (cast i)))
+castFloat64 _ = Nothing
 
 castChar : Vect 1 (NF vars) -> Maybe (NF vars)
 castChar [NPrimVal fc (I i)] = Just (NPrimVal fc (Ch (cast i)))
@@ -210,7 +227,8 @@ add (B16 x) (B16 y) = pure $ B16 (x + y)
 add (B32 x) (B32 y) = pure $ B32 (x + y)
 add (B64 x) (B64 y) = pure $ B64 (x + y)
 add (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x + cast y))
-add (Db x) (Db y) = pure $ Db (x + y)
+add (F32 x) (F32 y) = pure $ F32 (x + y)
+add (F64 x) (F64 y) = pure $ F64 (x + y)
 add _ _ = Nothing
 
 sub : Constant -> Constant -> Maybe Constant
@@ -225,7 +243,8 @@ sub (B16 x) (B16 y) = pure $ B16 (x - y)
 sub (B32 x) (B32 y) = pure $ B32 (x - y)
 sub (B64 x) (B64 y) = pure $ B64 (x - y)
 sub (Ch x) (Ch y) = pure $ Ch (cast (cast {to=Int} x - cast y))
-sub (Db x) (Db y) = pure $ Db (x - y)
+sub (F32 x) (F32 y) = pure $ F32 (x - y)
+sub (F64 x) (F64 y) = pure $ F64 (x - y)
 sub _ _ = Nothing
 
 mul : Constant -> Constant -> Maybe Constant
@@ -239,7 +258,8 @@ mul (I8 x) (I8 y) = pure $ I8 (x * y)
 mul (I16 x) (I16 y) = pure $ I16 (x * y)
 mul (I32 x) (I32 y) = pure $ I32 (x * y)
 mul (I64 x) (I64 y) = pure $ I64 (x * y)
-mul (Db x) (Db y) = pure $ Db (x * y)
+mul (F32 x) (F32 y) = pure $ F32 (x * y)
+mul (F64 x) (F64 y) = pure $ F64 (x * y)
 mul _ _ = Nothing
 
 div : Constant -> Constant -> Maybe Constant
@@ -263,7 +283,8 @@ div (B32 x) (B32 0) = Nothing
 div (B32 x) (B32 y) = pure $ B32 (assert_total (x `div` y))
 div (B64 x) (B64 0) = Nothing
 div (B64 x) (B64 y) = pure $ B64 (assert_total (x `div` y))
-div (Db x) (Db y) = pure $ Db (x / y)
+div (F32 x) (F32 y) = pure $ F32 (x / y)
+div (F64 x) (F64 y) = pure $ F64 (x / y)
 div _ _ = Nothing
 
 mod : Constant -> Constant -> Maybe Constant
@@ -365,7 +386,8 @@ neg (B8 x) = pure $ B8 (-x)
 neg (B16 x) = pure $ B16 (-x)
 neg (B32 x) = pure $ B32 (-x)
 neg (B64 x) = pure $ B64 (-x)
-neg (Db x) = pure $ Db (-x)
+neg (F32 x) = pure $ F32 (-x)
+neg (F64 x) = pure $ F64 (-x)
 neg _ = Nothing
 
 toInt : Bool -> Constant
@@ -385,7 +407,8 @@ lt (B32 x) (B32 y) = pure $ toInt (x < y)
 lt (B64 x) (B64 y) = pure $ toInt (x < y)
 lt (Str x) (Str y) = pure $ toInt (x < y)
 lt (Ch x) (Ch y) = pure $ toInt (x < y)
-lt (Db x) (Db y) = pure $ toInt (x < y)
+lt (F32 x) (F32 y) = pure $ toInt (x < y)
+lt (F64 x) (F64 y) = pure $ toInt (x < y)
 lt _ _ = Nothing
 
 lte : Constant -> Constant -> Maybe Constant
@@ -401,7 +424,8 @@ lte (B32 x) (B32 y) = pure $ toInt (x <= y)
 lte (B64 x) (B64 y) = pure $ toInt (x <= y)
 lte (Str x) (Str y) = pure $ toInt (x <= y)
 lte (Ch x) (Ch y) = pure $ toInt (x <= y)
-lte (Db x) (Db y) = pure $ toInt (x <= y)
+lte (F32 x) (F32 y) = pure $ toInt (x <= y)
+lte (F64 x) (F64 y) = pure $ toInt (x <= y)
 lte _ _ = Nothing
 
 eq : Constant -> Constant -> Maybe Constant
@@ -417,7 +441,8 @@ eq (B32 x) (B32 y) = pure $ toInt (x == y)
 eq (B64 x) (B64 y) = pure $ toInt (x == y)
 eq (Str x) (Str y) = pure $ toInt (x == y)
 eq (Ch x) (Ch y) = pure $ toInt (x == y)
-eq (Db x) (Db y) = pure $ toInt (x == y)
+eq (F32 x) (F32 y) = pure $ toInt (x == y)
+eq (F64 x) (F64 y) = pure $ toInt (x == y)
 eq _ _ = Nothing
 
 gte : Constant -> Constant -> Maybe Constant
@@ -433,7 +458,8 @@ gte (B32 x) (B32 y) = pure $ toInt (x >= y)
 gte (B64 x) (B64 y) = pure $ toInt (x >= y)
 gte (Str x) (Str y) = pure $ toInt (x >= y)
 gte (Ch x) (Ch y) = pure $ toInt (x >= y)
-gte (Db x) (Db y) = pure $ toInt (x >= y)
+gte (F32 x) (F32 y) = pure $ toInt (x >= y)
+gte (F64 x) (F64 y) = pure $ toInt (x >= y)
 gte _ _ = Nothing
 
 gt : Constant -> Constant -> Maybe Constant
@@ -449,51 +475,95 @@ gt (B32 x) (B32 y) = pure $ toInt (x > y)
 gt (B64 x) (B64 y) = pure $ toInt (x > y)
 gt (Str x) (Str y) = pure $ toInt (x > y)
 gt (Ch x) (Ch y) = pure $ toInt (x > y)
-gt (Db x) (Db y) = pure $ toInt (x > y)
+gt (F32 x) (F32 y) = pure $ toInt (x > y)
+gt (F64 x) (F64 y) = pure $ toInt (x > y)
 gt _ _ = Nothing
 
-doubleOp : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
-doubleOp f [NPrimVal fc (Db x)] = Just (NPrimVal fc (Db (f x)))
-doubleOp f _ = Nothing
+float32Op : (Float32 -> Float32) -> Vect 1 (NF vars) -> Maybe (NF vars)
+float32Op f [NPrimVal fc (F32 x)] = Just (NPrimVal fc (F32 (f x)))
+float32Op f _ = Nothing
 
-doubleExp : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleExp = doubleOp exp
+float32Exp : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Exp = float32Op exp
 
-doubleLog : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleLog = doubleOp log
+float32Log : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Log = float32Op log
 
-doublePow : {vars : _ } -> Vect 2 (NF vars) -> Maybe (NF vars)
-doublePow = binOp pow'
+float32Pow : {vars : _ } -> Vect 2 (NF vars) -> Maybe (NF vars)
+float32Pow = binOp pow'
     where pow' : Constant -> Constant -> Maybe Constant
-          pow' (Db x) (Db y) = pure $ Db (pow x y)
+          pow' (F32 x) (F32 y) = pure $ F32 (pow x y)
           pow' _ _ = Nothing
 
-doubleSin : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleSin = doubleOp sin
+float32Sin : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Sin = float32Op sin
 
-doubleCos : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleCos = doubleOp cos
+float32Cos : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Cos = float32Op cos
 
-doubleTan : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleTan = doubleOp tan
+float32Tan : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Tan = float32Op tan
 
-doubleASin : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleASin = doubleOp asin
+float32ASin : Vect 1 (NF vars) -> Maybe (NF vars)
+float32ASin = float32Op asin
 
-doubleACos : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleACos = doubleOp acos
+float32ACos : Vect 1 (NF vars) -> Maybe (NF vars)
+float32ACos = float32Op acos
 
-doubleATan : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleATan = doubleOp atan
+float32ATan : Vect 1 (NF vars) -> Maybe (NF vars)
+float32ATan = float32Op atan
 
-doubleSqrt : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleSqrt = doubleOp sqrt
+float32Sqrt : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Sqrt = float32Op sqrt
 
-doubleFloor : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleFloor = doubleOp floor
+float32Floor : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Floor = float32Op floor
 
-doubleCeiling : Vect 1 (NF vars) -> Maybe (NF vars)
-doubleCeiling = doubleOp ceiling
+float32Ceiling : Vect 1 (NF vars) -> Maybe (NF vars)
+float32Ceiling = float32Op ceiling
+
+float64Op : (Float64 -> Float64) -> Vect 1 (NF vars) -> Maybe (NF vars)
+float64Op f [NPrimVal fc (F64 x)] = Just (NPrimVal fc (F64 (f x)))
+float64Op f _ = Nothing
+
+float64Exp : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Exp = float64Op exp
+
+float64Log : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Log = float64Op log
+
+float64Pow : {vars : _ } -> Vect 2 (NF vars) -> Maybe (NF vars)
+float64Pow = binOp pow'
+    where pow' : Constant -> Constant -> Maybe Constant
+          pow' (F64 x) (F64 y) = pure $ F64 (pow x y)
+          pow' _ _ = Nothing
+
+float64Sin : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Sin = float64Op sin
+
+float64Cos : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Cos = float64Op cos
+
+float64Tan : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Tan = float64Op tan
+
+float64ASin : Vect 1 (NF vars) -> Maybe (NF vars)
+float64ASin = float64Op asin
+
+float64ACos : Vect 1 (NF vars) -> Maybe (NF vars)
+float64ACos = float64Op acos
+
+float64ATan : Vect 1 (NF vars) -> Maybe (NF vars)
+float64ATan = float64Op atan
+
+float64Sqrt : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Sqrt = float64Op sqrt
+
+float64Floor : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Floor = float64Op floor
+
+float64Ceiling : Vect 1 (NF vars) -> Maybe (NF vars)
+float64Ceiling = float64Op ceiling
 
 -- Only reduce for concrete values
 believeMe : Vect 3 (NF vars) -> Maybe (NF vars)
@@ -528,8 +598,11 @@ arithTy t = constTy t t t
 cmpTy : PrimType -> ClosedTerm
 cmpTy t = constTy t t IntType
 
-doubleTy : ClosedTerm
-doubleTy = predTy DoubleType DoubleType
+float32Ty : ClosedTerm
+float32Ty = predTy Float32Type Float32Type
+
+float64Ty : ClosedTerm
+float64Ty = predTy Float64Type Float64Type
 
 pi : (x : String) -> RigCount -> PiInfo (Term xs) -> Term xs ->
      Term (UN (Basic x) :: xs) -> Term xs
@@ -561,7 +634,8 @@ castTo Bits32Type = castBits32
 castTo Bits64Type = castBits64
 castTo StringType = castString
 castTo CharType = castChar
-castTo DoubleType = castDouble
+castTo Float32Type = castFloat32
+castTo Float64Type = castFloat64
 castTo WorldType = const Nothing
 
 export
@@ -595,18 +669,31 @@ getOp StrAppend = strAppend
 getOp StrReverse = strReverse
 getOp StrSubstr = strSubstr
 
-getOp DoubleExp = doubleExp
-getOp DoubleLog = doubleLog
-getOp DoublePow = doublePow
-getOp DoubleSin = doubleSin
-getOp DoubleCos = doubleCos
-getOp DoubleTan = doubleTan
-getOp DoubleASin = doubleASin
-getOp DoubleACos = doubleACos
-getOp DoubleATan = doubleATan
-getOp DoubleSqrt = doubleSqrt
-getOp DoubleFloor = doubleFloor
-getOp DoubleCeiling = doubleCeiling
+getOp Float32Exp = float32Exp
+getOp Float32Log = float32Log
+getOp Float32Pow = float32Pow
+getOp Float32Sin = float32Sin
+getOp Float32Cos = float32Cos
+getOp Float32Tan = float32Tan
+getOp Float32ASin = float32ASin
+getOp Float32ACos = float32ACos
+getOp Float32ATan = float32ATan
+getOp Float32Sqrt = float32Sqrt
+getOp Float32Floor = float32Floor
+getOp Float32Ceiling = float32Ceiling
+
+getOp Float64Exp = float64Exp
+getOp Float64Log = float64Log
+getOp Float64Pow = float64Pow
+getOp Float64Sin = float64Sin
+getOp Float64Cos = float64Cos
+getOp Float64Tan = float64Tan
+getOp Float64ASin = float64ASin
+getOp Float64ACos = float64ACos
+getOp Float64ATan = float64ATan
+getOp Float64Sqrt = float64Sqrt
+getOp Float64Floor = float64Floor
+getOp Float64Ceiling = float64Ceiling
 
 getOp (Cast _ y) = castTo y
 getOp BelieveMe = believeMe
@@ -642,18 +729,33 @@ opName StrCons = prim "strCons"
 opName StrAppend = prim "strAppend"
 opName StrReverse = prim "strReverse"
 opName StrSubstr = prim "strSubstr"
-opName DoubleExp = prim "doubleExp"
-opName DoubleLog = prim "doubleLog"
-opName DoublePow = prim "doublePow"
-opName DoubleSin = prim "doubleSin"
-opName DoubleCos = prim "doubleCos"
-opName DoubleTan = prim "doubleTan"
-opName DoubleASin = prim "doubleASin"
-opName DoubleACos = prim "doubleACos"
-opName DoubleATan = prim "doubleATan"
-opName DoubleSqrt = prim "doubleSqrt"
-opName DoubleFloor = prim "doubleFloor"
-opName DoubleCeiling = prim "doubleCeiling"
+
+opName Float32Exp = prim "float32Exp"
+opName Float32Log = prim "float32Log"
+opName Float32Pow = prim "float32Pow"
+opName Float32Sin = prim "float32Sin"
+opName Float32Cos = prim "float32Cos"
+opName Float32Tan = prim "float32Tan"
+opName Float32ASin = prim "float32ASin"
+opName Float32ACos = prim "float32ACos"
+opName Float32ATan = prim "float32ATan"
+opName Float32Sqrt = prim "float32Sqrt"
+opName Float32Floor = prim "float32Floor"
+opName Float32Ceiling = prim "float32Ceiling"
+
+opName Float64Exp = prim "float64Exp"
+opName Float64Log = prim "float64Log"
+opName Float64Pow = prim "float64Pow"
+opName Float64Sin = prim "float64Sin"
+opName Float64Cos = prim "float64Cos"
+opName Float64Tan = prim "float64Tan"
+opName Float64ASin = prim "float64ASin"
+opName Float64ACos = prim "float64ACos"
+opName Float64ATan = prim "float64ATan"
+opName Float64Sqrt = prim "float64Sqrt"
+opName Float64Floor = prim "float64Floor"
+opName Float64Ceiling = prim "float64Ceiling"
+
 opName (Cast x y) = prim $ "cast_" ++ show x ++ show y
 opName BelieveMe = prim $ "believe_me"
 opName Crash = prim $ "crash"
@@ -672,7 +774,7 @@ integralTypes = [ IntType
                 ]
 
 numTypes : List PrimType
-numTypes = integralTypes ++ [DoubleType]
+numTypes = integralTypes ++ [Float32Type, Float64Type]
 
 primTypes : List PrimType
 primTypes = numTypes ++ [StringType, CharType]
@@ -710,26 +812,41 @@ allPrimitives =
      MkPrim BelieveMe believeMeTy isTotal,
      MkPrim Crash crashTy notCovering] ++
 
-    [MkPrim DoubleExp doubleTy isTotal,
-     MkPrim DoubleLog doubleTy isTotal,
-     MkPrim DoublePow (arithTy DoubleType) isTotal,
-     MkPrim DoubleSin doubleTy isTotal,
-     MkPrim DoubleCos doubleTy isTotal,
-     MkPrim DoubleTan doubleTy isTotal,
-     MkPrim DoubleASin doubleTy isTotal,
-     MkPrim DoubleACos doubleTy isTotal,
-     MkPrim DoubleATan doubleTy isTotal,
-     MkPrim DoubleSqrt doubleTy isTotal,
-     MkPrim DoubleFloor doubleTy isTotal,
-     MkPrim DoubleCeiling doubleTy isTotal] ++
+    [MkPrim Float32Exp float32Ty isTotal,
+     MkPrim Float32Log float32Ty isTotal,
+     MkPrim Float32Pow (arithTy Float32Type) isTotal,
+     MkPrim Float32Sin float32Ty isTotal,
+     MkPrim Float32Cos float32Ty isTotal,
+     MkPrim Float32Tan float32Ty isTotal,
+     MkPrim Float32ASin float32Ty isTotal,
+     MkPrim Float32ACos float32Ty isTotal,
+     MkPrim Float32ATan float32Ty isTotal,
+     MkPrim Float32Sqrt float32Ty isTotal,
+     MkPrim Float32Floor float32Ty isTotal,
+     MkPrim Float32Ceiling float32Ty isTotal] ++
+
+    [MkPrim Float64Exp float64Ty isTotal,
+     MkPrim Float64Log float64Ty isTotal,
+     MkPrim Float64Pow (arithTy Float64Type) isTotal,
+     MkPrim Float64Sin float64Ty isTotal,
+     MkPrim Float64Cos float64Ty isTotal,
+     MkPrim Float64Tan float64Ty isTotal,
+     MkPrim Float64ASin float64Ty isTotal,
+     MkPrim Float64ACos float64Ty isTotal,
+     MkPrim Float64ATan float64Ty isTotal,
+     MkPrim Float64Sqrt float64Ty isTotal,
+     MkPrim Float64Floor float64Ty isTotal,
+     MkPrim Float64Ceiling float64Ty isTotal] ++
 
     -- support all combinations of primitive casts with the following
-    -- exceptions: String -> Char, Double -> Char, Char -> Double
+    -- exceptions: String -> Char, Float32 -> Char, Char -> Float32, Float64 -> Char, Char -> Float64
     [ MkPrim (Cast t1 t2) (predTy t1 t2) isTotal
     | t1 <- primTypes
     , t2 <- primTypes
-    , t1 /= t2                         &&
-      (t1,t2) /= (StringType,CharType) &&
-      (t1,t2) /= (DoubleType,CharType) &&
-      (t1,t2) /= (CharType,DoubleType)
+    , t1 /= t2                          &&
+      (t1,t2) /= (StringType,CharType)  &&
+      (t1,t2) /= (Float32Type,CharType) &&
+      (t1,t2) /= (CharType,Float32Type) &&
+      (t1,t2) /= (Float64Type,CharType) &&
+      (t1,t2) /= (CharType,Float64Type)
     ]

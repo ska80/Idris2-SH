@@ -1440,10 +1440,10 @@ directive fname indents
          n <- name
          atEnd indents
          pure (PrimChar n)
-  <|> do decoratedPragma fname "doubleLit"
+  <|> do decoratedPragma fname "floatLit"
          n <- name
          atEnd indents
-         pure (PrimDouble n)
+         pure (PrimFloat n)
   <|> do decoratedPragma fname "TTImpLit"
          n <- name
          atEnd indents

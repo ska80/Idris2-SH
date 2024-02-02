@@ -197,13 +197,22 @@ Reflect Char where
   reflect fc defs lhs env x = pure (PrimVal fc (Ch x))
 
 export
-Reify Double where
-  reify defs (NPrimVal _ (Db v)) = pure v
-  reify defs val = cantReify val "Double"
+Reify Float32 where
+  reify defs (NPrimVal _ (F32 v)) = pure v
+  reify defs val = cantReify val "Float32"
 
 export
-Reflect Double where
-  reflect fc defs lhs env x = pure (PrimVal fc (Db x))
+Reify Float64 where
+  reify defs (NPrimVal _ (F64 v)) = pure v
+  reify defs val = cantReify val "Float64"
+
+export
+Reflect Float32 where
+  reflect fc defs lhs env x = pure (PrimVal fc (F32 x))
+
+export
+Reflect Float64 where
+  reflect fc defs lhs env x = pure (PrimVal fc (F64 x))
 
 export
 Reify Bool where
@@ -544,8 +553,10 @@ Reify PrimType where
                   => pure StringType
              (UN (Basic "CharType"), [])
                   => pure CharType
-             (UN (Basic "DoubleType"), [])
-                  => pure DoubleType
+             (UN (Basic "Float32Type"), [])
+                  => pure Float32Type
+             (UN (Basic "Float64Type"), [])
+                  => pure Float64Type
              (UN (Basic "WorldType"), [])
                   => pure WorldType
              _ => cantReify val "PrimType"
@@ -591,9 +602,12 @@ Reify Constant where
              (UN (Basic "Ch"), [(_, x)])
                   => do x' <- reify defs !(evalClosure defs x)
                         pure (Ch x')
-             (UN (Basic "Db"), [(_, x)])
+             (UN (Basic "F32"), [(_, x)])
                   => do x' <- reify defs !(evalClosure defs x)
-                        pure (Db x')
+                        pure (F32 x')
+             (UN (Basic "F64"), [(_, x)])
+                  => do x' <- reify defs !(evalClosure defs x)
+                        pure (F64 x')
              (UN (Basic "PrT"), [(_, x)])
                   => do x' <- reify defs !(evalClosure defs x)
                         pure (PrT x')
@@ -628,8 +642,10 @@ Reflect PrimType where
       = getCon fc defs (reflectiontt "StringType")
   reflect fc defs lhs env CharType
       = getCon fc defs (reflectiontt "CharType")
-  reflect fc defs lhs env DoubleType
-      = getCon fc defs (reflectiontt "DoubleType")
+  reflect fc defs lhs env Float32Type
+      = getCon fc defs (reflectiontt "Float32Type")
+  reflect fc defs lhs env Float64Type
+      = getCon fc defs (reflectiontt "Float64Type")
   reflect fc defs lhs env WorldType
       = getCon fc defs (reflectiontt "WorldType")
 
@@ -671,9 +687,12 @@ Reflect Constant where
   reflect fc defs lhs env (Ch x)
       = do x' <- reflect fc defs lhs env x
            appCon fc defs (reflectiontt "Ch") [x']
-  reflect fc defs lhs env (Db x)
+  reflect fc defs lhs env (F32 x)
       = do x' <- reflect fc defs lhs env x
-           appCon fc defs (reflectiontt "Db") [x']
+           appCon fc defs (reflectiontt "F32") [x']
+  reflect fc defs lhs env (F64 x)
+      = do x' <- reflect fc defs lhs env x
+           appCon fc defs (reflectiontt "F64") [x']
   reflect fc defs lhs env (PrT x)
       = do x' <- reflect fc defs lhs env x
            appCon fc defs (reflectiontt "PrT") [x']

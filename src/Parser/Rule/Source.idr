@@ -93,7 +93,7 @@ constant : Rule Constant
 constant
     = terminal "Expected constant" $ \case
         CharLit c    => Ch <$> getCharLit c
-        DoubleLit d  => Just (Db d)
+        FloatLit f   => Just (F64 f)
         IntegerLit i => Just (BI i)
         Ident s      => isConstantType (UN $ Basic s) >>=
                              \case WorldType => Nothing

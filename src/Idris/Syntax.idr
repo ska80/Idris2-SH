@@ -367,7 +367,7 @@ mutual
        PrimInteger : Name -> Directive
        PrimString : Name -> Directive
        PrimChar : Name -> Directive
-       PrimDouble : Name -> Directive
+       PrimFloat : Name -> Directive
        PrimTTImp : Name -> Directive
        PrimName : Name -> Directive
        PrimDecls : Name -> Directive

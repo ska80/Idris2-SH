@@ -112,9 +112,10 @@ constFold rho (COp {arity} fc fn xs) =
           fromNF nf
   where
     toNF : CExp vars' -> Maybe (NF vars')
-    -- Don't fold `Int` and `Double` because they have varying widths
+    -- Don't fold `Int`, `Float32` and `Float64` because they have varying widths
     toNF (CPrimVal fc (I _)) = Nothing
-    toNF (CPrimVal fc (Db _)) = Nothing
+    toNF (CPrimVal fc (F32 _)) = Nothing
+    toNF (CPrimVal fc (F64 _)) = Nothing
     -- Fold the rest
     toNF (CPrimVal fc c) = Just $ NPrimVal fc c
     toNF _ = Nothing

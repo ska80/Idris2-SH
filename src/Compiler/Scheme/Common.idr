@@ -104,8 +104,10 @@ constPrimitives = MkConstantPrimitives {
   , intToChar    = \_,x   => pure $ op "cast-int-char" [x]
   , stringToInt  = \k     => pure . strTo k
   , intToString  = \_,x   => pure $ op "number->string" [x]
-  , doubleToInt  = \k     => pure . dblTo k
-  , intToDouble  = \_,x   => pure $ op "exact->inexact" [x]
+  , float32ToInt = \k     => pure . f32To k
+  , intToFloat32 = \_,x   => pure $ op "exact->inexact32" [x]
+  , float64ToInt = \k     => pure . f64To k
+  , intToFloat64 = \_,x   => pure $ op "exact->inexact64" [x]
   , intToInt     = \k1,k2 => pure . intTo k1 k2
   }
   where charTo : IntKind -> Builder -> Builder
@@ -118,10 +120,15 @@ constPrimitives = MkConstantPrimitives {
         strTo (Signed $ P n)     x = op "cast-string-boundedInt" [x, showB (n-1)]
         strTo (Unsigned n)       x = op "cast-string-boundedUInt" [x, showB n]
 
-        dblTo : IntKind -> Builder -> Builder
-        dblTo (Signed Unlimited) x = op "exact-truncate" [x]
-        dblTo (Signed $ P n)     x = op "exact-truncate-boundedInt" [x, showB (n-1)]
-        dblTo (Unsigned n)       x = op "exact-truncate-boundedUInt" [x, showB n]
+        f32To : IntKind -> Builder -> Builder
+        f32To (Signed Unlimited) x = op "exact-truncate32" [x]
+        f32To (Signed $ P n)     x = op "exact-truncate32-boundedInt" [x, showB (n-1)]
+        f32To (Unsigned n)       x = op "exact-truncate32-boundedUInt" [x, showB n]
+
+        f64To : IntKind -> Builder -> Builder
+        f64To (Signed Unlimited) x = op "exact-truncate64" [x]
+        f64To (Signed $ P n)     x = op "exact-truncate64-boundedInt" [x, showB (n-1)]
+        f64To (Unsigned n)       x = op "exact-truncate64-boundedUInt" [x, showB n]
 
         intTo : IntKind -> IntKind -> Builder -> Builder
         intTo _ (Signed Unlimited) x = x
@@ -176,22 +183,39 @@ schOp StrReverse [x] = pure $ op "string-reverse" [x]
 schOp StrSubstr [x, y, z] = pure $ op "string-substr" [x, y, z]
 
 -- `e` is Euler's number, which approximates to: 2.718281828459045
-schOp DoubleExp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
-schOp DoubleLog [x] = pure $ op "fllog" [x] -- Base is `e`.
-schOp DoublePow [x, y] = pure $ op "flexpt" [x, y]
-schOp DoubleSin [x] = pure $ op "flsin" [x]
-schOp DoubleCos [x] = pure $ op "flcos" [x]
-schOp DoubleTan [x] = pure $ op "fltan" [x]
-schOp DoubleASin [x] = pure $ op "flasin" [x]
-schOp DoubleACos [x] = pure $ op "flacos" [x]
-schOp DoubleATan [x] = pure $ op "flatan" [x]
-schOp DoubleSqrt [x] = pure $ op "flsqrt" [x]
-schOp DoubleFloor [x] = pure $ op "flfloor" [x]
-schOp DoubleCeiling [x] = pure $ op "flceiling" [x]
+-- FIXME: single-precision floating point ops
+schOp Float32Exp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
+schOp Float32Log [x] = pure $ op "fllog" [x] -- Base is `e`.
+schOp Float32Pow [x, y] = pure $ op "flexpt" [x, y]
+schOp Float32Sin [x] = pure $ op "flsin" [x]
+schOp Float32Cos [x] = pure $ op "flcos" [x]
+schOp Float32Tan [x] = pure $ op "fltan" [x]
+schOp Float32ASin [x] = pure $ op "flasin" [x]
+schOp Float32ACos [x] = pure $ op "flacos" [x]
+schOp Float32ATan [x] = pure $ op "flatan" [x]
+schOp Float32Sqrt [x] = pure $ op "flsqrt" [x]
+schOp Float32Floor [x] = pure $ op "flfloor" [x]
+schOp Float32Ceiling [x] = pure $ op "flceiling" [x]
 
-schOp (Cast DoubleType StringType)  [x] = pure $ op "number->string" [x]
+-- FIXME: double-precision floating point ops
+schOp Float64Exp [x] = pure $ op "flexp" [x] -- Base is `e`. Same as: `pow(e, x)`
+schOp Float64Log [x] = pure $ op "fllog" [x] -- Base is `e`.
+schOp Float64Pow [x, y] = pure $ op "flexpt" [x, y]
+schOp Float64Sin [x] = pure $ op "flsin" [x]
+schOp Float64Cos [x] = pure $ op "flcos" [x]
+schOp Float64Tan [x] = pure $ op "fltan" [x]
+schOp Float64ASin [x] = pure $ op "flasin" [x]
+schOp Float64ACos [x] = pure $ op "flacos" [x]
+schOp Float64ATan [x] = pure $ op "flatan" [x]
+schOp Float64Sqrt [x] = pure $ op "flsqrt" [x]
+schOp Float64Floor [x] = pure $ op "flfloor" [x]
+schOp Float64Ceiling [x] = pure $ op "flceiling" [x]
+
+schOp (Cast Float32Type StringType) [x] = pure $ op "number32->string" [x]
+schOp (Cast Float64Type StringType) [x] = pure $ op "number64->string" [x]
 schOp (Cast CharType StringType)    [x] = pure $ op "string" [x]
-schOp (Cast StringType DoubleType)  [x] = pure $ op "cast-string-double" [x]
+schOp (Cast StringType Float32Type) [x] = pure $ op "cast-string-float32" [x]
+schOp (Cast StringType Float64Type) [x] = pure $ op "cast-string-float64" [x]
 
 schOp (Cast from to)                [x] = castInt constPrimitives from to x
 
@@ -272,7 +296,8 @@ schConstant _ (Ch x)
    = if (ord x >= 32 && ord x < 127)
         then "#\\" ++ char x
         else "(integer->char " ++ showB (ord x) ++ ")"
-schConstant _ (Db x) = showB x
+schConstant _ (F32 x) = showB x
+schConstant _ (F64 x) = showB x
 schConstant _ (PrT t) = schPrimType t
 schConstant _ WorldVal = "#f"
 
