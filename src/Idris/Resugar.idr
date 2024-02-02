@@ -168,7 +168,7 @@ extractInteger tm = case tm of
   PBracketed _ t    => extractInteger t
   _                 => Nothing
 
-||| Attempt to extract a constant double
+||| Attempt to extract a constant double-precision float
 extractFloat64 : IPTerm -> Maybe Float64
 extractFloat64 tm = case tm of
   PApp _ (PRef _ (MkKindedName _ (NS ns (UN (Basic n))) rn)) k => case n of

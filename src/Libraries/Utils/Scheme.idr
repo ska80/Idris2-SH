@@ -104,7 +104,7 @@ unsafeGetString : ForeignObj -> String
 
 %foreign "scheme:blodwen-id"
 export
-unsafeGetFloat : ForeignObj -> Double
+unsafeGetFloat : ForeignObj -> Float64
 
 %foreign "scheme:blodwen-id"
 export

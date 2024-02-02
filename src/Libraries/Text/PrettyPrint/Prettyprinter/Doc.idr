@@ -22,8 +22,8 @@ textSpaces n = textReplicateChar n ' '
 public export
 data PageWidth : Type where
   ||| The `Int` is the number of characters, including whitespace, that fit in a line.
-  ||| The `Double` is the ribbon, the fraction of the toal page width that can be printed on.
-  AvailablePerLine : Int -> Double -> PageWidth
+  ||| The `Float64` is the ribbon, the fraction of the toal page width that can be printed on.
+  AvailablePerLine : Int -> Float64 -> PageWidth
   ||| The layouters should not introduce line breaks.
   Unbounded : PageWidth
 
@@ -634,13 +634,13 @@ export
 defaultPageWidth : PageWidth
 defaultPageWidth = AvailablePerLine 80 1
 
-round : Double -> Int
+round : Float64 -> Int
 round x = if x > 0
              then if x - floor x < 0.5 then cast $ floor x else cast $ ceiling x
              else if ceiling x - x < 0.5 then cast $ ceiling x else cast $ floor x
 
 ||| The remaining width on the current line.
-remainingWidth : Int -> Double -> Int -> Int -> Int
+remainingWidth : Int -> Float64 -> Int -> Int -> Int
 remainingWidth lineLength ribbonFraction lineIndent currentColumn =
   let columnsLeftInLine = lineLength - currentColumn
       ribbonWidth = (max 0 . min lineLength . round) (cast lineLength * ribbonFraction)

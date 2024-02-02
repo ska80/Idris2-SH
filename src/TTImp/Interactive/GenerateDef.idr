@@ -270,12 +270,12 @@ bindableUsed (PatClause fc lhs rhs)
           Just (lhsns, filter (\x => x `elem` lhsns) rhsns)
 bindableUsed _ = Nothing
 
-propBindableUsed : List ImpClause -> Double
+propBindableUsed : List ImpClause -> Float64
 propBindableUsed def
     = let (b, u) = getProp def in
           if b == Z
              then 1.0
-             else the Double (cast u) / the Double (cast b)
+             else the Float64 (cast u) / the Float64 (cast b)
   where
     getProp : List ImpClause -> (Nat, Nat)
     getProp [] = (0, 0)
