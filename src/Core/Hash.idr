@@ -100,12 +100,17 @@ export
 Hashable String where
   hashWithSalt h = String.Iterator.foldl hashWithSalt h
 
-export
-Hashable Float32 where
-  hash = hash . show
+-- FIXME: (floats)
+-- export
+-- Hashable Float32 where
+--   hash = hash . show
+
+-- export
+-- Hashable Float64 where
+--   hash = hash . show
 
 export
-Hashable Float64 where
+Hashable Double where
   hash = hash . show
 
 export

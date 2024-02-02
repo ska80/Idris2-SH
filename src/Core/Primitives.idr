@@ -479,7 +479,8 @@ gt (F32 x) (F32 y) = pure $ toInt (x > y)
 gt (F64 x) (F64 y) = pure $ toInt (x > y)
 gt _ _ = Nothing
 
-float32Op : (Float32 -> Float32) -> Vect 1 (NF vars) -> Maybe (NF vars)
+-- FIXME: (floats) float32Op : (Float32 -> Float32) -> Vect 1 (NF vars) -> Maybe (NF vars)
+float32Op : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
 float32Op f [NPrimVal fc (F32 x)] = Just (NPrimVal fc (F32 (f x)))
 float32Op f _ = Nothing
 
@@ -522,7 +523,8 @@ float32Floor = float32Op floor
 float32Ceiling : Vect 1 (NF vars) -> Maybe (NF vars)
 float32Ceiling = float32Op ceiling
 
-float64Op : (Float64 -> Float64) -> Vect 1 (NF vars) -> Maybe (NF vars)
+-- FIXME: (floats) float64Op : (Float64 -> Float64) -> Vect 1 (NF vars) -> Maybe (NF vars)
+float64Op : (Double -> Double) -> Vect 1 (NF vars) -> Maybe (NF vars)
 float64Op f [NPrimVal fc (F64 x)] = Just (NPrimVal fc (F64 (f x)))
 float64Op f _ = Nothing
 

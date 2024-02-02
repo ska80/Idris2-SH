@@ -49,8 +49,8 @@ data Constant
     | B64 Bits64
     | Str String
     | Ch  Char
-    | F32 Float32
-    | F64 Float64
+    | F32 Double -- FIXME: (floats) Float32
+    | F64 Double -- FIXME: (floats) Float64
     | PrT PrimType
     | WorldVal
 

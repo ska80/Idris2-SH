@@ -170,8 +170,8 @@ data SchemeObj : Direction -> Type where
      Null : SchemeObj t
      Cons : SchemeObj t -> SchemeObj t -> SchemeObj t
      IntegerVal : Integer -> SchemeObj t
-     Float32Val : Float32 -> SchemeObj t
-     Float64Val : Float64 -> SchemeObj t
+     Float32Val : Double -> SchemeObj t -- FIXME: (floats) Float32 -> SchemeObj t
+     Float64Val : Double -> SchemeObj t -- FIXME: (floats) Float64 -> SchemeObj t
      StringVal : String -> SchemeObj t
      CharVal : Char -> SchemeObj t
      Symbol : String -> SchemeObj t
@@ -370,15 +370,16 @@ Scheme String where
   fromScheme (StringVal x) = Just x
   fromScheme _ = Nothing
 
-export
-Scheme Float32 where
-  toScheme x = Float32Val x
+-- FIXME: (floats)
+-- export
+-- Scheme Float32 where
+--   toScheme x = Float32Val x
 
-  fromScheme (Float32Val x) = Just x
-  fromScheme _ = Nothing
+--   fromScheme (Float32Val x) = Just x
+--   fromScheme _ = Nothing
 
 export
-Scheme Float64 where
+Scheme Double where -- FIXME: (floats) Float64 where
   toScheme x = Float64Val x
 
   fromScheme (Float64Val x) = Just x

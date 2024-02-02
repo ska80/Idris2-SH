@@ -196,22 +196,31 @@ export
 Reflect Char where
   reflect fc defs lhs env x = pure (PrimVal fc (Ch x))
 
-export
-Reify Float32 where
-  reify defs (NPrimVal _ (F32 v)) = pure v
-  reify defs val = cantReify val "Float32"
+-- FIXME: (floats)
+-- export
+-- Reify Float32 where
+--   reify defs (NPrimVal _ (F32 v)) = pure v
+--   reify defs val = cantReify val "Float32"
 
+-- export
+-- Reify Float64 where
+--   reify defs (NPrimVal _ (F64 v)) = pure v
+--   reify defs val = cantReify val "Float64"
 export
-Reify Float64 where
-  reify defs (NPrimVal _ (F64 v)) = pure v
-  reify defs val = cantReify val "Float64"
+  Reify Double where
+    reify defs (NPrimVal _ (F32 v)) = pure v
+    reify defs val = cantReify val "Float32"
 
-export
-Reflect Float32 where
-  reflect fc defs lhs env x = pure (PrimVal fc (F32 x))
+-- FIXME: (floats)
+-- export
+-- Reflect Float32 where
+--   reflect fc defs lhs env x = pure (PrimVal fc (F32 x))
 
+-- export
+-- Reflect Float64 where
+--   reflect fc defs lhs env x = pure (PrimVal fc (F64 x))
 export
-Reflect Float64 where
+Reflect Double where
   reflect fc defs lhs env x = pure (PrimVal fc (F64 x))
 
 export

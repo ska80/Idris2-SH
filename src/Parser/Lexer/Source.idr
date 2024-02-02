@@ -42,7 +42,7 @@ public export
 data Token
   -- Literals
   = CharLit String
-  | FloatLit Float64
+  | FloatLit Double -- FIXME: (floats) Float64
   | IntegerLit Integer
   -- String
   | StringBegin Nat IsMultiline -- The escape depth and whether is multiline string
